@@ -147,7 +147,7 @@ export const hopLinks = async () => {
     //hopLinksElementの先頭に更新ボタンを設置する
     const updateButtonElement: HTMLButtonElement = document.createElement("button");
     updateButtonElement.id = "hopLinksUpdate";
-    updateButtonElement.innerText = "2 HopLink 🔂 (*manual update only)"; //手動更新
+    updateButtonElement.innerText = "2 HopLink 🔂 (*first load and manual update only)"; //手動更新
     updateButtonElement.addEventListener("click", () => {
         //hopLinksElementを削除する
         hopLinksElement.remove();
