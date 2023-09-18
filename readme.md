@@ -1,12 +1,10 @@
-# Logseq Plugin: Template for TypeScript
+# Logseq Plugin: 2 hop link
 
 - Development stage 👷🚧
 
-> This plugin still has room for improvement. Please let me know if you encounter any issues or have any ideas for enhancement.
-
-[![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-template-typescript)](https://github.com/YU000jp/logseq-plugin-template-typescript/releases)
-[![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-template-typescript?color=blue)](https://github.com/YU000jp/logseq-plugin-template-typescript/LICENSE)
-[![Downloads](https://img.shields.io/github/downloads/YU000jp/logseq-plugin-template-typescript/total.svg)](https://github.com/YU000jp/logseq-plugin-template-typescript/releases)
+[![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-two-hop-link)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
+[![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-two-hop-link?color=blue)](https://github.com/YU000jp/logseq-plugin-two-hop-link/LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/YU000jp/logseq-plugin-two-hop-link/total.svg)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
 <!-- Published 2023 -->
 
 ---
@@ -21,7 +19,7 @@
 
 - Press [`---`] on the top right toolbar to open [`Plugins`]
 - Select marketplace
-- Type `WORD` in the search field, select it from the search results and install
+- Type `2` in the search field, select it from the search results and install
 
 ### Usage
 
@@ -29,7 +27,7 @@
 
 ## Showcase / Questions / Ideas / Help
 
-> Go to the [discussion](./discussions) tab to ask and find this kind of things.
+> Go to the [discussion](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions) tab to ask and find this kind of things.
 
 ## Author
 
