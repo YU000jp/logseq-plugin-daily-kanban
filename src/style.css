@@ -1,0 +1,36 @@
+div#hopLinks {
+    margin-top: 7em;
+    margin-left: 2em;
+    user-select: none;
+
+    & button#hopLinksUpdate {
+        margin: 1em;
+    }
+
+    & div#outgoingLinks,
+    div.tokenLink {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    & span#hopLinksKeyword {
+        background: var(--ls-quaternary-background-color);
+
+    }
+
+    & span.hopLinksTh {
+        background: var(--ls-tertiary-background-color);
+    }
+
+    & span.hopLinksTh,
+    span.hopLinksTd {
+        border: 1px solid white;
+        padding: 2em;
+        width: 180px;
+        font-size: .8em;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}

@@ -1,12 +1,114 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8"/>
-    <title>Logseq Plugin:</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script src="./src/index.ts" type="module"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Logseq Plugin:</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+  <div id="app">
+
+    <div class="container">
+      <details>
+        <summary>Kanban board</summary>
+        <div class="lane">
+
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name">Monday</p>
+              </div>
+
+              <div id="mondayList" class="tasks"></div>
+            </div>
+          </div>
+
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name">Tuesday</p>
+              </div>
+
+              <div id="tuesdayList" class="tasks"></div>
+            </div>
+          </div>
+
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name">Wednesday</p>
+              </div>
+
+              <div id="wednesdayList" class="tasks"></div>
+            </div>
+          </div>
+
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name">Thursday</p>
+              </div>
+
+              <div id="thursdayList" class="tasks"></div>
+            </div>
+          </div>
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name">Friday</p>
+              </div>
+
+              <div id="fridayList" class="tasks"></div>
+            </div>
+          </div>
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name" style="color:#0000FF">Saturday</p>
+              </div>
+
+              <div id="saturdayList" class="tasks"></div>
+            </div>
+          </div>
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name" style="color:#FF0000">Sunday</p>
+              </div>
+
+              <div id="sundayList" class="tasks"></div>
+            </div>
+          </div>
+
+          <div class="lane-item">
+            <div class="lane-item-inner">
+              <div class="lane-status">
+                <p class="lane-status-name">DONE</p>
+                <button id="deleteAllDoneTask" class="lane-status-delete">Delete all done task</button>
+              </div>
+
+              <div id="doneList" class="tasks"></div>
+            </div>
+          </div>
+        </div>
+        <details>
+          <summary>New task</summary>
+          <form id="createForm" class="new">
+            <div class="new-head">
+              <label class="new-label" for="title">Title</label>
+              <input id="title" class="new-input" name="title" />
+              <button class="new-button">Submit</button>
+            </div>
+          </form>
+        </details>
+      </details>
+    </div>
+
+  </div>
+  <script src="./src/index.ts" type="module"></script>
+</body>
+
 </html>
