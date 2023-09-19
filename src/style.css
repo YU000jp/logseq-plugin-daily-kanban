@@ -33,4 +33,14 @@ div#hopLinks {
             opacity: 0.8;
         }
     }
+
+    & select {
+        background-color: inherit;
+        color: inherit;
+    }
+
+    & option {
+        background-color: var(--ls-primary-background-color);
+        color: var(--ls-primary-text-color);
+    }
 }
