@@ -27,6 +27,12 @@
 
 - Displayed at the bottom of the page if the page contains links to other pages.
 
+---
+
+## Showcase / Questions / Ideas / Help
+
+> Go to the [discussion](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions) tab to ask and find this kind of things.
+
 ### Contribution
 
 #### Issues
@@ -34,12 +40,6 @@
 - How to display tooltips for editing, with Logseq API
 - How to convert Logseq as its own markdown
 - Please create query statements using the current page name or keywords (Author is not good at advanced queries).
-
----
-
-## Showcase / Questions / Ideas / Help
-
-> Go to the [discussion](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions) tab to ask and find this kind of things.
 
 ## Author
 
