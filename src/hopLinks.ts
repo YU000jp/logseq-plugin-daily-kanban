@@ -163,6 +163,7 @@ const outgoingLInks = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
     hopLinksElement.append(outgoingLinksElement);
 };
 
+//typeBlocks
 const typeBlocks = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
@@ -206,7 +207,22 @@ const typeBlocks = (filteredPageLinksSet: ({ uuid: string; name: string; } | und
                 const uuid: string | undefined = this.querySelector("a")?.dataset.uuid;
                 if (!uuid) return;
                 if (shiftKey === true) {
-                    logseq.Editor.openInRightSidebar(uuid);
+                    const thisBlock = await logseq.Editor.getBlock(uuid) as BlockEntity | null;
+                    if (!thisBlock) {
+                        logseq.UI.showMsg('Block not found', "warning");
+                        return;
+                    }
+                    const parentBlock = await logseq.Editor.getBlock(thisBlock.parent.id) as BlockEntity | null;
+                    if (!parentBlock) {
+                        logseq.Editor.openInRightSidebar(uuid);
+                    } else {
+                        logseq.Editor.openInRightSidebar(parentBlock.uuid);
+                        const blockEle = parent.document.getElementById('block-content-' + uuid) as HTMLDivElement | null;
+                        if (blockEle) {
+                            blockEle.scrollIntoView({ behavior: 'smooth' });
+                            setTimeout(() => logseq.Editor.selectBlock(uuid), 150);
+                        }
+                    }
                 } else {
                     const thisBlock = await logseq.Editor.getBlock(uuid) as BlockEntity | null;
                     if (!thisBlock) {
