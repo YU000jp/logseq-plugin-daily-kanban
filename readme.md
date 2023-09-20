@@ -1,8 +1,8 @@
 # Logseq Plugin: 2 hop link
 
-- Development stage 👷🚧
+- Development stage (not published yet) 👷🚧
 
-> [Release](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases) information is on the right. Load files developper mode. Or try at [Innovation Lab plugin](https://github.com/YU000jp/logseq-plugin-some-menu-extender)
+> [Release](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases) information is on the right. Load files at developper mode. Or try at [Innovation Lab plugin](https://github.com/YU000jp/logseq-plugin-some-menu-extender)
 
 [![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-two-hop-link)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
 [![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-two-hop-link?color=blue)](https://github.com/YU000jp/logseq-plugin-two-hop-link/LICENSE)
