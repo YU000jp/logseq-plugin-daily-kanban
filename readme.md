@@ -29,7 +29,7 @@
 
 ### Contribution
 
-#### Issue
+#### Issues
 
 - How to display tooltips for editing, with Logseq API
 - How to convert Logseq as its own markdown
