@@ -25,6 +25,15 @@
 
 ### Usage
 
+- Displayed at the bottom of the page if the page contains links to other pages.
+
+### Contribution
+
+#### Issue
+
+- How to display tooltips for editing, with Logseq API
+- How to convert Logseq as its own markdown
+
 ---
 
 ## Showcase / Questions / Ideas / Help
