@@ -11,7 +11,7 @@
 
 ## Features
 
-![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/4e15ce0b-1032-4610-a93a-20a9ebde6a2c)
+![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/f9d858b0-20c7-4359-a607-001992f2ad41)
 
 ---
 
