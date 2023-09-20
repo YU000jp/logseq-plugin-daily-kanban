@@ -40,7 +40,7 @@
 #### Issues
 
 - How to display tooltips for editing, with Logseq API
-- How to convert Logseq as its own markdown
+- How to convert as its own markdown
 - Please create query statements using the current page name or keywords (Author is not good at advanced queries).
 
 ## Author
