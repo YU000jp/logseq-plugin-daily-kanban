@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.1.0...v1.2.0) (2023-09-20)
+
+
+### Features
+
+* **plugin settings:** exclude pages ([d7d4db9](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/d7d4db97bcba642051ffaa9c54550ffc8c155570))
+* **when on shift click:** open parent block ([aa70fba](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/aa70fba442d6b577ce2bebbde2aa91441bab297c))
+
 # [1.1.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.0.0...v1.1.0) (2023-09-19)
 
 
