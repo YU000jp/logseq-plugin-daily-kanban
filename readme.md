@@ -11,7 +11,7 @@
 
 ## Features
 
-![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/4e15ce0b-1032-4610-a93a-20a9ebde6a2c)
+![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/f9d858b0-20c7-4359-a607-001992f2ad41)
 
 ---
 
@@ -24,6 +24,15 @@
 - Type `2` in the search field, select it from the search results and install
 
 ### Usage
+
+- Displayed at the bottom of the page if the page contains links to other pages.
+
+### Contribution
+
+#### Issue
+
+- How to display tooltips for editing, with Logseq API
+- How to convert Logseq as its own markdown
 
 ---
 
@@ -39,7 +48,7 @@
 
 ### Icon
 
-- [icooon-mono.com](https://icooon-mono.com/)
+- [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
 
 ---
 
