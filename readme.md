@@ -1,6 +1,8 @@
 # Logseq Plugin: 2 hop link
 
-- Development stage 👷🚧
+- Development stage (not published yet) 👷🚧
+
+> [Release](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases) information is on the right. Load files at developper mode. Or try at [Innovation Lab plugin](https://github.com/YU000jp/logseq-plugin-some-menu-extender)
 
 [![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-two-hop-link)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
 [![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-two-hop-link?color=blue)](https://github.com/YU000jp/logseq-plugin-two-hop-link/LICENSE)
@@ -27,18 +29,19 @@
 
 - Displayed at the bottom of the page if the page contains links to other pages.
 
-### Contribution
-
-#### Issue
-
-- How to display tooltips for editing, with Logseq API
-- How to convert Logseq as its own markdown
-
 ---
 
 ## Showcase / Questions / Ideas / Help
 
 > Go to the [discussion](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions) tab to ask and find this kind of things.
+
+### Contribution
+
+#### Issues
+
+- How to display tooltips for editing, with Logseq API
+- How to convert as its own markdown
+- Please create query statements using the current page name or keywords (Author is not good at advanced queries).
 
 ## Author
 
