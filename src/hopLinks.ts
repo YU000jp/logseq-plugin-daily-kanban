@@ -537,26 +537,22 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
         popupElement.append(openLinkContainerElement);
 
         //ページの内容を表示する
-        const Blocks = await logseq.Editor.getPageBlocksTree(uuid) as BlockEntity[] | null;
-        if (!Blocks) return;
+        const blocks = await logseq.Editor.getPageBlocksTree(uuid) as BlockEntity[] | null;
+        if (!blocks) return;
         const content: HTMLPreElement = document.createElement("pre");
-        //Blocks[i].contentが空であるか、「::」が含まれている場合はBlocks[i+1].contentにする 10行までにする
-        Blocks.forEach(async (block, i) => {
-            if (i > 10) return;
-            if (block.content === "" || block.content.match(/::/) !== null) return;
-            // {{embed ((何らかの英数値))}} であるか ((何らかの英数値)) だった場合はuuidとしてブロックを取得する
-            const match = block.content.match(/{{embed \(\((.+?)\)\)}}/) || block.content.match(/\(\((.+?)\)\)/);
-            if (match) {
-                const thisBlock = await logseq.Editor.getBlock(match[1]) as BlockEntity | null;
-                if (!thisBlock) return;
-                block.content = thisBlock.content;
+        //Blocks[i].contentを10行取得する
+        for (let i = 0; i < 10; i++) {
+            if (blocks[i] && blocks[i].content) {
+                //リファレンスかどうか
+                const isReference: string | null = await includeReference(blocks[i].content);
+                if (isReference) {
+                    content.innerHTML += isReference + "\n";
+                } else {
+                    content.innerHTML += stringLimit(blocks[i].content, 500) + "\n";
+                }
             }
-            //文字数制限
-            block.content = stringLimit(block.content, 500);
-
-            content.innerHTML += block.content + "\n";
-        });
-        popupElement.append(content);
+        }
+        if (content.innerText !== "") popupElement.append(content);
     };
 }
 
