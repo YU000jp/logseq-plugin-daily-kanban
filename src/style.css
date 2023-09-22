@@ -1,5 +1,5 @@
 div#hopLinks {
-    margin-top: 15em;
+    margin-top: 16em;
     margin-left: 2em;
     user-select: none;
 
@@ -58,9 +58,9 @@ div#hopLinks {
 
         & div.hopLinks-popup-content {
             overflow: auto;
-            min-width: 180px;
+            min-width: 280px;
             max-width: 620px;
-            min-height: 100px;
+            min-height: 200px;
             max-height: 620px;
             color: var(--ls-primary-text-color);
             padding: 1em;
