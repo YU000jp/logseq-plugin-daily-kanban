@@ -1,8 +1,8 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin";
 import CSSfile from "./style.css?inline";
-import { stringLimit } from "./lib";
+import { getBlockContent, getPageContent, stringLimitAndRemoveProperties } from "./lib";
 import { includeReference } from "./lib";
-import { create } from "domain";
+
 export const loadTwoHopLink = async () => {
 
     //ページ読み込み時に実行コールバック
@@ -246,7 +246,7 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
             if (isReference) block.content = isReference;
 
             //block.contentの文字数制限
-            block.content = stringLimit(block.content, 500);
+            block.content = stringLimitAndRemoveProperties(block.content, 500);
 
             blockElement.innerHTML += `<a data-uuid="${block.uuid}">${block.content}</a>`;
             blockElement.addEventListener("click", openTooltipEventFromBlock(popupElement));
@@ -457,7 +457,7 @@ function createTd(page: PageEntity, tokenLinkElement: HTMLDivElement) {
     //div ポップアップの内容
     const popupElement: HTMLDivElement = document.createElement("div");
     popupElement.classList.add("hopLinks-popup-content");
-    divElementTag.innerHTML += `<a data-tag="${page.originalName}">${page.originalName}</a>`;
+    divElementTag.innerHTML += `<a data-uuid="${page.originalName}">${page.originalName}</a>`;
     inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
 
     labelElement.append(divElementTag, inputElement, popupElement);
@@ -531,27 +531,26 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
         if (!uuid) return;
 
         //ページを開くリンク
-        const thisPage = await logseq.Editor.getPage(uuid) as PageEntity | null;
+        const thisPage = await logseq.Editor.getPage(name) as PageEntity | null;
         if (!thisPage) return;
         const openLinkContainerElement: HTMLDivElement = createAnchorContainer(uuid, thisPage); //ページを開くリンク(Hierarchy対応)と画像を表示する
         popupElement.append(openLinkContainerElement);
 
-        //ページの内容を表示する
-        const blocks = await logseq.Editor.getPageBlocksTree(uuid) as BlockEntity[] | null;
-        if (!blocks) return;
+        //ページの内容を取得する
         const content: HTMLPreElement = document.createElement("pre");
-        //Blocks[i].contentを10行取得する
-        for (let i = 0; i < 10; i++) {
-            if (blocks[i] && blocks[i].content) {
-                //リファレンスかどうか
-                const isReference: string | null = await includeReference(blocks[i].content);
-                if (isReference) {
-                    content.innerHTML += isReference + "\n";
-                } else {
-                    content.innerHTML += stringLimit(blocks[i].content, 500) + "\n";
-                }
-            }
+        let pageContents = await getPageContent(thisPage);
+        if (pageContents) {
+            //リファレンスかどうか
+            const isReference: string | null = await includeReference(pageContents);
+            if (isReference) pageContents = isReference;
+
+            //pageContentの文字数制限
+            pageContents = stringLimitAndRemoveProperties(pageContents, 700);
+
+            content.innerText += pageContents + "\n";
+
         }
+
         if (content.innerText !== "") popupElement.append(content);
     };
 }
@@ -575,6 +574,8 @@ function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDiv
             //リファレンスかどうか
             const isReference: string | null = await includeReference(parentBlock.content);
             if (isReference) parentBlock.content = isReference;
+            //parentBlock.contentの文字数制限と一部のプロパティを削除する
+            parentBlock.content = stringLimitAndRemoveProperties(parentBlock.content, 500);
 
             const pElement: HTMLParagraphElement = document.createElement("p");
             //pElementをクリックしたら、親ブロックを開く
@@ -599,9 +600,9 @@ function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDiv
         anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(thisBlock.uuid) });
         pElement.append(anchorElement);
         const preElement: HTMLPreElement = document.createElement("pre");
-
+        const content = await getBlockContent(thisBlock);
         //リファレンスかどうか
-        const isReference: string | null = await includeReference(thisBlock.content);
+        const isReference: string | null = await includeReference(content);
         if (isReference) thisBlock.content = isReference;
 
         preElement.innerText = thisBlock.content;
