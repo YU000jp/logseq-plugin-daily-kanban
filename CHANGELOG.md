@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.4.0...v1.5.0) (2023-09-22)
+
+
+### Bug Fixes
+
+* before unload ([505ae09](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/505ae099ebe8ee57261c8928adae14522ca5b321))
+
+
+### Features
+
+* **design:** redesign ([656c42c](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/656c42cb4fc1243e7c09f14c4389fd720fd9ac33))
+
 # [1.4.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.3.0...v1.4.0) (2023-09-22)
 
 
