@@ -3,6 +3,10 @@ div#hopLinks {
     margin-left: 2em;
     user-select: none;
 
+    & a:hover {
+        text-decoration: underline;
+    }
+
     & button#hopLinksUpdate {
         margin: 1em;
     }
@@ -55,10 +59,9 @@ div#hopLinks {
         & div.hopLinks-popup-content {
             overflow: auto;
             min-width: 180px;
-            max-width: 600px;
+            max-width: 620px;
             min-height: 100px;
-            max-height: 600px;
-            background-color: var(--ls-primary-background-color);
+            max-height: 620px;
             color: var(--ls-primary-text-color);
             padding: 1em;
             box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
@@ -107,4 +110,8 @@ div#hopLinks {
     & div.tokenLink label div.hopLinks-popup-content {
         transform: translate(0, -120%);
     }
+}
+
+div[label="plugin-settings-modal"] div[data-id="two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
+    height: 15em;
 }
