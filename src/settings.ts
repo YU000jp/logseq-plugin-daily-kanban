@@ -21,9 +21,9 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         key: "hopLinkType",
         type: "enum",
         title: "2 hop link: Select page-tags or blocks, hierarchy",
-        default: "unset",
-        enumChoices: ["unset", "page-tags", "blocks", "hierarchy"],
-        description: "default: unset",
+        default: "backLinks",
+        enumChoices: ["unset", "backLinks", "page-tags", "blocks", "hierarchy"],
+        description: "default: backLinks",
     },
     {//除外するページ
         key: "excludePages",

@@ -1,7 +1,7 @@
 import { BlockEntity } from "@logseq/libs/dist/LSPlugin.user";
 
 export const stringLimit = (content: string, limit: number): string => {
-    if (content.length > limit) {
+    if (content && content.length > limit) {
         content = content.slice(0, limit) + "...";
     }
     return content;
