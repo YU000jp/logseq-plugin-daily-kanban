@@ -1,3 +1,12 @@
+## [1.5.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.5.0...v1.5.1) (2023-09-22)
+
+
+### Bug Fixes
+
+* **bug:** not work exclude pages ([b4f8932](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/b4f8932b636e3da0c26add2e6af20351b55310d0))
+* **bug:** read block content ([4f1b240](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/4f1b240c2e44e4ccfffe3bdd814beb19f1ce4c1b))
+* **plugin settings:** textarea too small ([ef0a8a6](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/ef0a8a6c0f68cc81d920f4fc4d50b610d00a5605))
+
 # [1.5.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.4.0...v1.5.0) (2023-09-22)
 
 
