@@ -13,23 +13,25 @@ div#hopLinks {
         flex-wrap: wrap;
     }
 
-    & span#hopLinksKeyword {
+    & div#hopLinksKeyword {
         background: var(--ls-quaternary-background-color);
 
     }
 
-    & span.hopLinksTh {
+    & div.hopLinksTh {
         background: var(--ls-tertiary-background-color);
     }
 
-    & span.hopLinksTh,
-    span.hopLinksTd {
+    & div.hopLinksTh,
+    div.hopLinksTd {
         border: 1px solid white;
         padding: 2em;
         width: 180px;
-        font-size: .8em;
+        display: block;
+        font-size: .88em;
 
-        &:hover {
+
+        &:hover:not(:has(div.hopLinks-popup-content)) {
             opacity: 0.8;
         }
     }
@@ -42,5 +44,65 @@ div#hopLinks {
     & option {
         background-color: var(--ls-primary-background-color);
         color: var(--ls-primary-text-color);
+    }
+
+    & label {
+
+        & div.hopLinksTd {
+            height: 100%;
+            cursor: zoom-in;
+        }
+
+        & div.hopLinks-popup-content {
+            overflow: auto;
+            min-width: 180px;
+            max-width: 600px;
+            min-height: 100px;
+            max-height: 600px;
+            background-color: var(--ls-primary-background-color);
+            color: var(--ls-primary-text-color);
+            padding: 1em;
+            box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
+            display: none;
+            position: absolute;
+            transform: translate(-10%, -50%);
+            z-index: 1;
+            border-radius: 0.2em;
+            border: 1px solid;
+            cursor: zoom-out;
+
+            & div.hopLinks-popup-img-container {
+                display: flex;
+                gap: 0 20px;
+                padding: 10px;
+
+                & div.hopLinks-popup-anchor {
+                    >a {
+                        margin-left: .5em;
+                        margin-right: .5em;
+                    }
+
+                    >img {
+                        object-fit: scale-down;
+                        max-width: 80px;
+                        max-height: 80px;
+                        vertical-align: top;
+                    }
+                }
+            }
+        }
+
+        & input[type="checkbox"] {
+            display: none;
+        }
+
+        & input[type="checkbox"]:checked+div.hopLinks-popup-content {
+            display: block;
+            transition: .2s;
+        }
+    }
+
+    & div.tokenLink label div.hopLinks-popup-content {
+        transform: translate(0, -120%);
     }
 }
