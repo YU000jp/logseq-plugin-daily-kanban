@@ -1,3 +1,11 @@
+## [1.5.2](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.5.1...v1.5.2) (2023-09-22)
+
+
+### Bug Fixes
+
+* **bug:** read page contents & remove properties ([41b8563](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/41b85633ba2f8e53a74a8f4ba467d9a3430a4b88))
+* font-size ([a224b1f](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/a224b1fedb0f12c83052602e9f2a732d3b2420f2))
+
 ## [1.5.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.5.0...v1.5.1) (2023-09-22)
 
 
