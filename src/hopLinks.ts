@@ -242,7 +242,7 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
             if (isReference) block.content = isReference;
 
             //block.contentの文字数制限
-            block.content = stringLimit(block.content, 200);
+            block.content = stringLimit(block.content, 500);
 
             blockElement.innerHTML += `<a data-uuid="${block.uuid}">${block.content}</a>`;
             blockElement.addEventListener("click", openTooltipEventFromBlock(popupElement));
@@ -523,7 +523,7 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
                 block.content = thisBlock.content;
             }
             //文字数制限
-            block.content = stringLimit(block.content, 200);
+            block.content = stringLimit(block.content, 500);
 
             content.innerHTML += block.content + "\n";
         });

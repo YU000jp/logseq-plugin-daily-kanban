@@ -1,5 +1,5 @@
 div#hopLinks {
-    margin-top: 7em;
+    margin-top: 15em;
     margin-left: 2em;
     user-select: none;
 
@@ -24,12 +24,11 @@ div#hopLinks {
 
     & div.hopLinksTh,
     div.hopLinksTd {
-        border: 1px solid white;
-        padding: 2em;
+        padding: .8em;
         width: 180px;
         display: block;
-        font-size: .88em;
-
+        font-size: .86em;
+        border: 1px solid var(--ls-guideline-color);
 
         &:hover:not(:has(div.hopLinks-popup-content)) {
             opacity: 0.8;
@@ -68,8 +67,11 @@ div#hopLinks {
             transform: translate(-10%, -50%);
             z-index: 1;
             border-radius: 0.2em;
-            border: 1px solid;
+            outline: 2px solid var(--ls-guideline-color);
+            outline-offset: 3px;
             cursor: zoom-out;
+            backdrop-filter: blur(40px);
+            font-size: .95em;
 
             & div.hopLinks-popup-img-container {
                 display: flex;
