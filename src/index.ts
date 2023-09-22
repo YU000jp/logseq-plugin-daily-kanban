@@ -20,6 +20,9 @@ const main = () => {
   loadTwoHopLink();
 
 
+  logseq.beforeunload(async () => {
+    parent.document.getElementById("hopLinks")?.remove();
+  });
 };/* end_main */
 
 
