@@ -11,9 +11,9 @@
 
 ---
 
-## Features
+- bottom of a page content
 
-![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/f9d858b0-20c7-4359-a607-001992f2ad41)
+![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/e50711c1-0401-4d8a-af46-9b9e1bd49af2)
 
 ---
 
