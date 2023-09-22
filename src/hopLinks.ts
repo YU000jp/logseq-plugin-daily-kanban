@@ -85,7 +85,7 @@ export const hopLinks = async (select?: string) => {
         if (a.name < b.name) return -1;
         return 0;
     });
-
+    excludePages(filteredPageLinksSet);
     if (logseq.settings!.outgoingLinks === true) outgoingLInks(filteredPageLinksSet, hopLinksElement);
 
     /*
@@ -145,10 +145,11 @@ export const hopLinks = async (select?: string) => {
 
 //outgoingLinks
 const outgoingLInks = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
+
     //outgoingLinksElementを作成
     const outgoingLinksElement: HTMLDivElement = document.createElement("div");
     outgoingLinksElement.id = "outgoingLinks";
-    outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">OutgoingLinks (Keyword)</div>`;
+    outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">Outgoing Links (Keyword)</div>`;
 
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
@@ -203,6 +204,9 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         if (!page) return;
         //blocksをフィルターする
         const filteredBlocks = page.filter((page) => page[1].length !== 0).map((page) => page[1][0]);
+        if (filteredBlocks.length === 0) return;
+        //ページを除外する
+        excludePagesForPageList(filteredBlocks.map((block) => block.page.originalName));
         if (filteredBlocks.length === 0) return;
 
         //PageBlocksInnerElementにelementを追加
@@ -267,8 +271,8 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         const pageList = page.map((page) => page[0].originalName);
         if (!pageList || pageList.length === 0) return;
 
-        //pageTagsからexcludePagesの配列に含まれるページも除外する
-        excludePages(pageList);
+        //excludePagesの配列に含まれるページを除外する
+        excludePagesForPageList(pageList);
         if (pageList.length === 0) return;
 
         //th
@@ -324,6 +328,11 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
         // namespace.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
         PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null);
         if (!PageEntity || PageEntity.length === 0) return;
+
+        //ページを除外する
+        excludePagesForPageList(PageEntity.map((page) => page.originalName));
+        if (PageEntity.length === 0) return;
+
         //sortする
         PageEntity.sort((a, b) => {
             if (a.name > b.name) return 1;
@@ -369,13 +378,20 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         }
         //そのページにタグ漬けされている
         let PageEntity = await logseq.DB.q(`(page-tags "${pageLink.name}")`) as unknown as PageEntity[] | undefined;
-        if (!PageEntity || PageEntity.length === 0) return;
-        // pageTags.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
-        PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null);
+        if (PageEntity && PageEntity.length !== 0) {
+            // pageTags.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
+            PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null);
+        }
+        //PageEntityとPageEntityFromPropertyが両方とも空の場合は処理を終了する
+        if ((!PageEntity || PageEntity.length === 0) && (!PageEntityFromProperty || PageEntityFromProperty.length === 0)) return;
 
-        if (!PageEntity || PageEntity.length === 0) return;
+        //ページを除外する
+        if (PageEntity) excludePagesForPageList(PageEntity.map((page) => page.originalName));
+        excludePagesForPageList(PageEntityFromProperty.map((page) => page.originalName));
+        if (PageEntity && PageEntity.length === 0 && PageEntityFromProperty.length === 0) return;
+
         //sortする
-        PageEntity.sort((a, b) => {
+        if (PageEntity) PageEntity.sort((a, b) => {
             if (a.name > b.name) return 1;
             if (a.name < b.name) return -1;
             return 0;
@@ -395,7 +411,7 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         tokenLinkElement.append(divElement);
 
         //td
-        PageEntity.forEach((page) => createTd(page, tokenLinkElement));
+        if (PageEntity) PageEntity.forEach((page) => createTd(page, tokenLinkElement));
         PageEntityFromProperty.forEach((page) => createTd(page, tokenLinkElement));
 
         hopLinksElement.append(tokenLinkElement);
@@ -403,13 +419,26 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
 }
 
 
-const excludePages = (pageList: string[]) => {
+const excludePagesForPageList = (pageList: string[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
         pageList.forEach((pageName) => {
             if (excludePages.includes(pageName)) {
                 pageList.splice(pageList.indexOf(pageName), 1);
             }
+        });
+    }
+}
+
+function excludePages(filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) {
+    const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
+    if (excludePages) {
+        excludePages.forEach((excludePage) => {
+            filteredPageLinksSet.forEach((pageLink, i) => {
+                if (pageLink?.name === excludePage) {
+                    filteredPageLinksSet.splice(i, 1);
+                }
+            });
         });
     }
 }
