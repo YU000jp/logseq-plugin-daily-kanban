@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.3.0...v1.4.0) (2023-09-22)
+
+
+### Features
+
+* **Add:** type "BackLInks" ([1456c6f](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/1456c6f20ff0af7d56b304d3a9951e2a2ff6a131))
+
 # [1.3.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.2.0...v1.3.0) (2023-09-22)
 
 
