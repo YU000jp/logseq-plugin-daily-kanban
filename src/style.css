@@ -74,7 +74,7 @@ div#hopLinks {
             outline-offset: 3px;
             cursor: zoom-out;
             backdrop-filter: blur(10px);
-            font-size: .95em;
+            font-size: .96em;
 
             & div.hopLinks-popup-img-container {
                 display: flex;
@@ -94,6 +94,10 @@ div#hopLinks {
                         vertical-align: top;
                     }
                 }
+            }
+
+            & pre {
+                line-height: 2.5em;
             }
         }
 
