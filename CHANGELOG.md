@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.2.0...v1.3.0) (2023-09-22)
+
+
+### Features
+
+* **Add:** Display on tooltip & support references ([806e64d](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/806e64d23751ed12538d73f5a91db06c86834b3c))
+
 # [1.2.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.1.0...v1.2.0) (2023-09-20)
 
 
