@@ -29,8 +29,8 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         key: "excludeDateFromOutgoingLinks",
         type: "boolean",
         title: "exclude date from outgoing links",
-        default: true,
-        description: "default: true",
+        default: false,
+        description: "default: false",
     },
     {//Resultからジャーナルを除外する
         key: "excludeJournalFromResult",
@@ -43,7 +43,7 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         key: "excludeDateFromResult",
         type: "boolean",
         title: "exclude date from result",
-        default: true,
-        description: "default: true",
+        default: false,
+        description: "default: false",
     },
 ];
