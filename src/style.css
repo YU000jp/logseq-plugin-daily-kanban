@@ -39,7 +39,7 @@ div#hopLinks {
         }
     }
 
-    & div.tokenLink:not(:has(div.hopLinksTd)) {
+    & div:is(.tokenLink, #outgoingLinks):not(:has(div.hopLinksTd)) {
         display: none;
     }
 
