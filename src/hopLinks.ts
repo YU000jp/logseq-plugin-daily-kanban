@@ -225,13 +225,7 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         tokenLinkElement.classList.add("tokenLink");
         const divElement: HTMLDivElement = document.createElement("div");
         divElement.classList.add("hopLinksTh");
-
-        //outgoingLinksElementにa要素を追加する
-        const anchorElement: HTMLAnchorElement = document.createElement("a");
-        anchorElement.dataset.uuid = pageLink.uuid;
-        anchorElement.dataset.name = pageLink.name;
-        anchorElement.innerText = pageLink.name;
-        divElement.append(anchorElement);
+        divElement.innerText = pageLink.name;
         tokenLinkElement.append(divElement);
         //end of 行タイトル(左ヘッダー)
 
@@ -303,11 +297,7 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         tokenLinkElement.classList.add("tokenLink");
         const divElement: HTMLDivElement = document.createElement("div");
         divElement.classList.add("hopLinksTh");
-        const anchorElement: HTMLAnchorElement = document.createElement("a");
-        anchorElement.dataset.uuid = pageLink.uuid;
-        anchorElement.dataset.name = pageLink.name;
-        anchorElement.innerText = pageLink.name;
-        divElement.append(anchorElement);
+        divElement.innerText = pageLink.name;
         tokenLinkElement.append(divElement);
 
         //td
@@ -372,11 +362,7 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
         tokenLinkElement.classList.add("tokenLink");
         const divElement: HTMLDivElement = document.createElement("div");
         divElement.classList.add("hopLinksTh");
-        const anchorElement: HTMLAnchorElement = document.createElement("a");
-        anchorElement.dataset.uuid = pageLink.uuid;
-        anchorElement.dataset.name = pageLink.name;
-        anchorElement.innerText = pageLink.name;
-        divElement.append(anchorElement);
+        divElement.innerText = pageLink.name;
         tokenLinkElement.append(divElement);
 
         //td
@@ -428,11 +414,7 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         tokenLinkElement.classList.add("tokenLink");
         const divElement: HTMLDivElement = document.createElement("div");
         divElement.classList.add("hopLinksTh");
-        const anchorElement: HTMLAnchorElement = document.createElement("a");
-        anchorElement.dataset.uuid = pageLink.uuid;
-        anchorElement.dataset.name = pageLink.name;
-        anchorElement.innerText = pageLink.name;
-        divElement.append(anchorElement);
+        divElement.innerText = pageLink.name;
         tokenLinkElement.append(divElement);
 
         //td
