@@ -39,6 +39,10 @@ div#hopLinks {
         }
     }
 
+    & div.tokenLink:not(:has(div.hopLinksTd)) {
+        display: none;
+    }
+
     & select {
         background-color: inherit;
         color: inherit;
@@ -54,12 +58,16 @@ div#hopLinks {
         & div.hopLinksTd {
             height: 100%;
             cursor: zoom-in;
+
+            >a {
+                line-height: 1.8em;
+            }
         }
 
         & div.hopLinks-popup-content {
             overflow: auto;
-            min-width: 280px;
-            max-width: 620px;
+            min-width: 340px;
+            max-width: 660px;
             min-height: 200px;
             max-height: 620px;
             color: var(--ls-primary-text-color);
@@ -73,7 +81,7 @@ div#hopLinks {
             outline: 2px solid var(--ls-guideline-color);
             outline-offset: 3px;
             cursor: zoom-out;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(70px);
             font-size: .96em;
 
             & div.hopLinks-popup-img-container {

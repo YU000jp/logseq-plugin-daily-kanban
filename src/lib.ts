@@ -4,12 +4,16 @@ export const stringLimitAndRemoveProperties = (content: string, limit: number): 
     if (content && content.length > limit) {
         content = content.slice(0, limit) + "\n\n...\n";
     }
-    //contentに「background-color:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
-    content = content.replaceAll(/background-color:: .+?\n/g, "");
-    //contentに。「id:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
-    content = content.replaceAll(/id:: .+?\n/g, "");
-    //contentに。「heading:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
-    content = content.replaceAll(/heading:: .+?\n/g, "");
+    if (content.includes("\n")) {
+        //contentに「background-color:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
+        content = content.replaceAll(/background-color:: .+?\n/g, "");
+        //contentに。「id:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
+        content = content.replaceAll(/id:: .+?\n/g, "");
+        //contentの最後の行に「id:: 」が含まれている場合は、その行を削除する
+        content = content.replace(/id:: .+?$/, "");
+        //contentに。「heading:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
+        content = content.replaceAll(/heading:: .+?\n/g, "");
+    }
     return content;
 };
 
