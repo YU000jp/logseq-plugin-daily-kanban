@@ -5,6 +5,13 @@
 
 * **Add:** exclude journal and date pages, to plugin settings ([8e9989e](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/8e9989ef3b8a9bb34b02299ecc29a663fe1058cd))
 
+# [1.6.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.5.2...v1.6.0) (2023-09-23)
+
+
+### Features
+
+* **Add:** exclude journal and date pages, to plugin settings ([8e9989e](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/8e9989ef3b8a9bb34b02299ecc29a663fe1058cd))
+
 ## [1.5.2](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.5.1...v1.5.2) (2023-09-22)
 
 
