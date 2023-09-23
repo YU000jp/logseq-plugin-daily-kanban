@@ -1,3 +1,11 @@
+## [1.6.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.6.0...v1.6.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* anchor event for page content ([5995052](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/59950522f9ce4088450a5ef309a153f3fccfb5aa))
+* **remove:** disable anchor click event ([eb2a9c1](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/eb2a9c1d5301285e0921f8d3175d0549500414e6))
+
 # [1.6.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.5.2...v1.6.0) (2023-09-23)
 
 
