@@ -581,6 +581,7 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
 
         //ページの内容を取得する
         const content: HTMLPreElement = document.createElement("pre");
+        content.title = "Page Content";
         let pageContents = await getPageContent(thisPage);
         if (pageContents) {
             //リファレンスかどうか
@@ -591,7 +592,6 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
             pageContents = stringLimitAndRemoveProperties(pageContents, 700);
 
             content.innerText += pageContents + "\n";
-
         }
 
         if (content.innerText !== "") popupElement.append(content);
