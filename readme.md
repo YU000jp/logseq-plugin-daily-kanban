@@ -34,6 +34,24 @@ bottom of a page content
 
 ### Plugin Settings
 
+- outgoing links enable :boolean
+  - `true` default
+  - `false`
+- exclude page title Keywords :string
+  > split by newline
+- exclude journal from outgoing links :boolean
+  - `true` default
+  - `false`
+- exclude date from outgoing links :boolean
+  - `true`
+  - `false` default
+- exclude journal from result :boolean
+  - `true` default
+  - `false`
+- exclude date from result :boolean
+  - `true`
+  - `false` default
+
 ---
 
 ## Showcase / Questions / Ideas / Help
