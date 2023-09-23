@@ -1,5 +1,6 @@
 # Logseq Plugin: 2 hop link
 
+- Displays collections of links at bottom of a page content. Collect outgoing links and generate further links.
 - Development stage (not published yet) 👷🚧
 
 > [Release](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases) information is on the right. Load files at developper mode.
