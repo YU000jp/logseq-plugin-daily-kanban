@@ -195,16 +195,6 @@ const outgoingLInks = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
 };
 
 
-const thAnchorEvent = async function (this: HTMLAnchorElement): Promise<void> {
-    const uuid: string | undefined = this.dataset.uuid;
-    if (!uuid) return;
-    const inputEle = parent.document.querySelector(`input[name="outgoingLinks-popup-${uuid}"]`) as HTMLInputElement | null;
-    if (!inputEle) return;
-    //inputEleをクリック
-    inputEle.click();
-};
-
-
 //typeBlocks
 const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
     //行作成
@@ -241,7 +231,6 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         anchorElement.dataset.uuid = pageLink.uuid;
         anchorElement.dataset.name = pageLink.name;
         anchorElement.innerText = pageLink.name;
-        anchorElement.addEventListener("click", thAnchorEvent);
         divElement.append(anchorElement);
         tokenLinkElement.append(divElement);
         //end of 行タイトル(左ヘッダー)
@@ -318,7 +307,6 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         anchorElement.dataset.uuid = pageLink.uuid;
         anchorElement.dataset.name = pageLink.name;
         anchorElement.innerText = pageLink.name;
-        anchorElement.addEventListener("click", thAnchorEvent);
         divElement.append(anchorElement);
         tokenLinkElement.append(divElement);
 
@@ -388,7 +376,6 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
         anchorElement.dataset.uuid = pageLink.uuid;
         anchorElement.dataset.name = pageLink.name;
         anchorElement.innerText = pageLink.name;
-        anchorElement.addEventListener("click", thAnchorEvent);
         divElement.append(anchorElement);
         tokenLinkElement.append(divElement);
 
@@ -445,7 +432,6 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         anchorElement.dataset.uuid = pageLink.uuid;
         anchorElement.dataset.name = pageLink.name;
         anchorElement.innerText = pageLink.name;
-        anchorElement.addEventListener("click", thAnchorEvent);
         divElement.append(anchorElement);
         tokenLinkElement.append(divElement);
 
