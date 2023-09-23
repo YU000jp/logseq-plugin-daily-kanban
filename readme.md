@@ -12,7 +12,7 @@
 
 ---
 
-- bottom of a page content
+bottom of a page content
 
 ![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/e50711c1-0401-4d8a-af46-9b9e1bd49af2)
 
@@ -24,11 +24,14 @@
 
 - Press [`---`] on the top right toolbar to open [`Plugins`]
 - Select marketplace
-- Type `2` in the search field, select it from the search results and install
+- Type `hop` in the search field, select it from the search results and install
 
 ### Usage
 
+- Place any links in a page content.
 - Displayed at the bottom of the page if the page contains links to other pages.
+
+### Plugin Settings
 
 ---
 
