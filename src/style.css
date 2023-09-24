@@ -3,12 +3,19 @@ div#hopLinks {
     margin-left: 2em;
     user-select: none;
 
+    & span#hopLinksTitle {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-right: 1em;
+    }
+
     & a:hover {
         text-decoration: underline;
     }
 
     & button#hopLinksUpdate {
         margin: 1em;
+        font-size: .88em;
     }
 
     & div#outgoingLinks,
@@ -22,12 +29,16 @@ div#hopLinks {
 
     }
 
-    & div.hopLinksTh.th-type-pageTags {
-        background: var(--ls-table-tr-even-background-color);
-    }
+    & div.hopLinksTh {
+        font-weight: bold;
 
-    & div.hopLinksTh:not(.th-type-pageTags) {
-        background: var(--ls-tertiary-background-color);
+        &.th-type-pageTags {
+            background: var(--ls-table-tr-even-background-color);
+        }
+
+        &:not(.th-type-pageTags) {
+            background: var(--ls-tertiary-background-color);
+        }
     }
 
     & div.hopLinksTh,
