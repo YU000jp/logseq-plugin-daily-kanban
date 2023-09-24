@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.8.0...v1.9.0) (2023-09-24)
+
+
+### Features
+
+* Support full hierarchies ([b7d9dc8](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/b7d9dc8c886e4650c599d10b942019561b9c4eab))
+
 # [1.8.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.7.0...v1.8.0) (2023-09-24)
 
 
