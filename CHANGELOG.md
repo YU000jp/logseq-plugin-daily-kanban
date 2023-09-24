@@ -1,3 +1,15 @@
+# [1.11.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.10.0...v1.11.0) (2023-09-24)
+
+
+### Bug Fixes
+
+* **bug:** Disable HTML ([82ae24b](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/82ae24b358c3607138fa79d52f9dc665293e887f))
+
+
+### Features
+
+* **Update:** select type ([123da49](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/123da49c9d2b186a79daf4a8fbd8ec22a7b0b570))
+
 # [1.10.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.9.0...v1.10.0) (2023-09-24)
 
 
