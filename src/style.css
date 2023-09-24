@@ -22,7 +22,11 @@ div#hopLinks {
 
     }
 
-    & div.hopLinksTh {
+    & div.hopLinksTh.th-type-pageTags {
+        background: var(--ls-table-tr-even-background-color);
+    }
+
+    & div.hopLinksTh:not(.th-type-pageTags) {
         background: var(--ls-tertiary-background-color);
     }
 
