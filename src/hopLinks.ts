@@ -193,10 +193,10 @@ const hopLinks = async (select?: string) => {
     selectElement.id = "hopLinkType";
     selectElement.innerHTML = `
     <option value="unset">Unset</option>
+    <option value="hierarchy">namespaces</option>
     <option value="backLinks">BackLinks</option>
     <option value="blocks">Blocks (references)</option>
-    <option value="page-tags">Page-Tags (outgoingLInks)</option>
-    <option value="hierarchy">Hierarchy (outgoingLInks)</option>
+    <option value="page-tags">Page-Tags</option>
     `;
     selectElement.addEventListener("change", () => {
         //hopLinksElementを削除する
