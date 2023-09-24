@@ -30,6 +30,8 @@ div#hopLinks {
     div.hopLinksTd {
         padding: .8em;
         width: 180px;
+        max-height: 300px;
+        overflow: hidden;
         display: block;
         font-size: .89em;
         border: 1px solid var(--ls-guideline-color);
