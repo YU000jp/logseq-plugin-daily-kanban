@@ -182,10 +182,14 @@ const hopLinks = async (select?: string) => {
             typePageTags(filteredPageLinksSet, hopLinksElement);
             break;
         case "hierarchy":
+            //ページタグ
+            typePageTags(filteredPageLinksSet, hopLinksElement);
             //hierarchy
             typeHierarchy(filteredPageLinksSet, hopLinksElement);
             break;
         case "deeperHierarchy":
+            //ページタグ
+            typePageTags(filteredPageLinksSet, hopLinksElement);
             //namespaces
             typeHierarchy(filteredPageLinksSet, hopLinksElement, true);
             break;
@@ -196,12 +200,12 @@ const hopLinks = async (select?: string) => {
     selectElement.id = "hopLinkType";
     selectElement.innerHTML = `
     <option value="unset">Unset</option>
-    <option value="hierarchy" title="base on outgoing links">Hierarchy</option>
-    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy</option>
+    <option value="hierarchy" title="base on outgoing links">Hierarchy + Page-Tags</option>
+    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy + Page-Tags</option>
     <option value="backLinks">BackLinks</option>
-    <option value="page-tags">Page-Tags</option>
     <option value="blocks">Blocks (references)</option>
     `;
+    //
     selectElement.addEventListener("change", () => {
         //hopLinksElementを削除する
         hopLinksElement.remove();
