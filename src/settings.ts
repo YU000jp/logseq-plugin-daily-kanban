@@ -46,4 +46,25 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         default: false,
         description: "default: false",
     },
+    {//ページを開いたときにLinked Referencesを閉じる
+        key: "collapseLinkedReferences",
+        type: "boolean",
+        title: "collapse the Linked References collection when page open",
+        default: false,
+        description: "default: false",
+    },
+    {//ページを開いたときにHierarchyを閉じる
+        key: "collapseHierarchy",
+        type: "boolean",
+        title: "collapse the Hierarchy list when page open",
+        default: false,
+        description: "default: false",
+    },
+    {//ページを開いたときにPage-tagsを閉じる
+        key: "collapsePageTags",
+        type: "boolean",
+        title: "collapse the Page-tags list when page open",
+        default: false,
+        description: "default: false",
+    },
 ];

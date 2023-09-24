@@ -23,7 +23,6 @@ export const loadTwoHopLink = async () => {
 };
 
 const hopLinks = async (select?: string) => {
-
     //アウトゴーイングリンクを表示する場所
     const mainElement = parent.document.getElementById("main-content-container") as HTMLDivElement | null;
     if (!mainElement) return;
@@ -36,8 +35,10 @@ const hopLinks = async (select?: string) => {
     const pageLinks = PageBlocksInnerElement.querySelectorAll("a[data-ref]:not(.page-property-key)") as NodeListOf<HTMLAnchorElement> | null;
     if (!pageLinks) return;
 
-    const newSet = new Set();
+    //ページを開いたときの処理
+    whenPageOpen();
 
+    const newSet = new Set();
     const pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[] = Array.from(pageLinks).map(async (pageLink) => {
         if (pageLink.dataset.ref === undefined) return undefined;
         // 先頭に#がついている場合は取り除く
@@ -101,8 +102,6 @@ const hopLinks = async (select?: string) => {
     // 結果の配列からundefinedを除外
     const filteredPageLinksSet = (await Promise.all(pageLinksSet)).filter(Boolean);
     pageLinksSet.length = 0; //配列を空にする
-
-
 
     //hopLinksElementに<span>でタイトルメッセージを設置する
     const spanElement: HTMLSpanElement = document.createElement("span");
@@ -228,31 +227,9 @@ const outgoingLInks = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
 
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
-        //ポップアップ表示あり
-        //label要素を作成
-        const labelElement: HTMLLabelElement = document.createElement("label");
-
-        //outgoingLinksElementにa要素を追加する
-        const anchorElement: HTMLAnchorElement = document.createElement("a");
-
-        anchorElement.innerText = pageLink.name;
-        //input要素を作成
-        const inputElement: HTMLInputElement = document.createElement("input");
-        inputElement.type = "checkbox";
-        inputElement.name = "outgoingLinks-popup-" + pageLink.uuid;
-        inputElement.dataset.uuid = pageLink.uuid;
-        inputElement.dataset.name = pageLink.name;
-        //div ポップアップの内容
-        const popupElement: HTMLDivElement = document.createElement("div");
-        popupElement.classList.add("hopLinks-popup-content");
-
-        inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
-
-        const blockElement: HTMLDivElement = document.createElement("div");
-        blockElement.classList.add("hopLinksTd");
-        blockElement.append(anchorElement, inputElement, popupElement);
-        labelElement.append(blockElement);
-        outgoingLinksElement.append(labelElement);
+        //td
+        const pageEntity = { uuid: pageLink.uuid, originalName: pageLink.name };
+        createTd(pageEntity, outgoingLinksElement);
     });
     //end of outgoingLinks
     hopLinksElement.append(outgoingLinksElement);
@@ -284,13 +261,8 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         excludePageForBlockEntity(filteredBlocks);
         if (filteredBlocks.length === 0) return;
 
-        //PageBlocksInnerElementにelementを追加
-        const tokenLinkElement: HTMLDivElement = document.createElement("div");
-        tokenLinkElement.classList.add("tokenLink");
-        const divElement: HTMLDivElement = document.createElement("div");
-        divElement.classList.add("hopLinksTh");
-        divElement.innerText = pageLink.name;
-        tokenLinkElement.append(divElement);
+        //th
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink);
         //end of 行タイトル(左ヘッダー)
 
         //右側
@@ -357,12 +329,7 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         if (pageList.length === 0) return;
 
         //th
-        const tokenLinkElement: HTMLDivElement = document.createElement("div");
-        tokenLinkElement.classList.add("tokenLink");
-        const divElement: HTMLDivElement = document.createElement("div");
-        divElement.classList.add("hopLinksTh");
-        divElement.innerText = pageLink.name;
-        tokenLinkElement.append(divElement);
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink);
 
         //td
         pageList.forEach(async (pageList) => {
@@ -376,25 +343,8 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
                 || logseq.settings!.excludeDateFromResult === true && page.originalName.match(/^\d{4}\/\d{2}$/) !== null || page.originalName.match(/^\d{4}$/) !== null
             ) return;
 
-            const uuid = page.uuid;
-            const divElementTag: HTMLDivElement = document.createElement("div");
-            divElementTag.classList.add("hopLinksTd");
-            //ポップアップ表示あり
-            const labelElement: HTMLLabelElement = document.createElement("label");
-            //input要素を作成
-            const inputElement: HTMLInputElement = document.createElement("input");
-            inputElement.type = "checkbox";
-            inputElement.name = "pageTags-popup-" + uuid;
-            inputElement.dataset.uuid = uuid;
-            inputElement.dataset.name = name;
-            //div ポップアップの内容
-            const popupElement: HTMLDivElement = document.createElement("div");
-            popupElement.classList.add("hopLinks-popup-content");
-            divElementTag.innerHTML += `<a data-tag="${name}">${name}</a>`;
-            inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
-
-            labelElement.append(divElementTag, inputElement, popupElement);
-            tokenLinkElement.append(labelElement);
+            //td
+            createTd(page, tokenLinkElement);
         });
 
         hopLinksElement.append(tokenLinkElement);
@@ -403,36 +353,40 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
 
 
 const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
-    filteredPageLinksSet.forEach(async (pageLink) => {
-        if (!pageLink) return;
-        let PageEntity = await logseq.DB.q(`(namespace "${pageLink.name}")`) as unknown as PageEntity[] | undefined;
-        if (!PageEntity || PageEntity.length === 0) return;
-        // namespace.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
-        PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null);
-        if (!PageEntity || PageEntity.length === 0) return;
+    filteredPageLinksSet.forEach(getTd());
 
-        //ページを除外する
-        excludePageForPageEntity(PageEntity);
-        if (PageEntity.length === 0) return;
+    function getTd(): (value: { uuid: string; name: string; } | undefined, index: number, array: ({ uuid: string; name: string; } | undefined)[]) => void {
+        return async (pageLink) => {
+            if (!pageLink) return;
+            let PageEntity = await logseq.DB.q(`(namespace "${pageLink.name}")`) as unknown as PageEntity[] | undefined;
+            if (!PageEntity || PageEntity.length === 0) return;
+            // namespace.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
+            PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null);
+            if (!PageEntity || PageEntity.length === 0) return;
 
-        //sortする
-        PageEntity.sort((a, b) => {
-            if (a.name > b.name) return 1;
-            if (a.name < b.name) return -1;
-            return 0;
-        });
-        //th
-        const tokenLinkElement: HTMLDivElement = document.createElement("div");
-        tokenLinkElement.classList.add("tokenLink");
-        const divElement: HTMLDivElement = document.createElement("div");
-        divElement.classList.add("hopLinksTh");
-        divElement.innerText = pageLink.name;
-        tokenLinkElement.append(divElement);
+            //ページを除外する
+            excludePageForPageEntity(PageEntity);
+            if (PageEntity.length === 0) return;
 
-        //td
-        PageEntity.forEach((page) => createTd(page, tokenLinkElement, pageLink.name));
-        hopLinksElement.append(tokenLinkElement);
-    });
+            //sortする
+            sortForPageEntity(PageEntity);
+            //th
+            const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink);
+
+            //td
+            PageEntity.forEach((page) => createTd(page, tokenLinkElement, pageLink.name));
+            hopLinksElement.append(tokenLinkElement);
+
+
+            //PageEntityをもとに再帰的に処理する。ただし、PageEntity.nameではなく、pageEntity.originalNameを渡す
+            PageEntity.forEach(async (page) => {
+                const pageLink = { uuid: page.uuid, name: page.originalName };
+                await getTd()(pageLink, 0, filteredPageLinksSet);
+            });
+            //PageEntityを空にする
+            PageEntity.length = 0;
+        };
+    }
 }
 
 
@@ -467,19 +421,10 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         if (PageEntityFromProperty) excludePageForPageEntity(PageEntityFromProperty);
         if (PageEntity.length === 0 && PageEntityFromProperty.length === 0) return;
         //sortする
-        if (PageEntity) PageEntity.sort((a, b) => {
-            if (a.name > b.name) return 1;
-            if (a.name < b.name) return -1;
-            return 0;
-        });
+        if (PageEntity) sortForPageEntity(PageEntity);
 
         //th
-        const tokenLinkElement: HTMLDivElement = document.createElement("div");
-        tokenLinkElement.classList.add("tokenLink");
-        const divElement: HTMLDivElement = document.createElement("div");
-        divElement.classList.add("hopLinksTh");
-        divElement.innerText = pageLink.name;
-        tokenLinkElement.append(divElement);
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink);
 
         //td
         if (PageEntity) PageEntity.forEach((page) => createTd(page, tokenLinkElement));
@@ -500,6 +445,35 @@ const excludePagesForPageList = (pageList: string[]) => {
         });
     }
 }
+
+const sortForPageEntity = (PageEntity: PageEntity[]) =>
+    PageEntity.sort((a, b) => {
+        if (a.name > b.name) return 1;
+        if (a.name < b.name) return -1;
+        return 0;
+    });
+
+const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }) => {
+    const tokenLinkElement: HTMLDivElement = document.createElement("div");
+    tokenLinkElement.classList.add("tokenLink");
+    const divElement: HTMLDivElement = document.createElement("div");
+    divElement.classList.add("hopLinksTh");
+    divElement.innerText = pageLink.name;
+    //ポップアップ表示あり
+    const labelElement: HTMLLabelElement = document.createElement("label");
+    //input要素を作成
+    const inputElement: HTMLInputElement = document.createElement("input");
+    inputElement.type = "checkbox";
+    inputElement.dataset.uuid = pageLink.uuid;
+    inputElement.dataset.name = pageLink.name;
+    //div ポップアップの内容
+    const popupElement: HTMLDivElement = document.createElement("div");
+    popupElement.classList.add("hopLinks-popup-content");
+    inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
+    labelElement.append(divElement, inputElement, popupElement);
+    tokenLinkElement.append(labelElement);
+    return tokenLinkElement;
+};
 
 function excludePageForPageEntity(PageEntity: PageEntity[]) {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
@@ -550,7 +524,7 @@ function excludePages(filteredPageLinksSet: ({ uuid: string; name: string; } | u
     }
 }
 
-function createTd(page: PageEntity, tokenLinkElement: HTMLDivElement, isHierarchyTitle?: string) {
+function createTd(page: PageEntity | { uuid, originalName }, tokenLinkElement: HTMLDivElement, isHierarchyTitle?: string) {
     const divElementTag: HTMLDivElement = document.createElement("div");
     divElementTag.classList.add("hopLinksTd");
     //ポップアップ表示あり
@@ -723,3 +697,32 @@ function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDiv
         popupElement.append(pElement, preElement);
     };
 }
+
+const whenPageOpen = async () => {
+    setTimeout(() => {
+        //Linked Referencesをhiddenにする
+        if (logseq.settings!.collapseLinkedReferences === true) {
+            const linkedReferences = parent.document.querySelector("div#main-content-container div.page.relative div.lazy-visibility div.references.page-linked>div.content>div.flex>div.initial") as HTMLDivElement | null;
+            if (linkedReferences) {
+                linkedReferences.classList.remove("initial");
+                linkedReferences.classList.add("hidden");
+            }
+        }
+        if (logseq.settings!.collapseHierarchy === true) {
+            //Hierarchyをhiddenにする
+            const hierarchy = parent.document.querySelector("div#main-content-container div.page.relative>div.page-hierarchy>div.flex>div.initial") as HTMLDivElement | null;
+            if (hierarchy) {
+                hierarchy.classList.remove("initial");
+                hierarchy.classList.add("hidden");
+            }
+        }
+        if (logseq.settings!.collapsePageTags === true) {
+            //Page-tagsをhiddenにする
+            const pageTags = parent.document.querySelector("div#main-content-container div.page.relative>div.page-tags>div.content>div.flex>div.initial") as HTMLDivElement | null;
+            if (pageTags) {
+                pageTags.classList.remove("initial");
+                pageTags.classList.add("hidden");
+            }
+        }
+    }, 300);
+};

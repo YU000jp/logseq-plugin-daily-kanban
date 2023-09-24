@@ -55,7 +55,8 @@ div#hopLinks {
 
     & label {
 
-        & div.hopLinksTd {
+        & div.hopLinksTh,
+        div.hopLinksTd {
             height: 100%;
             cursor: zoom-in;
 
