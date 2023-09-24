@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.7.0...v1.8.0) (2023-09-24)
+
+
+### Bug Fixes
+
+* Update select ([38d1ad2](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/38d1ad293d02a43b95b4b40ff0884dd68edf3821))
+
+
+### Features
+
+* **Add:** collapse ([268115a](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/268115a7f1ddb8931bfc6d6b94971ca9fb709d54))
+
 # [1.7.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.6.1...v1.7.0) (2023-09-24)
 
 
