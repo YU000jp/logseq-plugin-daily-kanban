@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.9.0...v1.10.0) (2023-09-24)
+
+
+### Bug Fixes
+
+* **bug:** too longer td items ([7b3b2cc](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/7b3b2cc5fa498a6b556aff9c6df551fbb64fc44f))
+
+
+### Features
+
+* **Add:** As deeper hierarchy ([d3b070c](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/d3b070c44c495c119ed7f4c7e6b95a368ea01558))
+
 # [1.9.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.8.0...v1.9.0) (2023-09-24)
 
 
