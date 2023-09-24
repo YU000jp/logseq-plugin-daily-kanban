@@ -159,7 +159,7 @@ const hopLinks = async (select?: string) => {
         return 0;
     });
     excludePages(filteredPageLinksSet);
-    if (logseq.settings!.outgoingLinks === true) outgoingLInks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
+    if (logseq.settings!.outgoingLinks === true) outgoingLinks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
 
 
 
@@ -227,7 +227,7 @@ const hopLinks = async (select?: string) => {
 
 
 //outgoingLinks
-const outgoingLInks = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
+const outgoingLinks = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
 
     //outgoingLinksElementを作成
     const outgoingLinksElement: HTMLDivElement = document.createElement("div");
