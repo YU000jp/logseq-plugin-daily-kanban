@@ -271,7 +271,7 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         if (filteredBlocks.length === 0) return;
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-blocks");
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-blocks", "Blocks (references)");
         //end of 行タイトル(左ヘッダー)
 
         //右側
@@ -339,7 +339,7 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         if (pageList.length === 0) return;
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-backLinks");
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-backLinks", "BackLinks");
 
         //td
         pageList.forEach(async (pageList) => {
@@ -381,7 +381,7 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
             //sortする
             sortForPageEntity(PageEntity);
             //th
-            const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-hierarchy");
+            const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-hierarchy", "Hierarchy");
 
             //td
             PageEntity.forEach((page) => createTd(page, tokenLinkElement, pageLink.name));
@@ -435,7 +435,7 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         if (PageEntity) sortForPageEntity(PageEntity);
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-pageTags");
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-pageTags", "Page-Tags");
 
         //td
         if (PageEntity) PageEntity.forEach((page) => createTd(page, tokenLinkElement));
@@ -514,9 +514,10 @@ function excludePages(filteredPageLinksSet: ({ uuid: string; name: string; } | u
 }
 
 
-const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }, className: string) => {
+const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }, className: string, boxTitle: string) => {
     const tokenLinkElement: HTMLDivElement = document.createElement("div");
     tokenLinkElement.classList.add("tokenLink");
+    tokenLinkElement.title = boxTitle;
     const divElement: HTMLDivElement = document.createElement("div");
     divElement.classList.add("hopLinksTh");
     divElement.classList.add(className);
