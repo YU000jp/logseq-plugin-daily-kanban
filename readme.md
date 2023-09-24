@@ -1,14 +1,11 @@
 # Logseq Plugin: 2 hop link
 
 - Displays collections of links at bottom of a page content. Collect outgoing links and generate further links.
-- Development stage (not published yet) 👷🚧
-
-> [Release](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases) information is on the right. Load files at developper mode.
 
 [![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-two-hop-link)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
 [![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-two-hop-link?color=blue)](https://github.com/YU000jp/logseq-plugin-two-hop-link/LICENSE)
 [![Downloads](https://img.shields.io/github/downloads/YU000jp/logseq-plugin-two-hop-link/total.svg)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
-<!-- Published 2023 -->
+ Published 2023/09/25
 
 ---
 
@@ -20,7 +17,7 @@ bottom of a page content
 
 ## Getting Started
 
-### Install from Logseq Marketplace (Coming👷🚧)
+### Install from Logseq Marketplace
 
 - Press [`---`] on the top right toolbar to open [`Plugins`]
 - Select marketplace
