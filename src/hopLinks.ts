@@ -185,6 +185,10 @@ const hopLinks = async (select?: string) => {
             //hierarchy
             typeHierarchy(filteredPageLinksSet, hopLinksElement);
             break;
+        case "deeperHierarchy":
+            //namespaces
+            typeHierarchy(filteredPageLinksSet, hopLinksElement, true);
+            break;
     }//end of switch
 
     //selectを設置する
@@ -192,7 +196,8 @@ const hopLinks = async (select?: string) => {
     selectElement.id = "hopLinkType";
     selectElement.innerHTML = `
     <option value="unset">Unset</option>
-    <option value="hierarchy">namespaces</option>
+    <option value="hierarchy">Hierarchy</option>
+    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy</option>
     <option value="backLinks">BackLinks</option>
     <option value="blocks">Blocks (references)</option>
     <option value="page-tags">Page-Tags</option>
@@ -352,7 +357,7 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
 };
 
 
-const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
+const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement, flagFull?: boolean) => {
     filteredPageLinksSet.forEach(getTd());
 
     function getTd(): (value: { uuid: string; name: string; } | undefined, index: number, array: ({ uuid: string; name: string; } | undefined)[]) => void {
@@ -377,12 +382,13 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
             PageEntity.forEach((page) => createTd(page, tokenLinkElement, pageLink.name));
             hopLinksElement.append(tokenLinkElement);
 
-
-            //PageEntityをもとに再帰的に処理する。ただし、PageEntity.nameではなく、pageEntity.originalNameを渡す
-            PageEntity.forEach(async (page) => {
-                const pageLink = { uuid: page.uuid, name: page.originalName };
-                await getTd()(pageLink, 0, filteredPageLinksSet);
-            });
+            if (flagFull === true) {
+                //PageEntityをもとに再帰的に処理する。ただし、PageEntity.nameではなく、pageEntity.originalNameを渡す
+                PageEntity.forEach(async (page) => {
+                    const pageLink = { uuid: page.uuid, name: page.originalName };
+                    await getTd()(pageLink, 0, filteredPageLinksSet);
+                });
+            }
             //PageEntityを空にする
             PageEntity.length = 0;
         };
