@@ -132,7 +132,7 @@ const hopLinks = async (select?: string) => {
     const updateButtonElement: HTMLButtonElement = document.createElement("button");
     updateButtonElement.id = "hopLinksUpdate";
     updateButtonElement.innerText = "🔂Update"; //手動更新
-    updateButtonElement.title = "Click to update (first load or manual update only)";
+    updateButtonElement.title = "Click to update (If add links, please click this button.)";
     updateButtonElement.addEventListener("click", () => {
         //hopLinksElementを削除する
         hopLinksElement.remove();
@@ -196,11 +196,11 @@ const hopLinks = async (select?: string) => {
     selectElement.id = "hopLinkType";
     selectElement.innerHTML = `
     <option value="unset">Unset</option>
-    <option value="hierarchy">Hierarchy</option>
+    <option value="hierarchy" title="base on outgoing links">Hierarchy</option>
     <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy</option>
     <option value="backLinks">BackLinks</option>
-    <option value="blocks">Blocks (references)</option>
     <option value="page-tags">Page-Tags</option>
+    <option value="blocks">Blocks (references)</option>
     `;
     selectElement.addEventListener("change", () => {
         //hopLinksElementを削除する
@@ -294,9 +294,10 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
             //block.contentの文字数制限
             block.content = stringLimitAndRemoveProperties(block.content, 500);
 
-            //\nを改行に変換する
-            block.content = block.content.replace(/\n/g, "<br/>");
-            blockElement.innerHTML += `<a data-uuid="${block.uuid}">${block.content}</a>`;
+            const anchorElement: HTMLAnchorElement = document.createElement("a");
+            anchorElement.dataset.uuid = block.uuid;
+            anchorElement.innerText = block.content;//HTMLタグ対策 innerTextを使用する
+            blockElement.append(anchorElement);
             blockElement.addEventListener("click", openTooltipEventFromBlock(popupElement));
             labelElement.append(blockElement, inputElement, popupElement);
             tokenLinkElement.append(labelElement);
@@ -459,28 +460,6 @@ const sortForPageEntity = (PageEntity: PageEntity[]) =>
         return 0;
     });
 
-const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }) => {
-    const tokenLinkElement: HTMLDivElement = document.createElement("div");
-    tokenLinkElement.classList.add("tokenLink");
-    const divElement: HTMLDivElement = document.createElement("div");
-    divElement.classList.add("hopLinksTh");
-    divElement.innerText = pageLink.name;
-    //ポップアップ表示あり
-    const labelElement: HTMLLabelElement = document.createElement("label");
-    //input要素を作成
-    const inputElement: HTMLInputElement = document.createElement("input");
-    inputElement.type = "checkbox";
-    inputElement.dataset.uuid = pageLink.uuid;
-    inputElement.dataset.name = pageLink.name;
-    //div ポップアップの内容
-    const popupElement: HTMLDivElement = document.createElement("div");
-    popupElement.classList.add("hopLinks-popup-content");
-    inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
-    labelElement.append(divElement, inputElement, popupElement);
-    tokenLinkElement.append(labelElement);
-    return tokenLinkElement;
-};
-
 function excludePageForPageEntity(PageEntity: PageEntity[]) {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
@@ -530,7 +509,30 @@ function excludePages(filteredPageLinksSet: ({ uuid: string; name: string; } | u
     }
 }
 
-function createTd(page: PageEntity | { uuid, originalName }, tokenLinkElement: HTMLDivElement, isHierarchyTitle?: string) {
+
+const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }) => {
+    const tokenLinkElement: HTMLDivElement = document.createElement("div");
+    tokenLinkElement.classList.add("tokenLink");
+    const divElement: HTMLDivElement = document.createElement("div");
+    divElement.classList.add("hopLinksTh");
+    divElement.innerText = pageLink.name;
+    //ポップアップ表示あり
+    const labelElement: HTMLLabelElement = document.createElement("label");
+    //input要素を作成
+    const inputElement: HTMLInputElement = document.createElement("input");
+    inputElement.type = "checkbox";
+    inputElement.dataset.uuid = pageLink.uuid;
+    inputElement.dataset.name = pageLink.name;
+    //div ポップアップの内容
+    const popupElement: HTMLDivElement = document.createElement("div");
+    popupElement.classList.add("hopLinks-popup-content");
+    inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
+    labelElement.append(divElement, inputElement, popupElement);
+    tokenLinkElement.append(labelElement);
+    return tokenLinkElement;
+};
+
+const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: HTMLDivElement, isHierarchyTitle?: string) => {
     const divElementTag: HTMLDivElement = document.createElement("div");
     divElementTag.classList.add("hopLinksTd");
     //ポップアップ表示あり
@@ -544,17 +546,16 @@ function createTd(page: PageEntity | { uuid, originalName }, tokenLinkElement: H
     //div ポップアップの内容
     const popupElement: HTMLDivElement = document.createElement("div");
     popupElement.classList.add("hopLinks-popup-content");
-    if (isHierarchyTitle) {
-        const name = page.originalName.replace(isHierarchyTitle + "/", "");
-        divElementTag.innerHTML += `<a data-uuid="${page.uuid}">${name}</a>`;
-    } else {
-        divElementTag.innerHTML += `<a data-uuid="${page.originalName}">${page.originalName}</a>`;
-    }
+    const anchorElement: HTMLAnchorElement = document.createElement("a");
+    anchorElement.dataset.uuid = page.uuid;
+    anchorElement.innerText = isHierarchyTitle ? page.originalName.replace(isHierarchyTitle + "/", "") : page.originalName;
+    anchorElement.title = page.originalName;
+    divElementTag.append(anchorElement);
     inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
 
     labelElement.append(divElementTag, inputElement, popupElement);
     tokenLinkElement.append(labelElement);
-}
+};
 
 function openPageEventForAnchor(pageName: string): (this: HTMLAnchorElement, ev: MouseEvent) => any {
     return async function (this: HTMLAnchorElement, { shiftKey }: MouseEvent) {
@@ -583,10 +584,10 @@ const createAnchorContainer = (uuid: string, parentPage: PageEntity): HTMLDivEle
             const anchorElement: HTMLAnchorElement = document.createElement("a");
             anchorElement.dataset.uuid = uuid;
             anchorElement.innerText = name;
-            anchorElement.title = "Click to open page, Shift+Click to open in right sidebar";
             //2回目以降は、前のページ名を含める
             const parentName = names.slice(0, i + 1).join("/");
             anchorElement.addEventListener("click", openPageEventForAnchor(parentName));
+            anchorElement.title = parentName;
             anchorContainerElement.append(anchorElement);
             if (i !== names.length - 1) {
                 anchorContainerElement.append(document.createTextNode(" / "));
@@ -596,7 +597,7 @@ const createAnchorContainer = (uuid: string, parentPage: PageEntity): HTMLDivEle
         const anchorElement: HTMLAnchorElement = document.createElement("a");
         anchorElement.dataset.uuid = uuid;
         anchorElement.innerText = parentPage.originalName;
-        anchorElement.title = "Click to open page, Shift+Click to open in right sidebar";
+        anchorElement.title = parentPage.originalName;
         anchorElement.addEventListener("click", openPageEventForAnchor(parentPage.name));
         anchorContainerElement.append(anchorElement);
     }
