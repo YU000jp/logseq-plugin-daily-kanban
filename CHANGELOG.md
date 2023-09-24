@@ -1,3 +1,15 @@
+# [1.7.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.6.1...v1.7.0) (2023-09-24)
+
+
+### Bug Fixes
+
+* **doc:** plugin description ([2833f67](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/2833f678bcbc5b22099d7e9045c3963bfa792851))
+
+
+### Features
+
+* **Update:** Support the hierarchy of current page ([b8ffbc7](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/b8ffbc76bd774883b8700b14029c9e7d2c89e0ec))
+
 ## [1.6.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.6.0...v1.6.1) (2023-09-23)
 
 
