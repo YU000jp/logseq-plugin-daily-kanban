@@ -102,23 +102,54 @@ const hopLinks = async (select?: string) => {
     const filteredPageLinksSet = (await Promise.all(pageLinksSet)).filter(Boolean);
     pageLinksSet.length = 0; //配列を空にする
 
-    //hopLinksElementの先頭に更新ボタンを設置する
+
+
+    //hopLinksElementに<span>でタイトルメッセージを設置する
+    const spanElement: HTMLSpanElement = document.createElement("span");
+    spanElement.id = "hopLinksTitle";
+    spanElement.innerText = "2 HopLink";
+    spanElement.title = "Click to collapse";
+    spanElement.style.cursor = "zoom-out";
+    //spanElementをクリックしたら消す
+    spanElement.addEventListener("click", () => {
+        const outgoingLinks = parent.document.getElementById("outgoingLinks") as HTMLDivElement | null;
+        if (outgoingLinks) {
+            outgoingLinks.remove();
+            //div.tokenLinkをすべて探し、削除する
+            const tokenLinks = parent.document.querySelectorAll("div.tokenLink") as NodeListOf<HTMLDivElement> | null;
+            if (tokenLinks) tokenLinks.forEach((tokenLink) => tokenLink.remove());
+            //selectElementを削除する
+            const selectElement = parent.document.getElementById("hopLinkType") as HTMLSelectElement | null;
+            if (selectElement) selectElement.remove();
+            //updateButtonElementの文字を変更する
+            const updateButtonElement = parent.document.getElementById("hopLinksUpdate") as HTMLButtonElement | null;
+            if (updateButtonElement) {
+                updateButtonElement.innerText = "Collapsed (revert)";
+                updateButtonElement.title = "Click to revert";
+            }
+        }
+    }, { once: true });
+    //hopLinksElementに更新ボタンを設置する
     const updateButtonElement: HTMLButtonElement = document.createElement("button");
     updateButtonElement.id = "hopLinksUpdate";
-    updateButtonElement.innerText = "2 HopLink 🔂"; //手動更新
+    updateButtonElement.innerText = "🔂Update"; //手動更新
     updateButtonElement.title = "Click to update (first load or manual update only)";
     updateButtonElement.addEventListener("click", () => {
         //hopLinksElementを削除する
         hopLinksElement.remove();
         hopLinks();
     }, { once: true });
-    hopLinksElement.prepend(updateButtonElement);
+    hopLinksElement.prepend(spanElement, updateButtonElement);
 
+    const blankMessage = (message: string) => {
+        const pElement: HTMLElement = document.createElement("p");
+        pElement.innerText = message;
+        hopLinksElement.append(pElement);
+    };
     //filteredBlocksが空の場合は処理を終了する
     if (filteredPageLinksSet.length === 0) {
-        const pElement: HTMLElement = document.createElement("p");
-        pElement.innerText = "No links found in this page. (If add links, please click the update button.)";
-        hopLinksElement.append(pElement);
+        //ブランクメッセージを表示する
+        blankMessage("No links found in this page. (If add links, please click the update button.)");
         return;
     }
     //filteredBlocksをソートする
@@ -129,13 +160,14 @@ const hopLinks = async (select?: string) => {
         return 0;
     });
     excludePages(filteredPageLinksSet);
-    if (logseq.settings!.outgoingLinks === true) outgoingLInks(filteredPageLinksSet, hopLinksElement);
+    if (logseq.settings!.outgoingLinks === true) outgoingLInks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
 
-    /*
-    2ホップリンク
-    */
 
-    //選択されたタイプ
+
+
+    /* 2ホップリンクの表示 */
+
+    //selectで選択されたタイプ
     const type = select || logseq.settings!.hopLinkType;
     switch (type) {
         case "blocks":
