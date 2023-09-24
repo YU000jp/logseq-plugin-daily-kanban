@@ -549,7 +549,7 @@ const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: H
     const anchorElement: HTMLAnchorElement = document.createElement("a");
     anchorElement.dataset.uuid = page.uuid;
     anchorElement.innerText = isHierarchyTitle ? page.originalName.replace(isHierarchyTitle + "/", "") : page.originalName;
-    anchorElement.title = page.originalName;
+    divElementTag.title = page.originalName;
     divElementTag.append(anchorElement);
     inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
 
