@@ -37,6 +37,7 @@ const hopLinks = async (select?: string) => {
     if (!pageLinks) return;
 
     const newSet = new Set();
+
     const pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[] = Array.from(pageLinks).map(async (pageLink) => {
         if (pageLink.dataset.ref === undefined) return undefined;
         // 先頭に#がついている場合は取り除く
@@ -63,6 +64,37 @@ const hopLinks = async (select?: string) => {
             return undefined;
         }
     });
+
+    //ページ名を追加する
+    const current = await logseq.Editor.getCurrentPage() as PageEntity | null;
+    if (current) {
+        const addPage = async (name: string) => {
+            const page = await logseq.Editor.getPage(name) as PageEntity | null;
+            if (page) {
+                //ジャーナルを除外する
+                if (logseq.settings!.excludeJournalFromOutgoingLinks === true && page["journal?"] === true) return;
+                if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
+                    //2024/01のような形式のページを除外する
+                    if (page.originalName.match(/^\d{4}\/\d{2}$/) !== null) return;
+                    //2024のような数値を除外する
+                    if (page.originalName.match(/^\d{4}$/) !== null) return;
+                }
+                // 重複を除外する
+                if (newSet.has(page.uuid)) return;
+                newSet.add(page.uuid);
+                pageLinksSet.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }));
+            }
+        };
+        if (current.originalName.includes("/")) {//現在のページ名に「/」が含まれている場合
+            // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
+            let names = current.originalName.split("/");
+            names = names.map((name, i) => names.slice(0, i + 1).join("/"));
+            for (const name of names) await addPage(name);
+        } else {
+            // current.originalName 現在のページ名
+            await addPage(current.originalName);
+        }
+    }
     //newSetを空にする
     newSet.clear();
 
@@ -131,8 +163,8 @@ const hopLinks = async (select?: string) => {
     <option value="unset">Unset</option>
     <option value="backLinks">BackLinks</option>
     <option value="blocks">Blocks (references)</option>
-    <option value="page-tags">Page Tags</option>
-    <option value="hierarchy">Hierarchy</option>
+    <option value="page-tags">Page-Tags (outgoingLInks)</option>
+    <option value="hierarchy">Hierarchy (outgoingLInks)</option>
     `;
     selectElement.addEventListener("change", () => {
         //hopLinksElementを削除する
@@ -366,7 +398,7 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
         tokenLinkElement.append(divElement);
 
         //td
-        PageEntity.forEach((page) => createTd(page, tokenLinkElement));
+        PageEntity.forEach((page) => createTd(page, tokenLinkElement, pageLink.name));
         hopLinksElement.append(tokenLinkElement);
     });
 }
@@ -486,7 +518,7 @@ function excludePages(filteredPageLinksSet: ({ uuid: string; name: string; } | u
     }
 }
 
-function createTd(page: PageEntity, tokenLinkElement: HTMLDivElement) {
+function createTd(page: PageEntity, tokenLinkElement: HTMLDivElement, isHierarchyTitle?: string) {
     const divElementTag: HTMLDivElement = document.createElement("div");
     divElementTag.classList.add("hopLinksTd");
     //ポップアップ表示あり
@@ -500,7 +532,12 @@ function createTd(page: PageEntity, tokenLinkElement: HTMLDivElement) {
     //div ポップアップの内容
     const popupElement: HTMLDivElement = document.createElement("div");
     popupElement.classList.add("hopLinks-popup-content");
-    divElementTag.innerHTML += `<a data-uuid="${page.originalName}">${page.originalName}</a>`;
+    if (isHierarchyTitle) {
+        const name = page.originalName.replace(isHierarchyTitle + "/", "");
+        divElementTag.innerHTML += `<a data-uuid="${page.uuid}">${name}</a>`;
+    } else {
+        divElementTag.innerHTML += `<a data-uuid="${page.originalName}">${page.originalName}</a>`;
+    }
     inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
 
     labelElement.append(divElementTag, inputElement, popupElement);
