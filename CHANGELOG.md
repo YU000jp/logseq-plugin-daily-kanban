@@ -1,3 +1,15 @@
+# [1.17.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.16.0...v1.17.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* **Change:** default settings ([e7caa8a](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/e7caa8a5be0f109922edfbe750c09543f718b1f1))
+
+
+### Features
+
+* **Add:** This page created at ([0543433](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/0543433dc78e81a41f2e65ba6e6431e1e8dba5d5))
+
 # [1.16.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.15.0...v1.16.0) (2023-09-25)
 
 
