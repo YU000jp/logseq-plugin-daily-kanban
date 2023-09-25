@@ -159,9 +159,6 @@ const hopLinks = async (select?: string) => {
     excludePages(filteredPageLinksSet);
     if (logseq.settings!.outgoingLinks === true) outgoingLinks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
 
-
-
-
     /* 2ホップリンクの表示 */
 
     //selectで選択されたタイプ
@@ -169,11 +166,11 @@ const hopLinks = async (select?: string) => {
     switch (type) {
         case "blocks":
             //block.content
-            typeReferencesByBlock(filteredPageLinksSet, hopLinksElement);
+            typeReferencesByBlock(filteredPageLinksSet, hopLinksElement, current);
             break;
         case "backLinks":
             //block.content
-            typeBackLink(filteredPageLinksSet, hopLinksElement);
+            typeBackLink(filteredPageLinksSet, hopLinksElement, current);
             break;
         case "page-tags":
             //ページタグ
@@ -244,7 +241,9 @@ const outgoingLinks = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
 
 
 //typeBlocks
-const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
+const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+    //aliasプロパティを取得し、filteredPageLinksSetから除外する
+    if (current) checkAlias(current, filteredPageLinksSet);
     //行作成
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
@@ -312,7 +311,11 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
 
 
 //typeBlocks
-const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement) => {
+const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+
+    //aliasプロパティを取得し、filteredPageLinksSetから除外する
+    if (current) checkAlias(current, filteredPageLinksSet);
+
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
         //pageLinkRefのページを取得する
@@ -461,6 +464,21 @@ const sortForPageEntity = (PageEntity: PageEntity[]) =>
         if (a.name < b.name) return -1;
         return 0;
     });
+
+function checkAlias(current: PageEntity, filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) {
+    if (current.properties && current.properties.alias) {
+        const alias = current.properties.alias as string[] | undefined; //originalNameと同等
+        if (alias && alias.length !== 0) {
+            alias.forEach((alias) => {
+                filteredPageLinksSet.forEach((pageLink, i) => {
+                    if (pageLink?.name === alias) {
+                        filteredPageLinksSet.splice(i, 1);
+                    }
+                });
+            });
+        }
+    }
+}
 
 function excludePageForPageEntity(PageEntity: PageEntity[]) {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
