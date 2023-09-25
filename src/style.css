@@ -138,7 +138,7 @@ div#hopLinks {
     }
 
     & div.tokenLink label div.hopLinks-popup-content {
-        transform: translate(0, -120%);
+        transform: translate(0, -100%);
     }
 }
 
