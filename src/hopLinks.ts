@@ -102,17 +102,6 @@ const hopLinks = async (select?: string) => {
     const filteredPageLinksSet = (await Promise.all(pageLinksSet)).filter(Boolean);
     pageLinksSet.length = 0; //配列を空にする
 
-    //ページの更新日時を表示する
-    if (logseq.settings!.thisPageShowUpdatedAt === true && current) {
-        if (current.updatedAt) {
-            const divElement: HTMLDivElement = document.createElement("div");
-            divElement.id = "hopLinksUpdatedAt";
-            showUpdatedAt(current.updatedAt, divElement);
-            PageBlocksInnerElement.append(divElement);
-        }
-
-    }
-
     //hopLinksElementに<span>でタイトルメッセージを設置する
     const spanElement: HTMLSpanElement = document.createElement("span");
     spanElement.id = "hopLinksTitle";

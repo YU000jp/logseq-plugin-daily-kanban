@@ -72,9 +72,6 @@
 - ツールチップにページのaliasプロパティを表示する :boolean
     - `true` default
     - `false`
-- "ページに更新日時を表示" :boolean
-    - `true`
-    - `false` default
 
 ---
 
