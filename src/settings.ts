@@ -10,6 +10,13 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         default: true,
         description: "default: true",
     },
+    {//External Links
+        key: "externalLinks",
+        type: "boolean",
+        title: "external links enable",
+        default: true,
+        description: "default: true",
+    },
     {//HierarchyをoutgoingLinks(Keywords)に含める
         key: "keywordsIncludeHierarchy",
         type: "boolean",

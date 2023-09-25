@@ -19,25 +19,34 @@ div#hopLinks {
     }
 
     & div#outgoingLinks,
+    div#externalLinks,
     div.tokenLink {
         display: flex;
         flex-wrap: wrap;
     }
 
-    & div#hopLinksKeyword {
-        background: var(--ls-quaternary-background-color);
-
-    }
-
     & div.hopLinksTh {
         font-weight: bold;
+        background: var(--ls-tertiary-background-color);
 
         &.th-type-pageTags {
             background: var(--ls-table-tr-even-background-color);
         }
+    }
 
-        &:not(.th-type-pageTags) {
-            background: var(--ls-tertiary-background-color);
+    & div#outgoingLinks div.hopLinksTh#hopLinksKeyword {
+        background: var(--ls-quaternary-background-color);
+    }
+
+    & div#externalLinks {
+        & div.hopLinksTh {
+            background: var(--ls-secondary-background-color);
+        }
+
+        & div.hopLInksTd {
+            font-size: .9em;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
