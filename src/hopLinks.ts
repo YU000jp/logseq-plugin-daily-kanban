@@ -254,11 +254,9 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         const filteredBlocks = page.filter((page) => page[1].length !== 0).map((page) => page[1][0]);
         if (filteredBlocks.length === 0) return;
         //現在のページ名に一致するものを削除する
-        const current = await logseq.Editor.getCurrentPage() as PageEntity | null;
         if (current) {
-            const currentPageName = current.originalName;
             filteredBlocks.forEach((block, i) => {
-                if (block.page.originalName === currentPageName) {
+                if (block.page.originalName === current.originalName) {
                     filteredBlocks.splice(i, 1);
                 }
             });
@@ -325,11 +323,9 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         const pageList = page.map((page) => page[0].originalName);
         if (!pageList || pageList.length === 0) return;
         //現在のページ名に一致するものを削除する
-        const current = await logseq.Editor.getCurrentPage() as PageEntity | null;
         if (current) {
-            const currentPageName = current.originalName;
             pageList.forEach((page, i) => {
-                if (page === currentPageName) {
+                if (page === current.originalName) {
                     pageList.splice(i, 1);
                 }
             });
@@ -345,8 +341,7 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         //td
         pageList.forEach(async (pageList) => {
             if (pageList === "") return;
-            const name = pageList;
-            const page = await logseq.Editor.getPage(name) as PageEntity | null;
+            const page = await logseq.Editor.getPage(pageList) as PageEntity | null;
             if (!page) return;
 
             //ジャーナルを除外する
