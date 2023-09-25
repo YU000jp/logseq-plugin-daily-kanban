@@ -3,7 +3,7 @@ import { t } from "logseq-l10n";
 
 /* user setting */
 // https://logseq.github.io/plugins/types/SettingSchemaDesc.html
-export const settingsTemplate: SettingSchemaDesc[] = [
+export const settings = (): SettingSchemaDesc[] => [
     {//outgoingLinks
         key: "outgoingLinks",
         type: "boolean",
