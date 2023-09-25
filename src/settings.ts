@@ -10,6 +10,13 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         default: true,
         description: "default: true",
     },
+    {//HierarchyをoutgoingLinks(Keywords)に含める
+        key: "KeywordsIncludeHierarchy",
+        type: "boolean",
+        title: "outgoing links (keywords) include hierarchy of the page",
+        default: true,
+        description: "default: true",
+    },
     {//除外するページ
         key: "excludePages",
         type: "string",
@@ -64,6 +71,13 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         key: "collapsePageTags",
         type: "boolean",
         title: "collapse the Page-tags list when page open",
+        default: false,
+        description: "default: false",
+    },
+    {//現在のページに関連するreferencesを取り除く
+        key: "excludeCurrentPage",
+        type: "boolean",
+        title: "exclude current page from \"backLinks\" and \"blocks (references)\"",
         default: false,
         description: "default: false",
     },

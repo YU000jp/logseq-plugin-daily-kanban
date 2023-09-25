@@ -84,7 +84,7 @@ const hopLinks = async (select?: string) => {
                 pageLinksSet.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }));
             }
         };
-        if (current.originalName.includes("/")) {//現在のページ名に「/」が含まれている場合
+        if (logseq.settings!.keywordsIncludeHierarchy === true && current.originalName.includes("/")) {//現在のページ名に「/」が含まれている場合
             // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
             let names = current.originalName.split("/");
             names = names.map((name, i) => names.slice(0, i + 1).join("/"));
@@ -247,20 +247,15 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
     //行作成
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
+        //現在のページ名に一致する場合は除外する
+        if (logseq.settings!.excludeCurrentPage === true && current && pageLink.name === current.originalName) return;
         //pageLinkRefのページを取得する
         const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: BlockEntity[]][];
         if (!page) return;
         //blocksをフィルターする
         const filteredBlocks = page.filter((page) => page[1].length !== 0).map((page) => page[1][0]);
         if (filteredBlocks.length === 0) return;
-        //現在のページ名に一致するものを削除する
-        if (current) {
-            filteredBlocks.forEach((block, i) => {
-                if (block.page.originalName === current.originalName) {
-                    filteredBlocks.splice(i, 1);
-                }
-            });
-        }
+
         //ページを除外する
         excludePageForBlockEntity(filteredBlocks);
         if (filteredBlocks.length === 0) return;
@@ -316,20 +311,14 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
 
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
+        //現在のページ名に一致する場合は除外する
+        if (logseq.settings!.excludeCurrentPage === true && current && pageLink.name === current.originalName) return;
         //pageLinkRefのページを取得する
         const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: BlockEntity[]][] | null;
         if (!page) return;
         //ページ名を取得し、リストにする
         const pageList = page.map((page) => page[0].originalName);
         if (!pageList || pageList.length === 0) return;
-        //現在のページ名に一致するものを削除する
-        if (current) {
-            pageList.forEach((page, i) => {
-                if (page === current.originalName) {
-                    pageList.splice(i, 1);
-                }
-            });
-        }
 
         //excludePagesの配列に含まれるページを除外する
         excludePagesForPageList(pageList);
