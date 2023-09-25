@@ -1,3 +1,18 @@
+# [1.13.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.12.0...v1.13.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* **duplicate:** remove alias (match alias property) ([1d6b1b2](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/1d6b1b216c4bda1aab3a2f651bb5fae2cc5a34ef))
+
+
+### Features
+
+* **Add:** 2 options to plugin settings ([965ff5c](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/965ff5c3a4523e8f474aa95ca994884b60ce575b))
+* **Add:** external Links ([6d0fcdf](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/6d0fcdf5b824851327d8fee39cd9cbee5a5a7801))
+* **Add:** settings button ([58dbe9c](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/58dbe9c7a7c17b73c3a22cbbe4b080e926a5abbc))
+* **tooltip enhance:** show some properties (to plugin settings) ([a461df9](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/a461df981404bafbcf2a9a10c8c2080909345f3c))
+
 # [1.12.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.11.0...v1.12.0) (2023-09-25)
 
 
