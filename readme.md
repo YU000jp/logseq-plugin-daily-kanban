@@ -36,16 +36,25 @@ bottom of a page content
   - `false`
 - exclude page title Keywords :string
   > split by newline
-- exclude journal from outgoing links :boolean
+- exclude journal from outgoing links (match user date format) :boolean
   - `true` default
   - `false`
-- exclude date from outgoing links :boolean
+- exclude date from outgoing links (ex. 2024, 2024/01) :boolean
   - `true`
   - `false` default
-- exclude journal from result :boolean
+- exclude journal from result (match user date format) :boolean
   - `true` default
   - `false`
-- exclude date from result :boolean
+- exclude date from result (ex. 2024, 2024/01) :boolean
+  - `true`
+  - `false` default
+- collapse the Linked References collection when page open :boolean
+  - `true`
+  - `false` default
+- collapse the Hierarchy list when page open :boolean
+  - `true`
+  - `false` default
+- collapse the Page-tags list when page open :boolean
   - `true`
   - `false` default
 
