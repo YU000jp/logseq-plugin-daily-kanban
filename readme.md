@@ -21,7 +21,9 @@ bottom of a page content
 
 - Press [`---`] on the top right toolbar to open [`Plugins`]
 - Select marketplace
-- Type `hop` in the search field, select it from the search results and install
+- Type `2` in the search field, select it from the search results and install
+
+  ![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/9ac95ab1-fb6b-48c8-ab63-be5cf135c4da)
 
 ### Usage
 
