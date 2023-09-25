@@ -81,4 +81,25 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         default: false,
         description: "default: false",
     },
+    {//tooltipにupdatedAtを表示する
+        key: "tooltipShowUpdatedAt",
+        type: "boolean",
+        title: "show updatedAt in tooltips",
+        default: false,
+        description: "default: false",
+    },
+    {//tooltipsにPage-tagsを表示する
+        key: "tooltipShowPageTags",
+        type: "boolean",
+        title: "show the tags property in tooltips",
+        default: false,
+        description: "default: false",
+    },
+    {//tooltipsにaliasを表示する
+        key: "tooltipShowAlias",
+        type: "boolean",
+        title: "show the alias property in tooltips",
+        default: false,
+        description: "default: false",
+    },
 ];

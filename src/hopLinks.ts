@@ -540,6 +540,7 @@ const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }, className: 
     //div ポップアップの内容
     const popupElement: HTMLDivElement = document.createElement("div");
     popupElement.classList.add("hopLinks-popup-content");
+    popupElement.title = "";
     inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
     labelElement.append(divElement, inputElement, popupElement);
     tokenLinkElement.append(labelElement);
@@ -560,6 +561,7 @@ const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: H
     //div ポップアップの内容
     const popupElement: HTMLDivElement = document.createElement("div");
     popupElement.classList.add("hopLinks-popup-content");
+    popupElement.title = "";
     const anchorElement: HTMLAnchorElement = document.createElement("a");
     anchorElement.dataset.uuid = page.uuid;
     anchorElement.innerText = isHierarchyTitle ? page.originalName.replace(isHierarchyTitle + "/", "") : page.originalName;
@@ -643,6 +645,11 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
         const openLinkContainerElement: HTMLDivElement = createAnchorContainer(uuid, thisPage); //ページを開くリンク(Hierarchy対応)と画像を表示する
         popupElement.append(openLinkContainerElement);
 
+        //ページタグを表示する
+        if (logseq.settings!.tooltipShowPageTags === true && thisPage.properties?.tags) showPageTags(thisPage.properties.tags, popupElement);
+        //aliasを表示する
+        if (logseq.settings!.tooltipShowAlias === true && thisPage.properties?.alias) showPageTags(thisPage.properties.alias, popupElement, true);
+
         //ページの内容を取得する
         const content: HTMLPreElement = document.createElement("pre");
         content.title = "Page Content";
@@ -658,10 +665,47 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
             content.innerText += pageContents + "\n";
         }
 
-        if (content.innerText !== "") popupElement.append(content);
+        if (content.innerText !== "") {
+            popupElement.append(content);
+
+            //更新日時を表示する
+            if (logseq.settings!.tooltipShowUpdatedAt === true && thisPage.updatedAt) showUpdatedAt(thisPage.updatedAt, popupElement);
+        }
     };
 }
 
+
+const openPageEventForTagNever = async function (this: HTMLAnchorElement, { shiftKey }: MouseEvent): Promise<void> {
+    const pageName: string | undefined = this.dataset.name;
+    if (!pageName) return;
+    const page = await logseq.Editor.getPage(pageName) as PageEntity | null;
+    if (!page) return;
+    if (shiftKey === true) {
+        logseq.Editor.openInRightSidebar(page.uuid);
+    } else {
+        logseq.Editor.scrollToBlockInPage(pageName, page.uuid, { replaceState: true });
+    }
+};
+
+const showPageTags = (property: string[], popupElement: HTMLDivElement, flagAlias?: boolean) => {
+    const tagsElement: HTMLParagraphElement = document.createElement("p");
+    tagsElement.title = flagAlias ? "Alias" : "Page-Tags";
+    property.forEach((tag, i) => {
+        if (i !== 0) tagsElement.append(", ");
+        const anchorElement: HTMLAnchorElement = document.createElement("a");
+        anchorElement.innerText = "#" + tag;
+        if (flagAlias) {
+            anchorElement.style.cursor = "unset";
+        } else {
+            anchorElement.title = "Click to open page in right sidebar";
+            anchorElement.dataset.name = tag;
+            anchorElement.addEventListener("click", openPageEventForTagNever);
+        }
+        tagsElement.append(anchorElement);
+    });
+
+    popupElement.append(tagsElement);
+}
 
 function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDivElement, ev: MouseEvent) => any {
     return async function (this: HTMLDivElement) {
@@ -747,3 +791,12 @@ const whenPageOpen = async () => {
         }
     }, 300);
 };
+
+const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
+    const updatedAtElement: HTMLParagraphElement = document.createElement("p");
+    updatedAtElement.classList.add("hopLinks-popup-updatedAt");
+    //ローカライズされた日付
+    if (updatedAt === undefined) return;
+    updatedAtElement.innerText = "This page updated at: " + new Date(updatedAt).toLocaleString();;
+    popupElement.append(updatedAtElement);
+}

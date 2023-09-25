@@ -125,6 +125,11 @@ div#hopLinks {
             & pre {
                 line-height: 2.5em;
             }
+
+            & p.hopLinks-popup-updatedAt {
+                font-size: small;
+                opacity: 0.7;
+            }
         }
 
         & input[type="checkbox"] {
