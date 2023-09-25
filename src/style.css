@@ -156,6 +156,6 @@ div#hopLinks {
     }
 }
 
-div[label="plugin-settings-modal"] div[data-id="two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
+div[data-id="two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
     height: 15em;
 }
