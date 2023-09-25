@@ -31,7 +31,7 @@ export const settings = (): SettingSchemaDesc[] => [
         title: t("exclude page title Keywords"),
         default: "",
         inputAs: "textarea",//改行で区切る
-        description: "split by newline",
+        description: t("split by newline"),
     },
     {//outgoingLinksからジャーナルを除外する
         key: "excludeJournalFromOutgoingLinks",
