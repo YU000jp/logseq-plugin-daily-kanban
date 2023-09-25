@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.13.0...v1.14.0) (2023-09-25)
+
+
+### Features
+
+* **external Links:** Add confirm ([d50f0e9](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/d50f0e91f712ad04c7a16729365023b13ef14d91))
+
 # [1.13.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.12.0...v1.13.0) (2023-09-25)
 
 
