@@ -59,7 +59,7 @@
 
 ## ショーケース / 質問 / アイデア / ヘルプ
 
-> この種のことを質問したり見つけたりするには、[ディスカッション](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions)タブに移動してください。
+> この種のことを質問したり見つけたりするには、[ディスカッション](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions)タブに移動してください。日本語で質問OKです。
 
 ### 貢献
 
