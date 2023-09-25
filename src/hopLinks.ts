@@ -183,6 +183,10 @@ const hopLinks = async (select?: string) => {
                 anchorElement.href = externalLink.href;
                 anchorElement.target = "_blank";
                 anchorElement.title = "Open in the browser";
+                //開くか尋ねる
+                anchorElement.addEventListener("click", (event: MouseEvent) => {
+                    if (!confirm(`Open in the browser?\n\n${externalLink.innerText}\n${externalLink.href}`)) event.preventDefault();
+                });
                 anchorElement.innerText = externalLink.innerText;
                 divElement.append(anchorElement);
                 labelElement.append(divElement);
