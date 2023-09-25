@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.15.0...v1.16.0) (2023-09-25)
+
+
+### Features
+
+* **traslations:** ja ([2737814](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/27378146b7bed665947087021296996b5cdf4439))
+
 # [1.15.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.14.0...v1.15.0) (2023-09-25)
 
 
