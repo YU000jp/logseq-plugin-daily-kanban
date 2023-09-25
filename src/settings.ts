@@ -11,7 +11,7 @@ export const settingsTemplate: SettingSchemaDesc[] = [
         description: "default: true",
     },
     {//HierarchyをoutgoingLinks(Keywords)に含める
-        key: "KeywordsIncludeHierarchy",
+        key: "keywordsIncludeHierarchy",
         type: "boolean",
         title: "outgoing links (keywords) include hierarchy of the page",
         default: true,
