@@ -84,7 +84,7 @@ const hopLinks = async (select?: string) => {
                 pageLinksSet.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }));
             }
         };
-        if (logseq.settings!.keywordsIncludeHierarchy === true && current.originalName.includes("/")) {//現在のページ名に「/」が含まれている場合
+        if (logseq.settings!.keywordsIncludeHierarchy === true && current.originalName.includes("/") as boolean === true) {//現在のページ名に「/」が含まれている場合
             // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
             let names = current.originalName.split("/");
             names = names.map((name, i) => names.slice(0, i + 1).join("/"));
@@ -166,6 +166,32 @@ const hopLinks = async (select?: string) => {
     });
     excludePages(filteredPageLinksSet);
     if (logseq.settings!.outgoingLinks === true) outgoingLinks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
+
+    if (logseq.settings!.externalLinks === true) {
+        const externalLinks = PageBlocksInnerElement.querySelectorAll("a.external-link") as NodeListOf<HTMLAnchorElement> | null;
+        if (externalLinks) {
+            //outgoingLinksElementを作成
+            const externalLinksElement: HTMLDivElement = document.createElement("div");
+            externalLinksElement.id = "externalLinks";
+            externalLinksElement.innerHTML += `<div class="hopLinksTh">External Links</div>`;
+            for (const externalLink of externalLinks) {
+                //td
+                const labelElement: HTMLLabelElement = document.createElement("label");
+                const divElement: HTMLDivElement = document.createElement("div");
+                divElement.classList.add("hopLinksTd");
+                const anchorElement: HTMLAnchorElement = document.createElement("a");
+                anchorElement.href = externalLink.href;
+                anchorElement.target = "_blank";
+                anchorElement.title = "Open in the browser";
+                anchorElement.innerText = externalLink.innerText;
+                divElement.append(anchorElement);
+                labelElement.append(divElement);
+                externalLinksElement.append(labelElement);
+            }
+            hopLinksElement.append(externalLinksElement);
+        }
+    }
+
 
     /* 2ホップリンクの表示 */
 
