@@ -138,7 +138,7 @@ const hopLinks = async (select?: string) => {
     //hopLinksElementに更新ボタンを設置する
     const updateButtonElement: HTMLButtonElement = document.createElement("button");
     updateButtonElement.id = "hopLinksUpdate";
-    updateButtonElement.innerText = "🔂Update"; //手動更新
+    updateButtonElement.innerText = "🔂" + t("Update"); //手動更新
     updateButtonElement.title = t("Click to update (If add links, please click this button.)");
     updateButtonElement.addEventListener("click", () => {
         //hopLinksElementを削除する
