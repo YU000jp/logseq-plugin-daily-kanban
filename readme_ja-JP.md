@@ -31,6 +31,12 @@
 - 発信リンクを有効にする :boolean
     - `true` default
     - `false`
+- 外部リンクを有効にする :boolean
+    - `true` default
+    - `false`
+- 発信リンクに階層のリンクを含める :boolean
+　　- `true` default
+    - `false`
 - 除外するページタイトルのキーワード :string
     > 改行で区切る
 - 発信リンクからジャーナルを除外します (ユーザーの日付形式と一致) :boolean
@@ -52,6 +58,18 @@
     - `true`
     - `false` default
 - ページを開いたときにページタグリストを折りたたむ :boolean
+    - `true`
+    - `false` default
+- 現在のページを「バックリンク」と「ブロック(参照)」から除外します :boolean
+    - `true`
+    - `false` default
+- ツールチップにページの更新日を表示する :boolean
+    - `true`
+    - `false` default
+- ツールチップにページのタグ(プロパティ)を表示する :boolean
+    - `true`
+    - `false` default
+- ツールチップにページのaliasプロパティを表示する :boolean
     - `true`
     - `false` default
 
