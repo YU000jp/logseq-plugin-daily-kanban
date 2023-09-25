@@ -64,12 +64,15 @@
     - `true`
     - `false` default
 - ツールチップにページの更新日を表示する :boolean
-    - `true`
-    - `false` default
+    - `true` default
+    - `false`
 - ツールチップにページのタグ(プロパティ)を表示する :boolean
-    - `true`
-    - `false` default
+    - `true` default
+    - `false`
 - ツールチップにページのaliasプロパティを表示する :boolean
+    - `true` default
+    - `false`
+- "ページに更新日時を表示" :boolean
     - `true`
     - `false` default
 

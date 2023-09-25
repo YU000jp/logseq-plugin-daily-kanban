@@ -67,12 +67,15 @@ bottom of a page content
   - `true`
   - `false` default
 - show updatedAt in tooltips: boolean
-  - `true`
-  - `false` default
+  - `true` default
+  - `false`
 - show the tags property in tooltips :boolean
-  - `true`
-  - `false` default
+  - `true` default
+  - `false`
 - show the alias property in tooltips :boolean
+  - `true` default
+  - `false`
+- show updatedAt in the page :boolean
   - `true`
   - `false` default
 
