@@ -169,7 +169,7 @@ const hopLinks = async (select?: string) => {
 
     if (logseq.settings!.externalLinks === true) {
         const externalLinks = PageBlocksInnerElement.querySelectorAll("a.external-link") as NodeListOf<HTMLAnchorElement> | null;
-        if (externalLinks) {
+        if (externalLinks && externalLinks.length !== 0) {
             //outgoingLinksElementを作成
             const externalLinksElement: HTMLDivElement = document.createElement("div");
             externalLinksElement.id = "externalLinks";
