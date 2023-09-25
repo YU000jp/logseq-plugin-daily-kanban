@@ -2,7 +2,6 @@ import '@logseq/libs'; //https://plugins-doc.logseq.com/
 import { loadTwoHopLink } from './hopLinks';
 import { setup as l10nSetup } from "logseq-l10n"; //https://github.com/sethyuan/logseq-l10n
 import ja from "./translations/ja.json";
-import zhCN from "./translations/zh-CN.json";
 import { settings } from './settings';
 
 /* main */
@@ -11,7 +10,7 @@ const main = async () => {
   /* user setting */
   // https://logseq.github.io/plugins/types/SettingSchemaDesc.html
   try {
-    await l10nSetup({ builtinTranslations: { ja, zhCN } })
+    await l10nSetup({ builtinTranslations: { ja } })
   } finally {
     /* user settings */
     logseq.useSettingsSchema(settings());
