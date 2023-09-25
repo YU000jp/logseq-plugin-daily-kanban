@@ -1,3 +1,16 @@
+# [1.12.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.11.0...v1.12.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* **bug:** popover(tooltips) position ([6ab9c37](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/6ab9c3782c1df018e26843f702580a7b452dfafc))
+* **doc:** description ([a9374a4](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/a9374a4cb6a45f84f3addd0c04e84b20f2f14998))
+
+
+### Features
+
+* **design:** color page-tags th ([b74cdbb](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/b74cdbbb1e66f021eb1c8a3f12d5949175cf1201))
+
 # [1.11.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.10.0...v1.11.0) (2023-09-24)
 
 
