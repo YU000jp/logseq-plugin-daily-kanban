@@ -2,6 +2,7 @@ import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin";
 import CSSfile from "./style.css?inline";
 import { getBlockContent, getPageContent, stringLimitAndRemoveProperties } from "./lib";
 import { includeReference } from "./lib";
+import { t } from "logseq-l10n";
 
 export const loadTwoHopLink = async () => {
 
@@ -105,7 +106,7 @@ const hopLinks = async (select?: string) => {
     const spanElement: HTMLSpanElement = document.createElement("span");
     spanElement.id = "hopLinksTitle";
     spanElement.innerText = "2 HopLink";
-    spanElement.title = "Click to collapse";
+    spanElement.title = t("Click to collapse");
     spanElement.style.cursor = "zoom-out";
     //spanElementをクリックしたら消す
     spanElement.addEventListener("click", () => {
@@ -121,8 +122,8 @@ const hopLinks = async (select?: string) => {
             //updateButtonElementの文字を変更する
             const updateButtonElement = parent.document.getElementById("hopLinksUpdate") as HTMLButtonElement | null;
             if (updateButtonElement) {
-                updateButtonElement.innerText = "Collapsed (revert)";
-                updateButtonElement.title = "Click to revert";
+                updateButtonElement.innerText = t("Collapsed (revert)");
+                updateButtonElement.title = t("Click to revert");
             }
         }
     }, { once: true });
@@ -131,14 +132,14 @@ const hopLinks = async (select?: string) => {
     const settingButtonElement: HTMLButtonElement = document.createElement("button");
     settingButtonElement.id = "hopLinksSetting";
     settingButtonElement.innerText = "⚙";
-    settingButtonElement.title = "Click to open plugin settings";
+    settingButtonElement.title = t("Click to open plugin settings");
     settingButtonElement.addEventListener("click", () => logseq.showSettingsUI());
 
     //hopLinksElementに更新ボタンを設置する
     const updateButtonElement: HTMLButtonElement = document.createElement("button");
     updateButtonElement.id = "hopLinksUpdate";
     updateButtonElement.innerText = "🔂Update"; //手動更新
-    updateButtonElement.title = "Click to update (If add links, please click this button.)";
+    updateButtonElement.title = t("Click to update (If add links, please click this button.)");
     updateButtonElement.addEventListener("click", () => {
         //hopLinksElementを削除する
         hopLinksElement.remove();
@@ -154,7 +155,7 @@ const hopLinks = async (select?: string) => {
     //filteredBlocksが空の場合は処理を終了する
     if (filteredPageLinksSet.length === 0) {
         //ブランクメッセージを表示する
-        blankMessage("No links found in this page. (If add links, please click the update button.)");
+        blankMessage(t("No links found in this page. (If add links, please click the update button.)"));
         return;
     }
     //filteredBlocksをソートする
@@ -168,32 +169,7 @@ const hopLinks = async (select?: string) => {
     if (logseq.settings!.outgoingLinks === true) outgoingLinks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
 
     if (logseq.settings!.externalLinks === true) {
-        const externalLinks = PageBlocksInnerElement.querySelectorAll("a.external-link") as NodeListOf<HTMLAnchorElement> | null;
-        if (externalLinks && externalLinks.length !== 0) {
-            //outgoingLinksElementを作成
-            const externalLinksElement: HTMLDivElement = document.createElement("div");
-            externalLinksElement.id = "externalLinks";
-            externalLinksElement.innerHTML += `<div class="hopLinksTh">External Links</div>`;
-            for (const externalLink of externalLinks) {
-                //td
-                const labelElement: HTMLLabelElement = document.createElement("label");
-                const divElement: HTMLDivElement = document.createElement("div");
-                divElement.classList.add("hopLinksTd");
-                const anchorElement: HTMLAnchorElement = document.createElement("a");
-                anchorElement.href = externalLink.href;
-                anchorElement.target = "_blank";
-                anchorElement.title = "Open in the browser";
-                //開くか尋ねる
-                anchorElement.addEventListener("click", (event: MouseEvent) => {
-                    if (!confirm(`Open in the browser?\n\n${externalLink.innerText}\n${externalLink.href}`)) event.preventDefault();
-                });
-                anchorElement.innerText = externalLink.innerText;
-                divElement.append(anchorElement);
-                labelElement.append(divElement);
-                externalLinksElement.append(labelElement);
-            }
-            hopLinksElement.append(externalLinksElement);
-        }
+        externalLinks(PageBlocksInnerElement, hopLinksElement);
     }
 
 
@@ -232,11 +208,11 @@ const hopLinks = async (select?: string) => {
     const selectElement: HTMLSelectElement = document.createElement("select");
     selectElement.id = "hopLinkType";
     selectElement.innerHTML = `
-    <option value="unset">Unset</option>
-    <option value="hierarchy" title="base on outgoing links">Hierarchy + Page-Tags</option>
-    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy + Page-Tags</option>
-    <option value="backLinks">BackLinks</option>
-    <option value="blocks">Blocks (references)</option>
+    <option value="unset">${t("Unset")}</option>
+    <option value="hierarchy" title="base on outgoing links">Hierarchy + ${t("Page-Tags")}</option>
+    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy + ${t("Page-Tags")}</option>
+    <option value="backLinks">${t("BackLinks")}</option>
+    <option value="blocks">${t("Blocks (references)")}</option>
     `;
     //
     selectElement.addEventListener("change", () => {
@@ -265,7 +241,7 @@ const outgoingLinks = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
     //outgoingLinksElementを作成
     const outgoingLinksElement: HTMLDivElement = document.createElement("div");
     outgoingLinksElement.id = "outgoingLinks";
-    outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">Outgoing Links (Keyword)</div>`;
+    outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">${t("Outgoing Links (Keyword)")}</div>`;
 
     filteredPageLinksSet.forEach(async (pageLink) => {
         if (!pageLink) return;
@@ -299,7 +275,7 @@ const typeReferencesByBlock = (filteredPageLinksSet: ({ uuid: string; name: stri
         if (filteredBlocks.length === 0) return;
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-blocks", "Blocks (references)");
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-blocks", t("Blocks (references)"));
         //end of 行タイトル(左ヘッダー)
 
         //右側
@@ -486,6 +462,35 @@ const sortForPageEntity = (PageEntity: PageEntity[]) =>
         if (a.name < b.name) return -1;
         return 0;
     });
+
+const externalLinks = (PageBlocksInnerElement: HTMLDivElement, hopLinksElement: HTMLDivElement) => {
+    const externalLinks = PageBlocksInnerElement.querySelectorAll("a.external-link") as NodeListOf<HTMLAnchorElement> | null;
+    if (externalLinks && externalLinks.length !== 0) {
+        //outgoingLinksElementを作成
+        const externalLinksElement: HTMLDivElement = document.createElement("div");
+        externalLinksElement.id = "externalLinks";
+        externalLinksElement.innerHTML += `<div class="hopLinksTh">External Links</div>`;
+        for (const externalLink of externalLinks) {
+            //td
+            const labelElement: HTMLLabelElement = document.createElement("label");
+            const divElement: HTMLDivElement = document.createElement("div");
+            divElement.classList.add("hopLinksTd");
+            const anchorElement: HTMLAnchorElement = document.createElement("a");
+            anchorElement.href = externalLink.href;
+            anchorElement.target = "_blank";
+            anchorElement.title = t("Open in the browser");
+            //開くか尋ねる
+            anchorElement.addEventListener("click", (event: MouseEvent) => {
+                if (!confirm(t("Open in the browser?") + `\n\n${externalLink.innerText}\n${externalLink.href}`)) event.preventDefault();
+            });
+            anchorElement.innerText = externalLink.innerText;
+            divElement.append(anchorElement);
+            labelElement.append(divElement);
+            externalLinksElement.append(labelElement);
+        }
+        hopLinksElement.append(externalLinksElement);
+    }
+};
 
 function checkAlias(current: PageEntity, filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) {
     if (current.properties && current.properties.alias) {
@@ -682,7 +687,7 @@ function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTML
 
         //ページの内容を取得する
         const content: HTMLPreElement = document.createElement("pre");
-        content.title = "Page Content";
+        content.title = t("Page Content");
         let pageContents = await getPageContent(thisPage);
         if (pageContents) {
             //リファレンスかどうか
@@ -719,7 +724,7 @@ const openPageEventForTagNever = async function (this: HTMLAnchorElement, { shif
 
 const showPageTags = (property: string[], popupElement: HTMLDivElement, flagAlias?: boolean) => {
     const tagsElement: HTMLParagraphElement = document.createElement("p");
-    tagsElement.title = flagAlias ? "Alias" : "Page-Tags";
+    tagsElement.title = flagAlias ? "Alias" : t("Page-Tags");
     property.forEach((tag, i) => {
         if (i !== 0) tagsElement.append(", ");
         const anchorElement: HTMLAnchorElement = document.createElement("a");
@@ -727,7 +732,6 @@ const showPageTags = (property: string[], popupElement: HTMLDivElement, flagAlia
         if (flagAlias) {
             anchorElement.style.cursor = "unset";
         } else {
-            anchorElement.title = "Click to open page in right sidebar";
             anchorElement.dataset.name = tag;
             anchorElement.addEventListener("click", openPageEventForTagNever);
         }
@@ -762,8 +766,8 @@ function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDiv
             //pElementをクリックしたら、親ブロックを開く
             const anchorElement: HTMLAnchorElement = document.createElement("a");
             anchorElement.dataset.uuid = parentPage.uuid;
-            anchorElement.innerText = "Parent Block";
-            anchorElement.title = "Click to open page in right sidebar";
+            anchorElement.innerText = t("Parent Block");
+            anchorElement.title = t("Click to open page in right sidebar");
             anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(parentBlock.uuid) });
             pElement.append(anchorElement);
             const preElement: HTMLPreElement = document.createElement("pre");
@@ -776,8 +780,8 @@ function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDiv
         //pElementをクリックしたら、親ブロックを開く
         const anchorElement: HTMLAnchorElement = document.createElement("a");
         anchorElement.dataset.uuid = parentPage.uuid;
-        anchorElement.innerText = "Block";
-        anchorElement.title = "Click to open page in right sidebar";
+        anchorElement.innerText = t("Block");
+        anchorElement.title = t("Click to open page in right sidebar");
         anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(thisBlock.uuid) });
         pElement.append(anchorElement);
         const preElement: HTMLPreElement = document.createElement("pre");
@@ -827,6 +831,6 @@ const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
     updatedAtElement.classList.add("hopLinks-popup-updatedAt");
     //ローカライズされた日付
     if (updatedAt === undefined) return;
-    updatedAtElement.innerText = "This page updated at: " + new Date(updatedAt).toLocaleString();;
+    updatedAtElement.innerText = t("This page updated at: ") + new Date(updatedAt).toLocaleString();;
     popupElement.append(updatedAtElement);
 }
