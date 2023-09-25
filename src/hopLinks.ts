@@ -434,7 +434,7 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         if (PageEntity) sortForPageEntity(PageEntity);
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-pageTags", "Page-Tags");
+        const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-pageTags", t("Page-Tags"));
 
         //td
         if (PageEntity) PageEntity.forEach((page) => createTd(page, tokenLinkElement));
