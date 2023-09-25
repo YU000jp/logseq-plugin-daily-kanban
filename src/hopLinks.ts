@@ -24,9 +24,7 @@ export const loadTwoHopLink = async () => {
 
 const hopLinks = async (select?: string) => {
     //アウトゴーイングリンクを表示する場所
-    const mainElement = parent.document.getElementById("main-content-container") as HTMLDivElement | null;
-    if (!mainElement) return;
-    const PageBlocksInnerElement = mainElement.querySelector("div.page-blocks-inner") as HTMLDivElement | null;
+    const PageBlocksInnerElement = parent.document.querySelector("div#main-content-container div.page-blocks-inner") as HTMLDivElement | null;
     if (!PageBlocksInnerElement) return;
     const hopLinksElement: HTMLDivElement = document.createElement("div");
     hopLinksElement.id = "hopLinks";
