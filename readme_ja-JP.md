@@ -6,9 +6,11 @@
 
 ---
 
-ページコンテンツの下部
+ページコンテンツの下部に表示
 
 ![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/e50711c1-0401-4d8a-af46-9b9e1bd49af2)
+
+> 色合いはテーマカラーによって異なります。
 
 ---
 
