@@ -102,6 +102,17 @@ const hopLinks = async (select?: string) => {
     const filteredPageLinksSet = (await Promise.all(pageLinksSet)).filter(Boolean);
     pageLinksSet.length = 0; //配列を空にする
 
+    //ページの更新日時を表示する
+    if (logseq.settings!.thisPageShowUpdatedAt === true && current) {
+        if (current.updatedAt) {
+            const divElement: HTMLDivElement = document.createElement("div");
+            divElement.id = "hopLinksUpdatedAt";
+            showUpdatedAt(current.updatedAt, divElement);
+            PageBlocksInnerElement.append(divElement);
+        }
+
+    }
+
     //hopLinksElementに<span>でタイトルメッセージを設置する
     const spanElement: HTMLSpanElement = document.createElement("span");
     spanElement.id = "hopLinksTitle";
@@ -383,7 +394,7 @@ const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string; } | 
             const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-hierarchy", "Hierarchy");
 
             //td
-            PageEntity.forEach((page) => createTd(page, tokenLinkElement, pageLink.name));
+            PageEntity.forEach((page) => createTd(page, tokenLinkElement, { isHierarchyTitle: pageLink.name }));
             hopLinksElement.append(tokenLinkElement);
 
             if (flagFull === true) {
@@ -437,8 +448,8 @@ const typePageTags = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         const tokenLinkElement: HTMLDivElement = tokeLinkCreateTh(pageLink, "th-type-pageTags", t("Page-Tags"));
 
         //td
-        if (PageEntity) PageEntity.forEach((page) => createTd(page, tokenLinkElement));
-        PageEntityFromProperty.forEach((page) => createTd(page, tokenLinkElement));
+        if (PageEntity) PageEntity.forEach((page) => createTd(page, tokenLinkElement, { isPageTags: true }));
+        PageEntityFromProperty.forEach((page) => createTd(page, tokenLinkElement, { isPageTags: true }));
 
         hopLinksElement.append(tokenLinkElement);
     });
@@ -582,7 +593,7 @@ const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }, className: 
     return tokenLinkElement;
 };
 
-const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: HTMLDivElement, isHierarchyTitle?: string) => {
+const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: HTMLDivElement, flag?: { isPageTags?: boolean, isHierarchyTitle?: string }) => {
     const divElementTag: HTMLDivElement = document.createElement("div");
     divElementTag.classList.add("hopLinksTd");
     //ポップアップ表示あり
@@ -590,7 +601,6 @@ const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: H
     //input要素を作成
     const inputElement: HTMLInputElement = document.createElement("input");
     inputElement.type = "checkbox";
-    inputElement.name = "blocks-popup-" + page.uuid;
     inputElement.dataset.uuid = page.uuid;
     inputElement.dataset.name = page.originalName;
     //div ポップアップの内容
@@ -599,7 +609,8 @@ const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: H
     popupElement.title = "";
     const anchorElement: HTMLAnchorElement = document.createElement("a");
     anchorElement.dataset.uuid = page.uuid;
-    anchorElement.innerText = isHierarchyTitle ? page.originalName.replace(isHierarchyTitle + "/", "") : page.originalName;
+    anchorElement.innerText = (flag && flag.isHierarchyTitle) ? page.originalName.replace(flag.isHierarchyTitle, "") : page.originalName;
+    if (flag && flag.isPageTags) anchorElement.innerText = "#" + anchorElement.innerText;
     divElementTag.title = page.originalName;
     divElementTag.append(anchorElement);
     inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement));
@@ -831,6 +842,6 @@ const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
     updatedAtElement.classList.add("hopLinks-popup-updatedAt");
     //ローカライズされた日付
     if (updatedAt === undefined) return;
-    updatedAtElement.innerText = t("This page updated at: ") + new Date(updatedAt).toLocaleString();;
+    updatedAtElement.innerText = t("This page updated at: ") + new Date(updatedAt).toLocaleString();
     popupElement.append(updatedAtElement);
 }

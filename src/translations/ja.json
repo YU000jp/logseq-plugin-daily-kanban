@@ -33,5 +33,6 @@
     "Block": "ブロック",
     "BackLinks": "バックリンク",
     "Unset": "設定しない",
-    "Update": "更新"
+    "Update": "更新",
+    "show updatedAt in the page": "ページに更新日時を表示"
 }

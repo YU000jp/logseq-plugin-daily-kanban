@@ -110,4 +110,11 @@ export const settings = (): SettingSchemaDesc[] => [
         default: false,
         description: "default: false",
     },
+    {//ページの更新日時を表示する
+        key: "thisPageShowUpdatedAt",
+        type: "boolean",
+        title: t("show updatedAt in the page"),
+        default: false,
+        description: "default: false",
+    }
 ];

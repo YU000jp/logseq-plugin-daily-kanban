@@ -1,3 +1,7 @@
+div#hopLinksUpdatedAt {
+    margin-top: 5em;
+}
+
 div#hopLinks {
     margin-top: 16em;
     margin-left: 2em;
@@ -117,6 +121,8 @@ div#hopLinks {
                 padding: 10px;
 
                 & div.hopLinks-popup-anchor {
+                    font-weight: bold;
+
                     >a {
                         margin-left: .5em;
                         margin-right: .5em;
@@ -129,6 +135,11 @@ div#hopLinks {
                         vertical-align: top;
                     }
                 }
+            }
+
+            & p {
+                font-size: small;
+                opacity: 0.7;
             }
 
             & pre {
