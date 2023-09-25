@@ -126,6 +126,14 @@ const hopLinks = async (select?: string) => {
             }
         }
     }, { once: true });
+
+    //設定画面を開くボタン
+    const settingButtonElement: HTMLButtonElement = document.createElement("button");
+    settingButtonElement.id = "hopLinksSetting";
+    settingButtonElement.innerText = "⚙";
+    settingButtonElement.title = "Click to open plugin settings";
+    settingButtonElement.addEventListener("click", () => logseq.showSettingsUI());
+
     //hopLinksElementに更新ボタンを設置する
     const updateButtonElement: HTMLButtonElement = document.createElement("button");
     updateButtonElement.id = "hopLinksUpdate";
@@ -136,7 +144,7 @@ const hopLinks = async (select?: string) => {
         hopLinksElement.remove();
         hopLinks();
     }, { once: true });
-    hopLinksElement.prepend(spanElement, updateButtonElement);
+    hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement);
 
     const blankMessage = (message: string) => {
         const pElement: HTMLElement = document.createElement("p");
