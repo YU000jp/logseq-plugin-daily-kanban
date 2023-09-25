@@ -1,3 +1,11 @@
+# [1.15.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.14.0...v1.15.0) (2023-09-25)
+
+
+### Features
+
+* **Add:** translation zh-CN ([861f892](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/861f8921e37754f0f2884ee26396d9e0540f5aed))
+* **l10n:** setup ([e3ab2cb](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/e3ab2cb429de52666df8ca7f5c83fe01ccd2e6b9))
+
 # [1.14.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.13.0...v1.14.0) (2023-09-25)
 
 
