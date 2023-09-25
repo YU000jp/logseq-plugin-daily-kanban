@@ -34,6 +34,12 @@ bottom of a page content
 - outgoing links enable :boolean
   - `true` default
   - `false`
+- external links enable :boolean
+  - `true` default
+  - `false`
+- outgoing links (keywords) include hierarchy of the page :boolean
+  - `true` default
+  - `false`
 - exclude page title Keywords :string
   > split by newline
 - exclude journal from outgoing links (match user date format) :boolean
@@ -55,6 +61,18 @@ bottom of a page content
   - `true`
   - `false` default
 - collapse the Page-tags list when page open :boolean
+  - `true`
+  - `false` default
+- exclude current page from "backLinks" and "blocks (references)" :boolean
+  - `true`
+  - `false` default
+- show updatedAt in tooltips: boolean
+  - `true`
+  - `false` default
+- show the tags property in tooltips :boolean
+  - `true`
+  - `false` default
+- show the alias property in tooltips :boolean
   - `true`
   - `false` default
 
