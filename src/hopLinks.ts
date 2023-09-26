@@ -331,7 +331,7 @@ const typeBackLink = (filteredPageLinksSet: ({ uuid: string; name: string; } | u
         const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: BlockEntity[]][] | null;
         if (!page) return;
         //ページ名を取得し、リストにする
-        const pageList = page.map((page) => page[0].originalName);
+        const pageList = page.map((page) => page[0]?.originalName);
         if (!pageList || pageList.length === 0) return;
 
         //excludePagesの配列に含まれるページを除外する
