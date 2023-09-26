@@ -494,15 +494,15 @@ const externalLinks = (PageBlocksInnerElement: HTMLDivElement, hopLinksElement: 
 
 function checkAlias(current: PageEntity, filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) {
     if (current.properties && current.properties.alias) {
-        const alias = current.properties.alias as string[] | undefined; //originalNameと同等
-        if (alias && alias.length !== 0) {
-            alias.forEach((alias) => {
+        const aliasProperty = current.properties.alias as string[] | undefined; //originalNameと同等
+        if (aliasProperty && aliasProperty.length !== 0) {
+            for (const alias of aliasProperty) {
                 filteredPageLinksSet.forEach((pageLink, i) => {
                     if (pageLink?.name === alias) {
                         filteredPageLinksSet.splice(i, 1);
                     }
                 });
-            });
+            }
         }
     }
 }
@@ -510,7 +510,7 @@ function checkAlias(current: PageEntity, filteredPageLinksSet: ({ uuid: string; 
 function excludePageForPageEntity(PageEntity: PageEntity[]) {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
-        PageEntity.forEach((page) => {
+        for (const page of PageEntity) {
             if (excludePages.includes(page.originalName)) {
                 PageEntity!.splice(PageEntity!.indexOf(page), 1);
             }
@@ -518,43 +518,39 @@ function excludePageForPageEntity(PageEntity: PageEntity[]) {
             if (logseq.settings!.excludeJournalFromResult === true && page["journal?"] === true) {
                 PageEntity!.splice(PageEntity!.indexOf(page), 1);
             }
-        });
+        }
     } else {
         //ジャーナルを除外する
         if (logseq.settings!.excludeJournalFromResult === true) {
-            PageEntity.forEach((page) => {
-                if (page["journal?"] === true) {
-                    PageEntity!.splice(PageEntity!.indexOf(page), 1);
-                }
-            });
+            for (const page of PageEntity) {
+                if (page["journal?"] === true) PageEntity!.splice(PageEntity!.indexOf(page), 1);
+            }
         }
     }
 }
 
-function excludePageForBlockEntity(filteredBlocks: BlockEntity[]) {
+const excludePageForBlockEntity = async (filteredBlocks: BlockEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
-        filteredBlocks.forEach((block) => {
-            if (excludePages.includes(block.page.originalName)) {
-                filteredBlocks.splice(filteredBlocks.indexOf(block), 1);
-            }
-        });
+        for (const block of filteredBlocks) {
+            if (!block.page) continue;
+            const page = await logseq.Editor.getPage(block.page.id) as PageEntity | null;
+            if (page && excludePages.includes(page.originalName)) filteredBlocks.splice(filteredBlocks.indexOf(block), 1);
+        }
     }
 
-}
+};
 
-function excludePages(filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) {
+const excludePages = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
-        excludePages.forEach((excludePage) => {
+        for (const excludePage of excludePages) {
             filteredPageLinksSet.forEach((pageLink, i) => {
-                if (pageLink?.name === excludePage) {
-                    filteredPageLinksSet.splice(i, 1);
-                }
+                if (pageLink?.name === excludePage) filteredPageLinksSet.splice(i, 1);
             });
-        });
+        }
     }
-}
+};
 
 
 const tokeLinkCreateTh = (pageLink: { uuid: string; name: string; }, className: string, boxTitle: string) => {

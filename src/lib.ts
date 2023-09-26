@@ -1,6 +1,7 @@
 import { BlockEntity, BlockUUIDTuple, PageEntity } from "@logseq/libs/dist/LSPlugin.user";
 
 export const stringLimitAndRemoveProperties = (content: string, limit: number): string => {
+    if (!content) return "";
     if (content && content.length > limit) {
         content = content.slice(0, limit) + "\n\n...\n";
     }
@@ -18,6 +19,7 @@ export const stringLimitAndRemoveProperties = (content: string, limit: number): 
 };
 
 export const includeReference = async (content): Promise<string | null> => {
+    if (!content) return null;
     if (content.match(/\(\(.+?\)\)/) === null) return null;
     //contentに、{{embed ((何らかの英数値))}} であるか ((何らかの英数値)) が含まれている数だけ繰り返す
     while (content.match(/{{embed \(\((.+?)\)\)}}/) || content.match(/\(\((.+?)\)\)/)) {
