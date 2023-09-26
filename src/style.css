@@ -1,8 +1,4 @@
-div#hopLinksUpdatedAt {
-    margin-top: 5em;
-}
-
-div#hopLinks {
+div#main-content-container div#hopLinks {
     margin-top: 16em;
     margin-left: 2em;
     user-select: none;
@@ -75,11 +71,11 @@ div#hopLinks {
     & select {
         background-color: inherit;
         color: inherit;
-    }
 
-    & option {
-        background-color: var(--ls-primary-background-color);
-        color: var(--ls-primary-text-color);
+        & option {
+            background-color: var(--ls-primary-background-color);
+            color: var(--ls-primary-text-color);
+        }
     }
 
     & label {
@@ -139,25 +135,25 @@ div#hopLinks {
             & p {
                 font-size: small;
                 opacity: 0.7;
+
+                &.hopLinks-popup-updatedAt {
+                    font-size: small;
+                    opacity: 0.7;
+                }
             }
 
             & pre {
                 line-height: 2.5em;
             }
-
-            & p.hopLinks-popup-updatedAt {
-                font-size: small;
-                opacity: 0.7;
-            }
         }
 
         & input[type="checkbox"] {
             display: none;
-        }
 
-        & input[type="checkbox"]:checked+div.hopLinks-popup-content {
-            display: block;
-            transition: .2s;
+            &:checked+div.hopLinks-popup-content {
+                display: block;
+                transition: .2s;
+            }
         }
     }
 
