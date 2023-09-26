@@ -533,9 +533,8 @@ const excludePageForBlockEntity = async (filteredBlocks: BlockEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
         for (const block of filteredBlocks) {
-            if (!block.page) continue;
-            const page = await logseq.Editor.getPage(block.page.id) as PageEntity | null;
-            if (page && excludePages.includes(page.originalName)) filteredBlocks.splice(filteredBlocks.indexOf(block), 1);
+            if (!block.page || !block.page.originalName) continue;
+            if (excludePages.includes(block.page.originalName)) filteredBlocks.splice(filteredBlocks.indexOf(block), 1);
         }
     }
 
