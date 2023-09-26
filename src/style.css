@@ -1,4 +1,4 @@
-div#main-content-container div#hopLinks {
+div#main-content-container div.page-blocks-inner div#hopLinks {
     margin-top: 16em;
     margin-left: 2em;
     user-select: none;
