@@ -1,3 +1,11 @@
+## [1.17.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.17.0...v1.17.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* **bug:** read error ([09b1ab1](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/09b1ab1a5d7d578eb8805adbde43ff03fd680bc8))
+* **revert:** "show updatedAt in the page" ([b6e808e](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/b6e808e98d35e18a2d16ba4807ddb56b301c0743))
+
 # [1.17.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.16.0...v1.17.0) (2023-09-25)
 
 
