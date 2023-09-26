@@ -31,6 +31,8 @@ bottom of a page content
 - Displayed at the bottom of the page if the page contains links to other pages.
 - When a page loads, collections are updated. Automatic updates do not work. Please click 🔂 button for updating.
 
+> It is not displayed on the journal page. Click on a journal link to open a single page.
+
 ### Plugin Settings
 
 - outgoing links enable :boolean
