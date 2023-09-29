@@ -9,9 +9,9 @@
 
 ---
 
-bottom of a page content
-
-![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/e50711c1-0401-4d8a-af46-9b9e1bd49af2)
+- Click on the link to view details in tooltip, or it is possible to open the page.
+> bottom of a page content
+  ![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/e50711c1-0401-4d8a-af46-9b9e1bd49af2)
 
 ---
 
@@ -35,50 +35,7 @@ bottom of a page content
 
 ### Plugin Settings
 
-- outgoing links enable :boolean
-  - `true` default
-  - `false`
-- external links enable :boolean
-  - `true` default
-  - `false`
-- outgoing links (keywords) include hierarchy of the page :boolean
-  - `true` default
-  - `false`
-- exclude page title Keywords :string
-  > split by newline
-- exclude journal from outgoing links (match user date format) :boolean
-  - `true` default
-  - `false`
-- exclude date from outgoing links (ex. 2024, 2024/01) :boolean
-  - `true`
-  - `false` default
-- exclude journal from result (match user date format) :boolean
-  - `true` default
-  - `false`
-- exclude date from result (ex. 2024, 2024/01) :boolean
-  - `true`
-  - `false` default
-- collapse the Linked References collection when page open :boolean
-  - `true`
-  - `false` default
-- collapse the Hierarchy list when page open :boolean
-  - `true`
-  - `false` default
-- collapse the Page-tags list when page open :boolean
-  - `true`
-  - `false` default
-- exclude current page from "backLinks" and "blocks (references)" :boolean
-  - `true`
-  - `false` default
-- show updatedAt in tooltips: boolean
-  - `true` default
-  - `false`
-- show the tags property in tooltips :boolean
-  - `true` default
-  - `false`
-- show the alias property in tooltips :boolean
-  - `true` default
-  - `false`
+> [Document here](https://github.com/YU000jp/logseq-plugin-two-hop-link/wiki/Plugin-Settings)
 
 ---
 
