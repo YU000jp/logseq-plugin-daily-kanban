@@ -12,7 +12,7 @@
 - Click on the link to view details in tooltip, or it is possible to open the page.
 > bottom of a page content
   ![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/e50711c1-0401-4d8a-af46-9b9e1bd49af2)
-  > [demo](https://github.com/YU000jp/logseq-plugin-two-hop-link/wiki/tooltip-demo)
+  > [demo (for checking fit and tooltip)](https://github.com/YU000jp/logseq-plugin-two-hop-link/wiki/tooltip-demo)
 
 ---
 
