@@ -57,6 +57,11 @@
 
 ## Prior art & Credit
 
+### Obsidian Plugin
+
+- [L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
+- [tokuhirom / 2Hop LInks](https://github.com/tokuhirom/obsidian-2hop-links-plugin)
+
 ### Icon
 
 - [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
