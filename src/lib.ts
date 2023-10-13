@@ -1,4 +1,4 @@
-import { BlockEntity, BlockUUIDTuple, PageEntity } from "@logseq/libs/dist/LSPlugin.user";
+import { BlockEntity, BlockUUIDTuple, PageEntity, } from "@logseq/libs/dist/LSPlugin.user";
 
 export const stringLimitAndRemoveProperties = (content: string, limit: number): string => {
     if (!content) return "";
@@ -32,7 +32,6 @@ export const includeReference = async (content): Promise<string | null> => {
     }
     return content;
 };
-
 
 
 
@@ -91,6 +90,11 @@ export async function getBlockContent(block: BlockEntity): Promise<string> {
 
     return content;
 }
+export const sortForPageEntity = (PageEntity: PageEntity[]) => PageEntity.sort((a, b) => {
+    if (a.name > b.name) return 1;
+    if (a.name < b.name) return -1;
+    return 0;
+});
 
 
 //--------------------------------------------end of credit

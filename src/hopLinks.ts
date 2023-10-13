@@ -1,7 +1,6 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin";
 import CSSfile from "./style.css?inline";
-import { getBlockContent, getPageContent, stringLimitAndRemoveProperties } from "./lib";
-import { includeReference } from "./lib";
+import { sortForPageEntity, includeReference, getBlockContent, getPageContent, stringLimitAndRemoveProperties } from "./lib";
 import { t } from "logseq-l10n";
 
 export const loadTwoHopLink = async () => {
@@ -38,63 +37,10 @@ const hopLinks = async (select?: string) => {
     whenPageOpen();
 
     const newSet = new Set();
-    const pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[] = Array.from(pageLinks).map(async (pageLink) => {
-        if (pageLink.dataset.ref === undefined) return undefined;
-        // 先頭に#がついている場合は取り除く
-        const pageLinkRef: string = pageLink.dataset.ref.replace(/^#/, "");
-        try {
-            const thisPage = await logseq.Editor.getPage(pageLinkRef) as PageEntity | undefined;
-            if (!thisPage) return undefined;
-
-            //ジャーナルを除外する
-            if (logseq.settings!.excludeJournalFromOutgoingLinks === true && thisPage["journal?"] === true) return undefined;
-            if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
-                //2024/01のような形式のページを除外する
-                if (thisPage.originalName.match(/^\d{4}\/\d{2}$/) !== null) return undefined;
-                //2024のような数値を除外する
-                if (thisPage.originalName.match(/^\d{4}$/) !== null) return undefined;
-            }
-
-            // 重複を除外する
-            if (newSet.has(thisPage.uuid)) return undefined;
-            newSet.add(thisPage.uuid);
-            return { uuid: thisPage.uuid, name: thisPage.originalName };
-        } catch (error) {
-            console.error(`Error fetching page: ${pageLinkRef}`, error);
-            return undefined;
-        }
-    });
-
+    //outgoingリンクを取得する
+    const pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[] = outgoingLinksFromCurrentPage(pageLinks, newSet);
     //ページ名を追加する
-    const current = await logseq.Editor.getCurrentPage() as PageEntity | null;
-    if (current) {
-        const addPage = async (name: string) => {
-            const page = await logseq.Editor.getPage(name) as PageEntity | null;
-            if (page) {
-                //ジャーナルを除外する
-                if (logseq.settings!.excludeJournalFromOutgoingLinks === true && page["journal?"] === true) return;
-                if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
-                    //2024/01のような形式のページを除外する
-                    if (page.originalName.match(/^\d{4}\/\d{2}$/) !== null) return;
-                    //2024のような数値を除外する
-                    if (page.originalName.match(/^\d{4}$/) !== null) return;
-                }
-                // 重複を除外する
-                if (newSet.has(page.uuid)) return;
-                newSet.add(page.uuid);
-                pageLinksSet.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }));
-            }
-        };
-        if (logseq.settings!.keywordsIncludeHierarchy === true && current.originalName.includes("/") as boolean === true) {//現在のページ名に「/」が含まれている場合
-            // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
-            let names = current.originalName.split("/");
-            names = names.map((name, i) => names.slice(0, i + 1).join("/"));
-            for (const name of names) await addPage(name);
-        } else {
-            // current.originalName 現在のページ名
-            await addPage(current.originalName);
-        }
-    }
+    const current = await addCurrentPageAndTheHierarchies(newSet, pageLinksSet);
     //newSetを空にする
     newSet.clear();
 
@@ -129,23 +75,7 @@ const hopLinks = async (select?: string) => {
     }, { once: true });
 
     //設定画面を開くボタン
-    const settingButtonElement: HTMLButtonElement = document.createElement("button");
-    settingButtonElement.id = "hopLinksSetting";
-    settingButtonElement.innerText = "⚙";
-    settingButtonElement.title = t("Click to open plugin settings");
-    settingButtonElement.addEventListener("click", () => logseq.showSettingsUI());
-
-    //hopLinksElementに更新ボタンを設置する
-    const updateButtonElement: HTMLButtonElement = document.createElement("button");
-    updateButtonElement.id = "hopLinksUpdate";
-    updateButtonElement.innerText = "🔂" + t("Update"); //手動更新
-    updateButtonElement.title = t("Click to update (If add links, please click this button.)");
-    updateButtonElement.addEventListener("click", () => {
-        //hopLinksElementを削除する
-        hopLinksElement.remove();
-        hopLinks();
-    }, { once: true });
-    hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement);
+    settingsAndUpdateButtons(hopLinksElement, spanElement);
 
     const blankMessage = (message: string) => {
         const pElement: HTMLElement = document.createElement("p");
@@ -159,12 +89,8 @@ const hopLinks = async (select?: string) => {
         return;
     }
     //filteredBlocksをソートする
-    filteredPageLinksSet.sort((a, b) => {
-        if (a?.name === undefined || b?.name === undefined) return 0;
-        if (a.name > b.name) return 1;
-        if (a.name < b.name) return -1;
-        return 0;
-    });
+    sortForPageLinksSet(filteredPageLinksSet);
+
     excludePages(filteredPageLinksSet);
     if (logseq.settings!.outgoingLinks === true) outgoingLinks(filteredPageLinksSet, hopLinksElement);//outgoingLinksを表示
 
@@ -456,8 +382,9 @@ const excludePagesForPageList = (pageList: string[]) => {
     }
 }
 
-const sortForPageEntity = (PageEntity: PageEntity[]) =>
-    PageEntity.sort((a, b) => {
+const sortForPageLinksSet = (filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) =>
+    filteredPageLinksSet.sort((a, b) => {
+        if (a?.name === undefined || b?.name === undefined) return 0;
         if (a.name > b.name) return 1;
         if (a.name < b.name) return -1;
         return 0;
@@ -492,7 +419,41 @@ const externalLinks = (PageBlocksInnerElement: HTMLDivElement, hopLinksElement: 
     }
 };
 
-function checkAlias(current: PageEntity, filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) {
+const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSet: Promise<{ uuid: string; name: string; } | undefined>[]) => {
+    const current = await logseq.Editor.getCurrentPage() as PageEntity | null;
+    if (current) {
+        const addPage = async (name: string) => {
+            const page = await logseq.Editor.getPage(name) as PageEntity | null;
+            if (page) {
+                //ジャーナルを除外する
+                if (logseq.settings!.excludeJournalFromOutgoingLinks === true && page["journal?"] === true) return;
+                if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
+                    //2024/01のような形式のページを除外する
+                    if (page.originalName.match(/^\d{4}\/\d{2}$/) !== null) return;
+                    //2024のような数値を除外する
+                    if (page.originalName.match(/^\d{4}$/) !== null) return;
+                }
+                // 重複を除外する
+                if (newSet.has(page.uuid)) return;
+                newSet.add(page.uuid);
+                pageLinksSet.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }));
+            }
+        };
+        if (logseq.settings!.keywordsIncludeHierarchy === true && current.originalName.includes("/") as boolean === true) { //現在のページ名に「/」が含まれている場合
+            // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
+            let names = current.originalName.split("/");
+            names = names.map((name, i) => names.slice(0, i + 1).join("/"));
+            for (const name of names) await addPage(name);
+        } else {
+            // current.originalName 現在のページ名
+            await addPage(current.originalName);
+        }
+    }
+    return current;
+};
+
+
+const checkAlias = (current: PageEntity, filteredPageLinksSet: ({ uuid: string; name: string; } | undefined)[]) => {
     if (current.properties && current.properties.alias) {
         const aliasProperty = current.properties.alias as string[] | undefined; //originalNameと同等
         if (aliasProperty && aliasProperty.length !== 0) {
@@ -505,9 +466,9 @@ function checkAlias(current: PageEntity, filteredPageLinksSet: ({ uuid: string; 
             }
         }
     }
-}
+};
 
-function excludePageForPageEntity(PageEntity: PageEntity[]) {
+const excludePageForPageEntity = (PageEntity: PageEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
     if (excludePages && excludePages.length !== 0) {
         for (const page of PageEntity) {
@@ -527,7 +488,7 @@ function excludePageForPageEntity(PageEntity: PageEntity[]) {
             }
         }
     }
-}
+};
 
 const excludePageForBlockEntity = async (filteredBlocks: BlockEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined; //除外するページ
@@ -602,6 +563,56 @@ const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: H
     labelElement.append(divElementTag, inputElement, popupElement);
     tokenLinkElement.append(labelElement);
 };
+
+
+const settingsAndUpdateButtons = (hopLinksElement: HTMLDivElement, spanElement: HTMLSpanElement) => {
+    const settingButtonElement: HTMLButtonElement = document.createElement("button");
+    settingButtonElement.id = "hopLinksSetting";
+    settingButtonElement.innerText = "⚙";
+    settingButtonElement.title = t("Click to open plugin settings");
+    settingButtonElement.addEventListener("click", () => logseq.showSettingsUI());
+
+    //hopLinksElementに更新ボタンを設置する
+    const updateButtonElement: HTMLButtonElement = document.createElement("button");
+    updateButtonElement.id = "hopLinksUpdate";
+    updateButtonElement.innerText = "🔂" + t("Update"); //手動更新
+    updateButtonElement.title = t("Click to update (If add links, please click this button.)");
+    updateButtonElement.addEventListener("click", () => {
+        //hopLinksElementを削除する
+        hopLinksElement.remove();
+        hopLinks();
+    }, { once: true });
+    hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement);
+};
+
+function outgoingLinksFromCurrentPage(pageLinks: NodeListOf<HTMLAnchorElement>, newSet: Set<unknown>): Promise<{ uuid: string; name: string; } | undefined>[] {
+    return Array.from(pageLinks).map(async (pageLink) => {
+        if (pageLink.dataset.ref === undefined) return undefined;
+        // 先頭に#がついている場合は取り除く
+        const pageLinkRef: string = pageLink.dataset.ref.replace(/^#/, "");
+        try {
+            const thisPage = await logseq.Editor.getPage(pageLinkRef) as PageEntity | undefined;
+            if (!thisPage) return undefined;
+
+            //ジャーナルを除外する
+            if (logseq.settings!.excludeJournalFromOutgoingLinks === true && thisPage["journal?"] === true) return undefined;
+            if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
+                //2024/01のような形式のページを除外する
+                if (thisPage.originalName.match(/^\d{4}\/\d{2}$/) !== null) return undefined;
+                //2024のような数値を除外する
+                if (thisPage.originalName.match(/^\d{4}$/) !== null) return undefined;
+            }
+
+            // 重複を除外する
+            if (newSet.has(thisPage.uuid)) return undefined;
+            newSet.add(thisPage.uuid);
+            return { uuid: thisPage.uuid, name: thisPage.originalName };
+        } catch (error) {
+            console.error(`Error fetching page: ${pageLinkRef}`, error);
+            return undefined;
+        }
+    });
+}
 
 function openPageEventForAnchor(pageName: string): (this: HTMLAnchorElement, ev: MouseEvent) => any {
     return async function (this: HTMLAnchorElement, { shiftKey }: MouseEvent) {
@@ -828,4 +839,4 @@ const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
     if (updatedAt === undefined) return;
     updatedAtElement.innerText = t("This page updated at: ") + new Date(updatedAt).toLocaleString();
     popupElement.append(updatedAtElement);
-}
+};
