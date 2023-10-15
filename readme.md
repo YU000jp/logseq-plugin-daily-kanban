@@ -20,17 +20,13 @@
 
 ### Install from Logseq Marketplace
 
-- Press [`---`] on the top right toolbar to open [`Plugins`]
-- Select marketplace
-- Type `2` in the search field, select it from the search results and install
+- Press [`---`] on the top right toolbar to open [`Plugins`]. Select marketplace.Type `2` in the search field, select it from the search results and install.
 
   ![image](https://github.com/YU000jp/logseq-plugin-two-hop-link/assets/111847207/9ac95ab1-fb6b-48c8-ab63-be5cf135c4da)
 
 ### Usage
 
-- Place any links or tags in a page content.
-- Displayed at the bottom of the page if the page contains links to other pages.
-- When a page loads, collections are updated. Automatic updates do not work. Please click 🔂 button for updating.
+- Place any links or tags in a page content. Displayed at the bottom of the page if the page contains links to other pages. When a page loads, collections are updated. Automatic updates do not work. Please click 🔂 button for updating.
 
 > It is not displayed on the journal page. Click on a journal link to open a single page.
 
