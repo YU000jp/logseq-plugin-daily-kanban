@@ -37,7 +37,7 @@ Logseq マーケットプレイスからインストールする
     - `true` default
     - `false`
 - 発信リンクに階層のリンクを含める :boolean
-　　- `true` default
+    - `true` default
     - `false`
 - 除外するページタイトルのキーワード :string
     > 改行で区切る
