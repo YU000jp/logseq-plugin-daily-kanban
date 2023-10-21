@@ -91,4 +91,4 @@ Logseq マーケットプレイスからインストールする
 
 製作者 > [YU000jp (GitHub)](https://github.com/YU000jp)
 
-<a href="https://www.buymeacoffee.com/yu000japan" target="_blank"></a><img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="🍌Buy Me A Coffee" class="">
+<a href="https://www.buymeacoffee.com/yu000japan" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="🍌Buy Me A Coffee" style="height: 42px;width: 152px" ></a>
