@@ -89,6 +89,6 @@ Logseq マーケットプレイスからインストールする
 
 アイコン > [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
 
-## 製作者 > [YU000jp (GitHub)](https://github.com/YU000jp)
+製作者 > [YU000jp (GitHub)](https://github.com/YU000jp)
 
 <a href="https://www.buymeacoffee.com/yu000japan" target="_blank"></a><img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="🍌Buy Me A Coffee" class="">
