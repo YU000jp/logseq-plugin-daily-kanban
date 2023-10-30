@@ -95,7 +95,7 @@ body[data-page=page]>div {
                     height: 100%;
                     cursor: zoom-in;
 
-                    >a {
+                    &>a {
                         line-height: 1.8em;
                     }
                 }
@@ -128,12 +128,12 @@ body[data-page=page]>div {
                         & div.hopLinks-popup-anchor {
                             font-weight: bold;
 
-                            >a {
+                            &>a {
                                 margin-left: .5em;
                                 margin-right: .5em;
                             }
 
-                            >img {
+                            &>img {
                                 object-fit: scale-down;
                                 max-width: 80px;
                                 max-height: 80px;
