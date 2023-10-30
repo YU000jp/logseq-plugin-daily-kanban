@@ -3,6 +3,11 @@ import { t } from "logseq-l10n"
 import { getBlockContent, getPageContent, includeReference, stringLimitAndRemoveProperties } from "./lib"
 
 
+/**
+ * Returns an event listener function that opens a tooltip with information about the block.
+ * @param popupElement - The HTMLDivElement that will contain the tooltip.
+ * @returns An event listener function that opens a tooltip with information about the block.
+ */
 export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: HTMLDivElement, ev: MouseEvent) => any {
     return async function (this: HTMLDivElement) {
         if (popupElement.innerHTML !== "") return //すでにpopupElementに中身がある場合は処理を終了する
@@ -59,6 +64,12 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
     }
 }
 
+
+/**
+ * Returns an event listener function that opens a tooltip with information about a Logseq page.
+ * @param popupElement - The HTMLDivElement that will contain the tooltip.
+ * @returns An event listener function that opens a tooltip with information about a Logseq page.
+ */
 export function openTooltipEventFromPageName(popupElement: HTMLDivElement): (this: HTMLInputElement, ev: Event) => any {
     return async function (this: HTMLInputElement): Promise<void> {
         if (popupElement.innerHTML !== "") return //すでにpopupElementに中身がある場合は処理を終了する
@@ -106,6 +117,12 @@ export function openTooltipEventFromPageName(popupElement: HTMLDivElement): (thi
 }
 
 
+/**
+ * Shows page tags in a popup element.
+ * @param property - An array of strings representing the tags to be displayed.
+ * @param popupElement - The HTMLDivElement where the tags will be displayed.
+ * @param flagAlias - An optional boolean flag indicating whether the tags are aliases.
+ */
 const showPageTags = (property: string[], popupElement: HTMLDivElement, flagAlias?: boolean) => {
     const tagsElement: HTMLParagraphElement = document.createElement("p")
     tagsElement.title = flagAlias ? "Alias" : t("Page-Tags")
@@ -126,6 +143,11 @@ const showPageTags = (property: string[], popupElement: HTMLDivElement, flagAlia
 }
 
 
+/**
+ * Displays the updated date of a page in the tooltip popup.
+ * @param updatedAt - The timestamp of when the page was last updated.
+ * @param popupElement - The HTML element that represents the tooltip popup.
+ */
 const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
     const updatedAtElement: HTMLParagraphElement = document.createElement("p")
     updatedAtElement.classList.add("hopLinks-popup-updatedAt")
@@ -136,6 +158,13 @@ const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
 }
 
 
+/**
+ * Handles the click event for a tag that has never been clicked before.
+ * Opens the corresponding page in the main editor or the right sidebar depending on the shift key.
+ * @param this - The HTMLAnchorElement that was clicked.
+ * @param event - The MouseEvent that triggered the click event.
+ * @returns A Promise that resolves when the page has been opened.
+ */
 const openPageEventForTagNever = async function (this: HTMLAnchorElement, { shiftKey }: MouseEvent): Promise<void> {
     const pageName: string | undefined = this.dataset.name
     if (!pageName) return
@@ -144,6 +173,14 @@ const openPageEventForTagNever = async function (this: HTMLAnchorElement, { shif
     if (shiftKey === true) logseq.Editor.openInRightSidebar(page.uuid)
     else logseq.Editor.scrollToBlockInPage(pageName, page.uuid, { replaceState: true })
 }
+
+
+/**
+ * Creates an anchor container element with the given UUID and parent page.
+ * @param uuid - The UUID of the anchor element.
+ * @param parentPage - The parent page entity.
+ * @returns The created HTMLDivElement.
+ */
 export const createAnchorContainer = (uuid: string, parentPage: PageEntity): HTMLDivElement => {
     // div.hopLinks-popup-img-container > div.hopLinks-popup-anchor > a > img
     const containerElement: HTMLDivElement = document.createElement("div")
@@ -163,9 +200,7 @@ export const createAnchorContainer = (uuid: string, parentPage: PageEntity): HTM
             anchorElement.addEventListener("click", openPageEventForAnchor(parentName))
             anchorElement.title = parentName
             anchorContainerElement.append(anchorElement)
-            if (i !== names.length - 1) {
-                anchorContainerElement.append(document.createTextNode(" / "))
-            }
+            if (i !== names.length - 1) anchorContainerElement.append(document.createTextNode(" / "))
         })
     } else {
         const anchorElement: HTMLAnchorElement = document.createElement("a")
@@ -187,15 +222,18 @@ export const createAnchorContainer = (uuid: string, parentPage: PageEntity): HTM
     }
     return containerElement
 }
+
+
+/**
+ * Returns a function that opens a Logseq page event for an anchor element.
+ * @param pageName - The name of the Logseq page.
+ * @returns A function that opens a Logseq page event for an anchor element.
+ */
 export function openPageEventForAnchor(pageName: string): (this: HTMLAnchorElement, ev: MouseEvent) => any {
     return async function (this: HTMLAnchorElement, { shiftKey }: MouseEvent) {
         const uuid: string | undefined = this.dataset.uuid
         if (!uuid) return
-        if (shiftKey === true) {
-            logseq.Editor.openInRightSidebar(uuid)
-        } else {
-            logseq.Editor.scrollToBlockInPage(pageName, uuid, { replaceState: true })
-        }
+        if (shiftKey === true) logseq.Editor.openInRightSidebar(uuid)
+        else logseq.Editor.scrollToBlockInPage(pageName, uuid, { replaceState: true })
     }
 }
-
