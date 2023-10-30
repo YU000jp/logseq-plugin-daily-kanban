@@ -143,10 +143,10 @@ const hopLinks = async (select?: string) => {
     selectElement.id = "hopLinkType"
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
-    <option value="hierarchy" title="base on outgoing links">${t("Hierarchy")} + ${t("Page-Tags")}</option>
-    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">${t("Deeper Hierarchy")} + ${t("Page-Tags")}</option>
-    <option value="backLinks">${t("BackLinks")}</option>
-    <option value="blocks">${t("Blocks (references)")}</option>
+    <option value="hierarchy" title="${t("base on outgoing links")}">${t("Hierarchy")} + ${t("Page-Tags")}</option>
+    <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Deeper Hierarchy")} + ${t("Page-Tags")}</option>
+    <option value="backLinks">Linked References > ${t("BackLinks")}</option>
+    <option value="blocks">Linked References > ${t("Blocks")}</option>
     `
     //
     selectElement.addEventListener("change", () => {
