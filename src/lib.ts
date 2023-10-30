@@ -87,7 +87,7 @@ export const sortForPageEntity = (PageEntity: PageEntity[]) => PageEntity.sort((
 
 
 // collapsed pageのaccessoryをそれぞれhiddenにする
-export const collapsedPageAccessory = async () => setTimeout(() => {
+export const collapsePageAccessory = async () => setTimeout(() => {
     //Linked Referencesをhiddenにする
     if (logseq.settings!.collapseLinkedReferences === true)
         hidden("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative div.lazy-visibility>div>div.fade-enter-active div.references.page-linked>div.content>div.flex>div.initial")

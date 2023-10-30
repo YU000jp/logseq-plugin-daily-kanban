@@ -7,7 +7,7 @@ import { excludePageForBlockEntity } from "./excludePages"
 import { openTooltipEventFromBlock } from "./tooltip"
 
 //typeBlocks
-export const typeReferencesByBlock = async (filteredPageLinksSet: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+export const typeRefBlock = async (filteredPageLinksSet: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
     //aliasプロパティを取得し、filteredPageLinksSetから除外する
     if (current) checkAlias(current, filteredPageLinksSet)
     //行作成

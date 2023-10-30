@@ -4,7 +4,7 @@ import { checkAlias } from "./excludePages"
 import { excludePagesForPageList } from "./excludePages"
 
 //typeBlocks
-export const typeBackLink = async (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+export const typeRefPageName = async (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
 
     //aliasプロパティを取得し、filteredPageLinksSetから除外する
     if (current) checkAlias(current, filteredPageLinksSet)

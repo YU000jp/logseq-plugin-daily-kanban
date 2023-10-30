@@ -3,11 +3,11 @@ import { t } from "logseq-l10n"
 import { externalLinks } from "./externalLinks"
 import { outgoingLinks, outgoingLinksFromCurrentPage } from "./outgoingLinks"
 import CSSfile from "./style.css?inline"
-import { typeBackLink } from "./typeBackLink"
+import { typeRefPageName } from "./typeRefPageName"
 import { typeHierarchy } from "./typeHierarchy"
 import { typePageTags } from "./typePageTags"
-import { typeReferencesByBlock } from "./typeReferencesByBlock"
-import { collapsedPageAccessory } from "./lib"
+import { typeRefBlock } from "./typeRefBlock"
+import { collapsePageAccessory } from "./lib"
 import { excludePages } from "./excludePages"
 
 
@@ -40,7 +40,7 @@ const hopLinks = async (select?: string) => {
     if (!pageLinks) return
 
     //ページを開いたときの処理
-    collapsedPageAccessory()
+    collapsePageAccessory()
 
     const newSet = new Set()
     //outgoingリンクを取得する
@@ -114,11 +114,11 @@ const hopLinks = async (select?: string) => {
     switch (type) {
         case "blocks":
             //block.content
-            typeReferencesByBlock(filteredPageLinksSet, hopLinksElement, current)
+            typeRefBlock(filteredPageLinksSet, hopLinksElement, current)
             break
         case "backLinks":
             //block.content
-            typeBackLink(filteredPageLinksSet, hopLinksElement, current)
+            typeRefPageName(filteredPageLinksSet, hopLinksElement, current)
             break
         case "page-tags":
             //ページタグ
