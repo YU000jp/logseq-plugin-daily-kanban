@@ -16,12 +16,16 @@ export const loadTwoHopLink = async () => {
     //ページ読み込み時に実行コールバック
 
     logseq.App.onRouteChanged(async ({ template }) => {
-        if (template === '/page/:name' && !parent.document.getElementById("hopLinks") as boolean) hopLinks() //2ホップリンク
+        if (template === '/page/:name'
+            && !parent.document.getElementById("hopLinks") as boolean)
+            setTimeout(() => hopLinks(), 50) //50ミリ秒後に実行する
+
     })
 
     //Logseqのバグあり。動作保証が必要
     logseq.App.onPageHeadActionsSlotted(async () => {
-        if (!parent.document.getElementById("hopLinks") as boolean) hopLinks() //2ホップリンク
+        if (!parent.document.getElementById("hopLinks") as boolean)
+            setTimeout(() => hopLinks(), 50) //50ミリ秒後に実行する
     })
 
     logseq.provideStyle(CSSfile)
@@ -216,7 +220,7 @@ const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSe
 
         if (logseq.settings!.keywordsIncludeHierarchy === true
             && current.originalName.includes("/") as boolean === true) { //現在のページ名に「/」が含まれている場合
-            
+
             // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
             let names = current.originalName.split("/")
             names = names.map((_name, i) => names.slice(0, i + 1).join("/"))
