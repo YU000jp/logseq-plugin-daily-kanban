@@ -1,13 +1,14 @@
-import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
+import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
 import { externalLinks } from "./externalLinks"
 import { outgoingLinks, outgoingLinksFromCurrentPage } from "./outgoingLinks"
 import CSSfile from "./style.css?inline"
-import { openTooltipEventFromPageName } from "./tooltip"
 import { typeBackLink } from "./typeBackLink"
 import { typeHierarchy } from "./typeHierarchy"
 import { typePageTags } from "./typePageTags"
 import { typeReferencesByBlock } from "./typeReferencesByBlock"
+import { whenPageOpen } from "./lib"
+import { excludePages } from "./excludePages"
 
 
 export const loadTwoHopLink = async () => {
@@ -167,14 +168,6 @@ const hopLinks = async (select?: string) => {
 }
 
 
-export const excludePagesForPageList = (pageList: string[]) => {
-    const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
-    if (excludePages && excludePages.length !== 0)
-        for (const pageName of pageList)
-            if (excludePages.includes(pageName))
-                pageList.splice(pageList.indexOf(pageName), 1)
-}
-
 const sortForPageLinksSet = (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[]) =>
     filteredPageLinksSet.sort((a, b) => {
         if (a?.name === undefined || b?.name === undefined) return 0
@@ -182,6 +175,7 @@ const sortForPageLinksSet = (filteredPageLinksSet: ({ uuid: string; name: string
         if (a.name < b.name) return -1
         return 0
     })
+
 
 const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[]) => {
     const current = await logseq.Editor.getCurrentPage() as PageEntity | null
@@ -217,109 +211,6 @@ const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSe
 }
 
 
-export const checkAlias = (current: PageEntity, filteredPageLinksSet: ({ name: string } | undefined)[]) => {
-    if (current.properties && current.properties.alias) {
-        const aliasProperty = current.properties.alias as string[] | undefined //originalNameと同等
-        if (aliasProperty && aliasProperty.length !== 0)
-            for (const alias of aliasProperty)
-                for (const pageLink of filteredPageLinksSet)
-                    if (pageLink?.name === alias) filteredPageLinksSet.splice(filteredPageLinksSet.indexOf(pageLink), 1)
-    }
-}
-
-export const excludePageForPageEntity = (PageEntityArray:PageEntity[]) => {
-    const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
-    if (excludePages && excludePages.length !== 0) {
-        for (const page of PageEntityArray) {
-            if (excludePages.includes(page.originalName))
-                PageEntityArray!.splice(PageEntityArray!.indexOf(page), 1)
-            //ジャーナルを除外する
-            if (logseq.settings!.excludeJournalFromResult === true
-                && page["journal?"] === true)
-                PageEntityArray!.splice(PageEntityArray!.indexOf(page), 1)
-        }
-    } else {
-        //ジャーナルを除外する
-        if (logseq.settings!.excludeJournalFromResult === true)
-            for (const page of PageEntityArray)
-                if (page["journal?"] === true)
-                    PageEntityArray!.splice(PageEntityArray!.indexOf(page), 1)
-    }
-}
-
-
-export const excludePageForBlockEntity = async (filteredBlocks: BlockEntity[]) => {
-    const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
-    if (excludePages && excludePages.length !== 0)
-        for (const block of filteredBlocks) {
-            if (!block.page || !block.page.originalName) continue
-            if (excludePages.includes(block.page.originalName)) filteredBlocks.splice(filteredBlocks.indexOf(block), 1)
-        }
-}
-
-const excludePages = (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[]) => {
-    const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
-    if (excludePages && excludePages.length !== 0)
-        for (const excludePage of excludePages)
-            for (const pageLink of filteredPageLinksSet)
-                if (pageLink?.name === excludePage)
-                    filteredPageLinksSet.splice(filteredPageLinksSet.indexOf(pageLink), 1)
-}
-
-
-export const tokenLinkCreateTh = (pageLink: { uuid: string; name: string }, className: string, boxTitle: string) => {
-    const tokenLinkElement: HTMLDivElement = document.createElement("div")
-    tokenLinkElement.classList.add("tokenLink")
-    tokenLinkElement.title = boxTitle
-    const divElement: HTMLDivElement = document.createElement("div")
-    divElement.classList.add("hopLinksTh")
-    divElement.classList.add(className)
-    divElement.innerText = pageLink.name
-    //ポップアップ表示あり
-    const labelElement: HTMLLabelElement = document.createElement("label")
-    //input要素を作成
-    const inputElement: HTMLInputElement = document.createElement("input")
-    inputElement.type = "checkbox"
-    inputElement.dataset.uuid = pageLink.uuid
-    inputElement.dataset.name = pageLink.name
-    //div ポップアップの内容
-    const popupElement: HTMLDivElement = document.createElement("div")
-    popupElement.classList.add("hopLinks-popup-content")
-    popupElement.title = ""
-    inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement))
-    labelElement.append(divElement, inputElement, popupElement)
-    tokenLinkElement.append(labelElement)
-    return tokenLinkElement
-}
-
-
-export const createTd = (page: PageEntity | { uuid, originalName }, tokenLinkElement: HTMLDivElement, flag?: { isPageTags?: boolean, isHierarchyTitle?: string }) => {
-    const divElementTag: HTMLDivElement = document.createElement("div")
-    divElementTag.classList.add("hopLinksTd")
-    //ポップアップ表示あり
-    const labelElement: HTMLLabelElement = document.createElement("label")
-    //input要素を作成
-    const inputElement: HTMLInputElement = document.createElement("input")
-    inputElement.type = "checkbox"
-    inputElement.dataset.uuid = page.uuid
-    inputElement.dataset.name = page.originalName
-    //div ポップアップの内容
-    const popupElement: HTMLDivElement = document.createElement("div")
-    popupElement.classList.add("hopLinks-popup-content")
-    popupElement.title = ""
-    const anchorElement: HTMLAnchorElement = document.createElement("a")
-    anchorElement.dataset.uuid = page.uuid
-    anchorElement.innerText = (flag && flag.isHierarchyTitle) ? page.originalName.replace(flag.isHierarchyTitle, "") : page.originalName
-    if (flag && flag.isPageTags) anchorElement.innerText = "#" + anchorElement.innerText
-    divElementTag.title = page.originalName
-    divElementTag.append(anchorElement)
-    inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement))
-
-    labelElement.append(divElementTag, inputElement, popupElement)
-    tokenLinkElement.append(labelElement)
-}
-
-
 const settingsAndUpdateButtons = (hopLinksElement: HTMLDivElement, spanElement: HTMLSpanElement) => {
     const settingButtonElement: HTMLButtonElement = document.createElement("button")
     settingButtonElement.id = "hopLinksSetting"
@@ -340,30 +231,3 @@ const settingsAndUpdateButtons = (hopLinksElement: HTMLDivElement, spanElement: 
     hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement)
 }
 
-
-const whenPageOpen = async () => setTimeout(() => {
-    //Linked Referencesをhiddenにする
-    if (logseq.settings!.collapseLinkedReferences === true) {
-        const linkedReferences = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative div.lazy-visibility>div>div.fade-enter-active div.references.page-linked>div.content>div.flex>div.initial") as HTMLDivElement | null
-        if (linkedReferences) {
-            linkedReferences.classList.remove("initial")
-            linkedReferences.classList.add("hidden")
-        }
-    }
-    if (logseq.settings!.collapseHierarchy === true) {
-        //Hierarchyをhiddenにする
-        const hierarchy = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-hierarchy>div.flex>div.initial") as HTMLDivElement | null
-        if (hierarchy) {
-            hierarchy.classList.remove("initial")
-            hierarchy.classList.add("hidden")
-        }
-    }
-    if (logseq.settings!.collapsePageTags === true) {
-        //Page-tagsをhiddenにする
-        const pageTags = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-tags>div.content>div.flex>div.initial") as HTMLDivElement | null
-        if (pageTags) {
-            pageTags.classList.remove("initial")
-            pageTags.classList.add("hidden")
-        }
-    }
-}, 10)

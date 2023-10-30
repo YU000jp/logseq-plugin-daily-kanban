@@ -7,15 +7,10 @@ import { settings } from './settings'
 /* main */
 const main = async () => {
 
-  /* user setting */
-  // https://logseq.github.io/plugins/types/SettingSchemaDesc.html
-  try {
-    await l10nSetup({ builtinTranslations: { ja } })
-  } finally {
-    /* user settings */
-    logseq.useSettingsSchema(settings())
-    if (!logseq.settings) setTimeout(() => logseq.showSettingsUI(), 300)
-  }
+  await l10nSetup({ builtinTranslations: { ja } })
+  /* user settings */
+  logseq.useSettingsSchema(settings())
+  if (!logseq.settings) setTimeout(() => logseq.showSettingsUI(), 300)
 
   loadTwoHopLink()
 
@@ -25,8 +20,4 @@ const main = async () => {
 
 }/* end_main */
 
-
-
-logseq.ready(main).catch(console.error);
-
-
+logseq.ready(main).catch(console.error)

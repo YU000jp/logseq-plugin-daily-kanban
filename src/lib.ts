@@ -95,6 +95,32 @@ export const sortForPageEntity = (PageEntity: PageEntity[]) => PageEntity.sort((
     if (a.name < b.name) return -1
     return 0
 })
+export const whenPageOpen = async () => setTimeout(() => {
+    //Linked Referencesをhiddenにする
+    if (logseq.settings!.collapseLinkedReferences === true) {
+        const linkedReferences = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative div.lazy-visibility>div>div.fade-enter-active div.references.page-linked>div.content>div.flex>div.initial") as HTMLDivElement | null
+        if (linkedReferences) {
+            linkedReferences.classList.remove("initial")
+            linkedReferences.classList.add("hidden")
+        }
+    }
+    if (logseq.settings!.collapseHierarchy === true) {
+        //Hierarchyをhiddenにする
+        const hierarchy = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-hierarchy>div.flex>div.initial") as HTMLDivElement | null
+        if (hierarchy) {
+            hierarchy.classList.remove("initial")
+            hierarchy.classList.add("hidden")
+        }
+    }
+    if (logseq.settings!.collapsePageTags === true) {
+        //Page-tagsをhiddenにする
+        const pageTags = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-tags>div.content>div.flex>div.initial") as HTMLDivElement | null
+        if (pageTags) {
+            pageTags.classList.remove("initial")
+            pageTags.classList.add("hidden")
+        }
+    }
+}, 10)
 
 
 //--------------------------------------------end of credit

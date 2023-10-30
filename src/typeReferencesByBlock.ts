@@ -1,7 +1,9 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { includeReference, stringLimitAndRemoveProperties } from "./lib"
 import { t } from "logseq-l10n"
-import { checkAlias, excludePageForBlockEntity, tokenLinkCreateTh } from "./hopLinks"
+import { tokenLinkCreateTh } from "./tokenLink"
+import { checkAlias } from "./excludePages"
+import { excludePageForBlockEntity } from "./excludePages"
 import { openTooltipEventFromBlock } from "./tooltip"
 
 //typeBlocks
@@ -12,7 +14,8 @@ export const typeReferencesByBlock = async (filteredPageLinksSet: ({ uuid: strin
     for (const pageLink of filteredPageLinksSet) {
         if (!pageLink) continue
         //現在のページ名に一致する場合は除外する
-        if (logseq.settings!.excludeCurrentPage === true && current && pageLink.name === current.originalName) continue
+        if (logseq.settings!.excludeCurrentPage === true
+            && current && pageLink.name === current.originalName) continue
         //pageLinkRefのページを取得する
         const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: BlockEntity[]][]
         if (!page) continue
@@ -30,7 +33,8 @@ export const typeReferencesByBlock = async (filteredPageLinksSet: ({ uuid: strin
         //右側
         for (const block of filteredBlocks) {
             if (!block || block.content === "") continue
-            if (block.content === `[[${pageLink.name}]]` || block.content === `#${pageLink.name}`) continue // [[pageLink.name]]もしくは #pageLink.name と一致した場合は除外する
+            if (block.content === `[[${pageLink.name}]]` 
+            || block.content === `#${pageLink.name}`) continue // [[pageLink.name]]もしくは #pageLink.name と一致した場合は除外する
 
 
             //行タイトル(左ヘッダー)

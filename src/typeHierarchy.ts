@@ -1,6 +1,7 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { sortForPageEntity } from "./lib"
-import { excludePageForPageEntity, tokenLinkCreateTh, createTd } from "./hopLinks"
+import { tokenLinkCreateTh, createTd } from "./tokenLink"
+import { excludePageForPageEntity } from "./excludePages"
 
 export const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, flagFull?: boolean) => {
     filteredPageLinksSet.forEach(getTd())
