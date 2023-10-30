@@ -80,7 +80,7 @@ body[data-page=page]>div {
             background-color: inherit;
             color: inherit;
 
-            & option {
+            &>option {
                 background-color: var(--ls-primary-background-color);
                 color: var(--ls-primary-text-color);
             }
@@ -88,70 +88,73 @@ body[data-page=page]>div {
 
         & label {
 
-            & div.hopLinksTh,
-            div.hopLinksTd {
-                height: 100%;
-                cursor: zoom-in;
+            & div {
 
-                >a {
-                    line-height: 1.8em;
-                }
-            }
+                &.hopLinksTh,
+                &.hopLinksTd {
+                    height: 100%;
+                    cursor: zoom-in;
 
-            & div.hopLinks-popup-content {
-                overflow: auto;
-                min-width: 340px;
-                max-width: 660px;
-                min-height: 200px;
-                max-height: 620px;
-                color: var(--ls-primary-text-color);
-                padding: 1em;
-                box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
-                display: none;
-                position: absolute;
-                transform: translate(-10%, -50%);
-                z-index: 1;
-                border-radius: 0.2em;
-                outline: 2px solid var(--ls-guideline-color);
-                outline-offset: 3px;
-                cursor: zoom-out;
-                backdrop-filter: blur(70px);
-                font-size: .96em;
-
-                & div.hopLinks-popup-img-container {
-                    display: flex;
-                    gap: 0 20px;
-                    padding: 10px;
-
-                    & div.hopLinks-popup-anchor {
-                        font-weight: bold;
-
-                        >a {
-                            margin-left: .5em;
-                            margin-right: .5em;
-                        }
-
-                        >img {
-                            object-fit: scale-down;
-                            max-width: 80px;
-                            max-height: 80px;
-                            vertical-align: top;
-                        }
+                    >a {
+                        line-height: 1.8em;
                     }
                 }
 
-                & p {
-                    font-size: small;
-                    opacity: 0.7;
+                &.hopLinks-popup-content {
+                    overflow: auto;
+                    min-width: 340px;
+                    max-width: 660px;
+                    min-height: 200px;
+                    max-height: 620px;
+                    color: var(--ls-primary-text-color);
+                    padding: 1em;
+                    box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
+                    display: none;
+                    position: absolute;
+                    transform: translate(-10%, -50%);
+                    z-index: 1;
+                    border-radius: 0.2em;
+                    outline: 2px solid var(--ls-guideline-color);
+                    outline-offset: 3px;
+                    cursor: zoom-out;
+                    backdrop-filter: blur(70px);
+                    font-size: .96em;
 
-                    &.hopLinks-popup-updatedAt {
+                    & div.hopLinks-popup-img-container {
+                        display: flex;
+                        gap: 0 20px;
+                        padding: 10px;
+
+                        & div.hopLinks-popup-anchor {
+                            font-weight: bold;
+
+                            >a {
+                                margin-left: .5em;
+                                margin-right: .5em;
+                            }
+
+                            >img {
+                                object-fit: scale-down;
+                                max-width: 80px;
+                                max-height: 80px;
+                                vertical-align: top;
+                            }
+                        }
+                    }
+
+                    & p {
                         font-size: small;
                         opacity: 0.7;
-                    }
-                }
 
-                & pre {
-                    line-height: 2.5em;
+                        &.hopLinks-popup-updatedAt {
+                            font-size: small;
+                            opacity: 0.7;
+                        }
+                    }
+
+                    & pre {
+                        line-height: 2.5em;
+                    }
                 }
             }
 
