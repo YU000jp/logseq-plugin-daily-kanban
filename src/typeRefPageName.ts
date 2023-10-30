@@ -1,5 +1,5 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { tokenLinkCreateTh, createTd } from "./tokenLink"
+import { tokenLinkCreateTh, createTd } from "./type"
 import { checkAlias } from "./excludePages"
 import { excludePagesForPageList } from "./excludePages"
 

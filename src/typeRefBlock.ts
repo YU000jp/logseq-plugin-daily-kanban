@@ -1,7 +1,7 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { includeReference, stringLimitAndRemoveProperties } from "./lib"
 import { t } from "logseq-l10n"
-import { tokenLinkCreateTh } from "./tokenLink"
+import { tokenLinkCreateTh } from "./type"
 import { checkAlias } from "./excludePages"
 import { excludePageForBlockEntity } from "./excludePages"
 import { openTooltipEventFromBlock } from "./tooltip"
