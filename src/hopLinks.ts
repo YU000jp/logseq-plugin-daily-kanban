@@ -14,18 +14,15 @@ import { excludePages } from "./excludePages"
 export const loadTwoHopLink = async () => {
 
     //ページ読み込み時に実行コールバック
+
     logseq.App.onRouteChanged(async ({ template }) => {
-        if (template === '/page/:name') {
-            //2ホップリンク
-            if (!parent.document.getElementById("hopLinks") as boolean) hopLinks()
-        } //バグあり？onPageHeadActionsSlottedとともに動作保証が必要
+        if (template === '/page/:name' && !parent.document.getElementById("hopLinks") as boolean) hopLinks() //2ホップリンク
     })
 
-    //ページ読み込み時に実行コールバック
+    //Logseqのバグあり。動作保証が必要
     logseq.App.onPageHeadActionsSlotted(async () => {
-        //2ホップリンク
-        if (!parent.document.getElementById("hopLinks") as boolean) hopLinks()
-    }) //バグあり？onRouteChangedとともに動作保証が必要
+        if (!parent.document.getElementById("hopLinks") as boolean) hopLinks() //2ホップリンク
+    })
 
     logseq.provideStyle(CSSfile)
 }
@@ -70,7 +67,9 @@ const hopLinks = async (select?: string) => {
             outgoingLinks.remove()
             //div.tokenLinkをすべて探し、削除する
             const tokenLinks = parent.document.body.querySelectorAll("div#root>div>main div#main-content-container div.tokenLink") as NodeListOf<HTMLDivElement> | null
-            if (tokenLinks) for (const tokenLink of tokenLinks) tokenLink.remove()
+            if (tokenLinks)
+                for (const tokenLink of tokenLinks)
+                    tokenLink.remove()
             //selectElementを削除する
             const selectElement = parent.document.getElementById("hopLinkType") as HTMLSelectElement | null
             if (selectElement) selectElement.remove()
@@ -183,11 +182,12 @@ const sortForPageLinksSet = (filteredPageLinksSet: ({ uuid: string; name: string
     })
 
 
-    
+
 //現在のページ名とその階層を、リストに追加する
 const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[]) => {
     const current = await logseq.Editor.getCurrentPage() as PageEntity | null
     if (current) {
+
         const addPage = async (name: string) => {
             const page = await logseq.Editor.getPage(name) as PageEntity | null
             if (page) {
@@ -205,15 +205,20 @@ const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSe
                 pageLinksSet.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }))
             }
         }
-        if (logseq.settings!.keywordsIncludeHierarchy === true && current.originalName.includes("/") as boolean === true) { //現在のページ名に「/」が含まれている場合
+
+        if (logseq.settings!.keywordsIncludeHierarchy === true
+            && current.originalName.includes("/") as boolean === true) { //現在のページ名に「/」が含まれている場合
+            
             // current.originalNameがA/B/Cとしたら、A、A/B、A/B/Cを取得する
             let names = current.originalName.split("/")
             names = names.map((_name, i) => names.slice(0, i + 1).join("/"))
             for (const name of names) await addPage(name)
+
         } else {
             // current.originalName 現在のページ名
             await addPage(current.originalName)
         }
+
     }
     return current
 }
@@ -221,6 +226,8 @@ const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSe
 
 //設定と更新ボタンを設置する
 const settingsAndUpdateButtons = (hopLinksElement: HTMLDivElement, spanElement: HTMLSpanElement) => {
+
+    //hopLinksElementに設定ボタンを設置する
     const settingButtonElement: HTMLButtonElement = document.createElement("button")
     settingButtonElement.id = "hopLinksSetting"
     settingButtonElement.innerText = "⚙"
@@ -238,5 +245,6 @@ const settingsAndUpdateButtons = (hopLinksElement: HTMLDivElement, spanElement: 
         hopLinks()
     }, { once: true })
     hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement)
+
 }
 
