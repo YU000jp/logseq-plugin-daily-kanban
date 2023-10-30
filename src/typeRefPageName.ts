@@ -36,7 +36,7 @@ export const typeRefPageName = async (outgoingList: ({ uuid: string; name: strin
             const page = await logseq.Editor.getPage(pageName) as PageEntity | null
             if (!page) continue
 
-            //ジャーナルを除外する
+            //日誌を除外する
             if (logseq.settings!.excludeJournalFromResult === true
                 && page["journal?"] === true
                 || logseq.settings!.excludeDateFromResult === true

@@ -33,7 +33,7 @@ export const settings = (): SettingSchemaDesc[] => [
         inputAs: "textarea",//改行で区切る
         description: t("split by newline"),
     },
-    {//outgoingLinksからジャーナルを除外する
+    {//outgoingLinksから日誌を除外する
         key: "excludeJournalFromOutgoingLinks",
         type: "boolean",
         title: t("exclude journal from outgoing links (match user date format)"),
@@ -47,7 +47,7 @@ export const settings = (): SettingSchemaDesc[] => [
         default: false,
         description: "default: false",
     },
-    {//Resultからジャーナルを除外する
+    {//Resultから日誌を除外する
         key: "excludeJournalFromResult",
         type: "boolean",
         title: t("exclude journal from result (match user date format)"),

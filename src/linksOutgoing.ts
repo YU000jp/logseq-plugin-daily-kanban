@@ -27,7 +27,7 @@ export const outgoingLinksFromCurrentPage = (pageLinks: NodeListOf<HTMLAnchorEle
         const thisPage = await logseq.Editor.getPage(pageLinkRef) as PageEntity | undefined
         if (!thisPage) return undefined
 
-        //ジャーナルを除外する
+        //日誌を除外する
         if (logseq.settings!.excludeJournalFromOutgoingLinks === true && thisPage["journal?"] === true) return undefined
         if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
             //2024/01のような形式のページを除外する

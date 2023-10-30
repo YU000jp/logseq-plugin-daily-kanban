@@ -16,13 +16,13 @@ export const excludePageForPageEntity = (PageEntityArray: PageEntity[]) => {
         for (const page of PageEntityArray) {
             if (excludePages.includes(page.originalName))
                 PageEntityArray!.splice(PageEntityArray!.indexOf(page), 1)
-            //ジャーナルを除外する
+            //日誌を除外する
             if (logseq.settings!.excludeJournalFromResult === true
                 && page["journal?"] === true)
                 PageEntityArray!.splice(PageEntityArray!.indexOf(page), 1)
         }
     } else {
-        //ジャーナルを除外する
+        //日誌を除外する
         if (logseq.settings!.excludeJournalFromResult === true)
             for (const page of PageEntityArray)
                 if (page["journal?"] === true)
