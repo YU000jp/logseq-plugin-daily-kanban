@@ -40,19 +40,14 @@ export const includeReference = async (content): Promise<string | null> => {
 //https://github.com/briansunter/logseq-plugin-gpt3-openai/blob/980b80dd7787457ffed2218c51fcf8007d4416d5/src/lib/logseq.ts#L47
 
 
-function isBlockEntity(b: BlockEntity | BlockUUIDTuple): b is BlockEntity {
-    return (b as BlockEntity).uuid !== undefined
-}
+const isBlockEntity = (b: BlockEntity | BlockUUIDTuple): b is BlockEntity => (b as BlockEntity).uuid !== undefined
 
-async function getTreeContent(b: BlockEntity) {
+//子ブロックを含めたブロックの内容を取得する
+export const getTreeContent = async (b: BlockEntity) => {
     let content = ""
     const trimmedBlockContent = b.content.trim()
-    if (trimmedBlockContent.length > 0) {
-        content += trimmedBlockContent + "\n"
-    }
-    if (!b.children) {
-        return content
-    }
+    if (trimmedBlockContent.length > 0) content += trimmedBlockContent + "\n"
+    if (!b.children) return content
 
     for (const child of b.children) {
         if (isBlockEntity(child)) {
@@ -61,66 +56,60 @@ async function getTreeContent(b: BlockEntity) {
             const childBlock = await logseq.Editor.getBlock(child[1], {
                 includeChildren: true,
             })
-            if (childBlock) {
+            if (childBlock)
                 content += await getTreeContent(childBlock)
-            }
         }
     }
     return content
 }
 
-export async function getPageContent(page: PageEntity): Promise<string> {
+export const getPageContent = async (page: PageEntity): Promise<string> => {
     let blockContents: string[] = []
 
     const pageBlocks = await logseq.Editor.getPageBlocksTree(page.name) as BlockEntity[]
     for (const pageBlock of pageBlocks) {
         const blockContent = await getTreeContent(pageBlock)
-        if (typeof blockContent === "string" && blockContent.length > 0) {
-            blockContents.push(blockContent)
-        }
+        if (typeof blockContent === "string"
+            && blockContent.length > 0) blockContents.push(blockContent)
     }
     return blockContents.join("\n")
 }
 
-//子ブロックを含めたブロックの内容を取得する
-export async function getBlockContent(block: BlockEntity): Promise<string> {
-    let content = ""
+//--------------------------------------------end of credit
 
-    content += await getTreeContent(block)
 
-    return content
-}
+
 export const sortForPageEntity = (PageEntity: PageEntity[]) => PageEntity.sort((a, b) => {
     if (a.name > b.name) return 1
     if (a.name < b.name) return -1
     return 0
 })
-export const whenPageOpen = async () => setTimeout(() => {
+
+
+// collapsed pageのaccessoryをそれぞれhiddenにする
+export const collapsedPageAccessory = async () => setTimeout(() => {
     //Linked Referencesをhiddenにする
-    if (logseq.settings!.collapseLinkedReferences === true) {
-        const linkedReferences = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative div.lazy-visibility>div>div.fade-enter-active div.references.page-linked>div.content>div.flex>div.initial") as HTMLDivElement | null
-        if (linkedReferences) {
-            linkedReferences.classList.remove("initial")
-            linkedReferences.classList.add("hidden")
-        }
-    }
-    if (logseq.settings!.collapseHierarchy === true) {
-        //Hierarchyをhiddenにする
-        const hierarchy = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-hierarchy>div.flex>div.initial") as HTMLDivElement | null
-        if (hierarchy) {
-            hierarchy.classList.remove("initial")
-            hierarchy.classList.add("hidden")
-        }
-    }
-    if (logseq.settings!.collapsePageTags === true) {
-        //Page-tagsをhiddenにする
-        const pageTags = parent.document.querySelector("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-tags>div.content>div.flex>div.initial") as HTMLDivElement | null
-        if (pageTags) {
-            pageTags.classList.remove("initial")
-            pageTags.classList.add("hidden")
-        }
-    }
+    if (logseq.settings!.collapseLinkedReferences === true)
+        hidden("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative div.lazy-visibility>div>div.fade-enter-active div.references.page-linked>div.content>div.flex>div.initial")
+
+    //Hierarchyをhiddenにする
+    if (logseq.settings!.collapseHierarchy === true)
+        hidden("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-hierarchy>div.flex>div.initial")
+
+    //Page-tagsをhiddenにする
+    if (logseq.settings!.collapsePageTags === true)
+        hidden("body[data-page=page]>div#root>div>main div#main-content-container div.page.relative>div.page-tags>div.content>div.flex>div.initial")
+
 }, 10)
 
 
-//--------------------------------------------end of credit
+// initialからhiddenにする
+const hidden = (selector: string, flagOnce?: boolean) => {
+    const element = parent.document.querySelector(selector) as HTMLDivElement | null
+    if (element) {
+        element.classList.remove("initial")
+        element.classList.add("hidden")
+    }
+    if (flagOnce === false)
+        setTimeout(() => hidden(selector, true), 500)
+}

@@ -1,6 +1,6 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
-import { getBlockContent, getPageContent, includeReference, stringLimitAndRemoveProperties } from "./lib"
+import { getPageContent, getTreeContent, includeReference, stringLimitAndRemoveProperties } from "./lib"
 
 
 /**
@@ -52,7 +52,7 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
         anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(thisBlock.uuid) })
         pElement.append(anchorElement)
         const preElement: HTMLPreElement = document.createElement("pre")
-        const content = await getBlockContent(thisBlock)
+        const content = await getTreeContent(thisBlock)
         //リファレンスかどうか
         const isReference: string | null = await includeReference(content)
         if (isReference) thisBlock.content = isReference

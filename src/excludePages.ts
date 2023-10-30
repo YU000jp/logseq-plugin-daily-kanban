@@ -36,7 +36,8 @@ export const excludePageForBlockEntity = async (filteredBlocks: BlockEntity[]) =
     if (excludePages && excludePages.length !== 0)
         for (const block of filteredBlocks) {
             if (!block.page || !block.page.originalName) continue
-            if (excludePages.includes(block.page.originalName)) filteredBlocks.splice(filteredBlocks.indexOf(block), 1)
+            if (excludePages.includes(block.page.originalName))
+                filteredBlocks.splice(filteredBlocks.indexOf(block), 1)
         }
 }
 
@@ -57,6 +58,7 @@ export const checkAlias = (current: PageEntity, filteredPageLinksSet: ({ name: s
         if (aliasProperty && aliasProperty.length !== 0)
             for (const alias of aliasProperty)
                 for (const pageLink of filteredPageLinksSet)
-                    if (pageLink?.name === alias) filteredPageLinksSet.splice(filteredPageLinksSet.indexOf(pageLink), 1)
+                    if (pageLink?.name === alias)
+                        filteredPageLinksSet.splice(filteredPageLinksSet.indexOf(pageLink), 1)
     }
 }

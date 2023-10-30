@@ -7,7 +7,7 @@ import { typeBackLink } from "./typeBackLink"
 import { typeHierarchy } from "./typeHierarchy"
 import { typePageTags } from "./typePageTags"
 import { typeReferencesByBlock } from "./typeReferencesByBlock"
-import { whenPageOpen } from "./lib"
+import { collapsedPageAccessory } from "./lib"
 import { excludePages } from "./excludePages"
 
 
@@ -43,7 +43,7 @@ const hopLinks = async (select?: string) => {
     if (!pageLinks) return
 
     //ページを開いたときの処理
-    whenPageOpen()
+    collapsedPageAccessory()
 
     const newSet = new Set()
     //outgoingリンクを取得する
@@ -168,6 +168,12 @@ const hopLinks = async (select?: string) => {
 }
 
 
+//filteredBlocksをソートする
+/**
+ * Sorts an array of page links by name in ascending order.
+ * @param filteredPageLinksSet An array of objects containing a UUID and a name property.
+ * @returns The sorted array of page links.
+ */
 const sortForPageLinksSet = (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[]) =>
     filteredPageLinksSet.sort((a, b) => {
         if (a?.name === undefined || b?.name === undefined) return 0
@@ -177,6 +183,8 @@ const sortForPageLinksSet = (filteredPageLinksSet: ({ uuid: string; name: string
     })
 
 
+    
+//現在のページ名とその階層を、リストに追加する
 const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[]) => {
     const current = await logseq.Editor.getCurrentPage() as PageEntity | null
     if (current) {
@@ -211,6 +219,7 @@ const addCurrentPageAndTheHierarchies = async (newSet: Set<unknown>, pageLinksSe
 }
 
 
+//設定と更新ボタンを設置する
 const settingsAndUpdateButtons = (hopLinksElement: HTMLDivElement, spanElement: HTMLSpanElement) => {
     const settingButtonElement: HTMLButtonElement = document.createElement("button")
     settingButtonElement.id = "hopLinksSetting"
