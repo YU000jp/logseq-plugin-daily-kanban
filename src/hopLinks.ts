@@ -28,7 +28,11 @@ export const loadTwoHopLink = async () => {
 }
 
 
+let processing: boolean = false
 const hopLinks = async (select?: string) => {
+    if (processing) return
+    setTimeout(() => processing = false, 5000) //3秒後にprocessingをfalseにする 途中で処理を失敗した場合に備える
+
     //アウトゴーイングリンクを表示する場所
     const PageBlocksInnerElement = parent.document.body.querySelector("div#root>div>main div#main-content-container div.page-blocks-inner") as HTMLDivElement | null
     if (!PageBlocksInnerElement) return
@@ -38,6 +42,7 @@ const hopLinks = async (select?: string) => {
     //PageBlocksInnerElementの中に含まれる<a data-ref>をすべて取得する
     const pageLinks = PageBlocksInnerElement.querySelectorAll("a[data-ref]:not(.page-property-key)") as NodeListOf<HTMLAnchorElement> | null
     if (!pageLinks) return
+    processing = true
 
     //ページを開いたときの処理
     collapsePageAccessory()
@@ -164,7 +169,10 @@ const hopLinks = async (select?: string) => {
             if (option.value === logseq.settings!.hopLinkType)
                 option.selected = true
     }, 100)
-}
+
+    processing = false
+
+}//end of hopLinks
 
 
 //filteredBlocksをソートする
