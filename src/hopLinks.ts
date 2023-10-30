@@ -32,7 +32,7 @@ export const loadTwoHopLink = async () => {
 
 const hopLinks = async (select?: string) => {
     //アウトゴーイングリンクを表示する場所
-    const PageBlocksInnerElement = parent.document.querySelector("div#main-content-container div.page-blocks-inner") as HTMLDivElement | null
+    const PageBlocksInnerElement = parent.document.body.querySelector("div#root>div>main div#main-content-container div.page-blocks-inner") as HTMLDivElement | null
     if (!PageBlocksInnerElement) return
     const hopLinksElement: HTMLDivElement = document.createElement("div")
     hopLinksElement.id = "hopLinks"
@@ -68,7 +68,7 @@ const hopLinks = async (select?: string) => {
         if (outgoingLinks) {
             outgoingLinks.remove()
             //div.tokenLinkをすべて探し、削除する
-            const tokenLinks = parent.document.querySelectorAll("div.tokenLink") as NodeListOf<HTMLDivElement> | null
+            const tokenLinks = parent.document.body.querySelectorAll("div#root>div>main div#main-content-container div.tokenLink") as NodeListOf<HTMLDivElement> | null
             if (tokenLinks) for (const tokenLink of tokenLinks) tokenLink.remove()
             //selectElementを削除する
             const selectElement = parent.document.getElementById("hopLinkType") as HTMLSelectElement | null
@@ -143,8 +143,8 @@ const hopLinks = async (select?: string) => {
     selectElement.id = "hopLinkType"
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
-    <option value="hierarchy" title="base on outgoing links">Hierarchy + ${t("Page-Tags")}</option>
-    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">Deeper Hierarchy + ${t("Page-Tags")}</option>
+    <option value="hierarchy" title="base on outgoing links">${t("Hierarchy")} + ${t("Page-Tags")}</option>
+    <option value="deeperHierarchy" title="recursive processing for deeper hierarchy">${t("Deeper Hierarchy")} + ${t("Page-Tags")}</option>
     <option value="backLinks">${t("BackLinks")}</option>
     <option value="blocks">${t("Blocks (references)")}</option>
     `
