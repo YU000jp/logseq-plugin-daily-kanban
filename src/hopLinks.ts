@@ -807,7 +807,7 @@ const whenPageOpen = async () => {
     setTimeout(() => {
         //Linked Referencesをhiddenにする
         if (logseq.settings!.collapseLinkedReferences === true) {
-            const linkedReferences = parent.document.querySelector("div#main-content-container div.page.relative div.lazy-visibility div.references.page-linked>div.content>div.flex>div.initial") as HTMLDivElement | null;
+            const linkedReferences = parent.document.querySelector("div#main-content-container div.page.relative div.lazy-visibility>div>div.fade-enter-active div.references.page-linked>div.content>div.flex>div.initial") as HTMLDivElement | null;
             if (linkedReferences) {
                 linkedReferences.classList.remove("initial");
                 linkedReferences.classList.add("hidden");
