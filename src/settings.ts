@@ -1,5 +1,5 @@
-import { SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin.user';
-import { t } from "logseq-l10n";
+import { SettingSchemaDesc } from '@logseq/libs/dist/LSPlugin.user'
+import { t } from "logseq-l10n"
 
 /* user setting */
 // https://logseq.github.io/plugins/types/SettingSchemaDesc.html
@@ -110,4 +110,4 @@ export const settings = (): SettingSchemaDesc[] => [
         default: true,
         description: "default: true",
     },
-];
+]
