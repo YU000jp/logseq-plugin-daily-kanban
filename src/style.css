@@ -1,167 +1,174 @@
-div#main-content-container div.page-blocks-inner div#hopLinks {
-    margin-top: 16em;
-    margin-left: 2em;
-    user-select: none;
+body[data-page=page]>div {
+    &#root>div>main div#main-content-container div.page-blocks-inner div#hopLinks {
+        margin-top: 16em;
+        margin-left: 2em;
+        user-select: none;
 
-    & span#hopLinksTitle {
-        font-size: 1.2em;
-        font-weight: bold;
-        margin-right: 1em;
-    }
-
-    & a:hover {
-        text-decoration: underline;
-    }
-
-    & button#hopLinksUpdate {
-        margin: 1em;
-        font-size: .88em;
-    }
-
-    & div#outgoingLinks,
-    div#externalLinks,
-    div.tokenLink {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    & div.hopLinksTh {
-        font-weight: bold;
-        background: var(--ls-tertiary-background-color);
-
-        &.th-type-pageTags {
-            background: var(--ls-table-tr-even-background-color);
-        }
-    }
-
-    & div#outgoingLinks div.hopLinksTh#hopLinksKeyword {
-        background: var(--ls-quaternary-background-color);
-    }
-
-    & div#externalLinks {
-        & div.hopLinksTh {
-            background: var(--ls-secondary-background-color);
+        & span#hopLinksTitle {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-right: 1em;
         }
 
-        & div.hopLInksTd {
-            font-size: .9em;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-    }
-
-    & div.hopLinksTh,
-    div.hopLinksTd {
-        padding: .8em;
-        width: 180px;
-        max-height: 300px;
-        overflow: hidden;
-        font-size: .89em;
-        border: 1px solid var(--ls-guideline-color);
-
-        &:hover:not(:has(div.hopLinks-popup-content)) {
-            opacity: 0.8;
-        }
-    }
-
-    & div:is(.tokenLink, #outgoingLinks):not(:has(div.hopLinksTd)) {
-        display: none;
-    }
-
-    & select {
-        background-color: inherit;
-        color: inherit;
-
-        & option {
-            background-color: var(--ls-primary-background-color);
-            color: var(--ls-primary-text-color);
-        }
-    }
-
-    & label {
-
-        & div.hopLinksTh,
-        div.hopLinksTd {
-            height: 100%;
-            cursor: zoom-in;
-
-            >a {
-                line-height: 1.8em;
-            }
+        & a:hover {
+            text-decoration: underline;
         }
 
-        & div.hopLinks-popup-content {
-            overflow: auto;
-            min-width: 340px;
-            max-width: 660px;
-            min-height: 200px;
-            max-height: 620px;
-            color: var(--ls-primary-text-color);
-            padding: 1em;
-            box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
-            display: none;
-            position: absolute;
-            transform: translate(-10%, -50%);
-            z-index: 1;
-            border-radius: 0.2em;
-            outline: 2px solid var(--ls-guideline-color);
-            outline-offset: 3px;
-            cursor: zoom-out;
-            backdrop-filter: blur(70px);
-            font-size: .96em;
+        & button#hopLinksUpdate {
+            margin: 1em;
+            font-size: .88em;
+        }
 
-            & div.hopLinks-popup-img-container {
+        & div {
+
+            &#outgoingLinks,
+            &#externalLinks,
+            &.tokenLink {
                 display: flex;
-                gap: 0 20px;
-                padding: 10px;
+                flex-wrap: wrap;
+            }
 
-                & div.hopLinks-popup-anchor {
-                    font-weight: bold;
+            &.hopLinksTh {
+                font-weight: bold;
+                background: var(--ls-tertiary-background-color);
 
-                    >a {
-                        margin-left: .5em;
-                        margin-right: .5em;
-                    }
-
-                    >img {
-                        object-fit: scale-down;
-                        max-width: 80px;
-                        max-height: 80px;
-                        vertical-align: top;
-                    }
+                &.th-type-pageTags {
+                    background: var(--ls-table-tr-even-background-color);
                 }
             }
 
-            & p {
-                font-size: small;
-                opacity: 0.7;
+            &#outgoingLinks div.hopLinksTh#hopLinksKeyword {
+                background: var(--ls-quaternary-background-color);
+            }
 
-                &.hopLinks-popup-updatedAt {
+            &#externalLinks {
+                & div.hopLinksTh {
+                    background: var(--ls-secondary-background-color);
+                }
+
+                & div.hopLInksTd {
+                    font-size: .9em;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            &.hopLinksTh,
+            &.hopLinksTd {
+                padding: .8em;
+                width: 180px;
+                max-height: 300px;
+                overflow: hidden;
+                font-size: .89em;
+                border: 1px solid var(--ls-guideline-color);
+
+                &:hover:not(:has(div.hopLinks-popup-content)) {
+                    opacity: 0.8;
+                }
+            }
+
+            &:is(.tokenLink, #outgoingLinks):not(:has(div.hopLinksTd)) {
+                display: none;
+            }
+
+            &.tokenLink label div.hopLinks-popup-content {
+                transform: translate(0, -100%);
+            }
+        }
+
+        & select {
+            background-color: inherit;
+            color: inherit;
+
+            & option {
+                background-color: var(--ls-primary-background-color);
+                color: var(--ls-primary-text-color);
+            }
+        }
+
+        & label {
+
+            & div.hopLinksTh,
+            div.hopLinksTd {
+                height: 100%;
+                cursor: zoom-in;
+
+                >a {
+                    line-height: 1.8em;
+                }
+            }
+
+            & div.hopLinks-popup-content {
+                overflow: auto;
+                min-width: 340px;
+                max-width: 660px;
+                min-height: 200px;
+                max-height: 620px;
+                color: var(--ls-primary-text-color);
+                padding: 1em;
+                box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
+                display: none;
+                position: absolute;
+                transform: translate(-10%, -50%);
+                z-index: 1;
+                border-radius: 0.2em;
+                outline: 2px solid var(--ls-guideline-color);
+                outline-offset: 3px;
+                cursor: zoom-out;
+                backdrop-filter: blur(70px);
+                font-size: .96em;
+
+                & div.hopLinks-popup-img-container {
+                    display: flex;
+                    gap: 0 20px;
+                    padding: 10px;
+
+                    & div.hopLinks-popup-anchor {
+                        font-weight: bold;
+
+                        >a {
+                            margin-left: .5em;
+                            margin-right: .5em;
+                        }
+
+                        >img {
+                            object-fit: scale-down;
+                            max-width: 80px;
+                            max-height: 80px;
+                            vertical-align: top;
+                        }
+                    }
+                }
+
+                & p {
                     font-size: small;
                     opacity: 0.7;
+
+                    &.hopLinks-popup-updatedAt {
+                        font-size: small;
+                        opacity: 0.7;
+                    }
+                }
+
+                & pre {
+                    line-height: 2.5em;
                 }
             }
 
-            & pre {
-                line-height: 2.5em;
+            & input[type="checkbox"] {
+                display: none;
+
+                &:checked+div.hopLinks-popup-content {
+                    display: block;
+                    transition: .2s;
+                }
             }
         }
 
-        & input[type="checkbox"] {
-            display: none;
 
-            &:checked+div.hopLinks-popup-content {
-                display: block;
-                transition: .2s;
-            }
-        }
     }
 
-    & div.tokenLink label div.hopLinks-popup-content {
-        transform: translate(0, -100%);
+    &[data-id="two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
+        height: 15em;
     }
-}
-
-div[data-id="two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
-    height: 15em;
 }
