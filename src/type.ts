@@ -45,7 +45,7 @@ export const createTd = (page: PageEntity | { uuid: string; originalName: string
     popupElement.title = ""
     const anchorElement: HTMLAnchorElement = document.createElement("a")
     anchorElement.dataset.uuid = page.uuid
-    anchorElement.innerText = (flag && flag.isHierarchyTitle) ? page.originalName.replace(flag.isHierarchyTitle, "") : page.originalName
+    anchorElement.innerText = (flag && flag.isHierarchyTitle) ? page.originalName.replace(flag.isHierarchyTitle, ".") : page.originalName
     if (flag && flag.isPageTags) anchorElement.innerText = "#" + anchorElement.innerText
     divElementTag.title = page.originalName
     divElementTag.append(anchorElement)

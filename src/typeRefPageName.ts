@@ -4,12 +4,12 @@ import { checkAlias } from "./excludePages"
 import { excludePagesForPageList } from "./excludePages"
 
 //typeBlocks
-export const typeRefPageName = async (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+export const typeRefPageName = async (outgoingList: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
 
-    //aliasプロパティを取得し、filteredPageLinksSetから除外する
-    if (current) checkAlias(current, filteredPageLinksSet)
+    //aliasプロパティを取得し、outgoingListから除外する
+    if (current) checkAlias(current, outgoingList)
 
-    for (const pageLink of filteredPageLinksSet) {
+    for (const pageLink of outgoingList) {
         if (!pageLink) continue
         //現在のページ名に一致する場合は除外する
         if (logseq.settings!.excludeCurrentPage === true

@@ -1,15 +1,15 @@
 import { t } from "logseq-l10n"
-import { createTd } from "./tokenLink"
+import { createTd } from "./type"
 import { PageEntity } from "@logseq/libs/dist/LSPlugin.user"
 
-export const outgoingLinks = (filteredPageLinksSet: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement) => {
+export const outgoingLinks = (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement) => {
 
     //outgoingLinksElementを作成
     const outgoingLinksElement: HTMLDivElement = document.createElement("div")
     outgoingLinksElement.id = "outgoingLinks"
     outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">${t("Outgoing Links (Keyword)")}</div>`
 
-    for (const pageLink of filteredPageLinksSet) {
+    for (const pageLink of outgoingList) {
         if (!pageLink) continue
         //td
         const pageEntity = { uuid: pageLink.uuid, originalName: pageLink.name }

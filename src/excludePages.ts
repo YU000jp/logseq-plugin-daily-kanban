@@ -31,34 +31,34 @@ export const excludePageForPageEntity = (PageEntityArray: PageEntity[]) => {
 }
 
 
-export const excludePageForBlockEntity = async (filteredBlocks: BlockEntity[]) => {
+export const excludePageForBlockEntity = async (outgoingList: BlockEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
-        for (const block of filteredBlocks) {
+        for (const block of outgoingList) {
             if (!block.page || !block.page.originalName) continue
             if (excludePages.includes(block.page.originalName))
-                filteredBlocks.splice(filteredBlocks.indexOf(block), 1)
+                outgoingList.splice(outgoingList.indexOf(block), 1)
         }
 }
 
 
-export const excludePages = (filteredPageLinksSet: ({ uuid: string; name: string } | undefined)[]) => {
+export const excludePages = (outgoingList: ({ uuid: string; name: string } | undefined)[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
         for (const excludePage of excludePages)
-            for (const pageLink of filteredPageLinksSet)
+            for (const pageLink of outgoingList)
                 if (pageLink?.name === excludePage)
-                    filteredPageLinksSet.splice(filteredPageLinksSet.indexOf(pageLink), 1)
+                    outgoingList.splice(outgoingList.indexOf(pageLink), 1)
 }
 
 
-export const checkAlias = (current: PageEntity, filteredPageLinksSet: ({ name: string } | undefined)[]) => {
+export const checkAlias = (current: PageEntity, outgoingList: ({ name: string } | undefined)[]) => {
     if (current.properties && current.properties.alias) {
         const aliasProperty = current.properties.alias as string[] | undefined //originalNameと同等
         if (aliasProperty && aliasProperty.length !== 0)
             for (const alias of aliasProperty)
-                for (const pageLink of filteredPageLinksSet)
+                for (const pageLink of outgoingList)
                     if (pageLink?.name === alias)
-                        filteredPageLinksSet.splice(filteredPageLinksSet.indexOf(pageLink), 1)
+                        outgoingList.splice(outgoingList.indexOf(pageLink), 1)
     }
 }

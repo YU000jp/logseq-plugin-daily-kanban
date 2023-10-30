@@ -7,11 +7,11 @@ import { excludePageForBlockEntity } from "./excludePages"
 import { openTooltipEventFromBlock } from "./tooltip"
 
 //typeBlocks
-export const typeRefBlock = async (filteredPageLinksSet: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
-    //aliasプロパティを取得し、filteredPageLinksSetから除外する
-    if (current) checkAlias(current, filteredPageLinksSet)
+export const typeRefBlock = async (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+    //aliasプロパティを取得し、outgoingListから除外する
+    if (current) checkAlias(current, outgoingList)
     //行作成
-    for (const pageLink of filteredPageLinksSet) {
+    for (const pageLink of outgoingList) {
         if (!pageLink) continue
         //現在のページ名に一致する場合は除外する
         if (logseq.settings!.excludeCurrentPage === true
@@ -20,18 +20,18 @@ export const typeRefBlock = async (filteredPageLinksSet: ({ uuid: string; name: 
         const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: BlockEntity[]][]
         if (!page) continue
         //blocksをフィルターする
-        const filteredBlocks = page.filter((page) => page[1].length !== 0).map((page) => page[1][0])
-        if (filteredBlocks.length === 0) continue
+        const outgoingList = page.filter((page) => page[1].length !== 0).map((page) => page[1][0])
+        if (outgoingList.length === 0) continue
 
         //ページを除外する
-        excludePageForBlockEntity(filteredBlocks)
-        if (filteredBlocks.length === 0) continue
+        excludePageForBlockEntity(outgoingList)
+        if (outgoingList.length === 0) continue
 
         //th
         const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-blocks", t("Blocks"))
         //end of 行タイトル(左ヘッダー)
         //右側
-        for (const block of filteredBlocks) {
+        for (const block of outgoingList) {
             if (!block || block.content === "") continue
             if (block.content === `[[${pageLink.name}]]` 
             || block.content === `#${pageLink.name}`) continue // [[pageLink.name]]もしくは #pageLink.name と一致した場合は除外する

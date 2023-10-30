@@ -3,8 +3,8 @@ import { sortForPageEntity } from "./lib"
 import { tokenLinkCreateTh, createTd } from "./type"
 import { excludePageForPageEntity } from "./excludePages"
 
-export const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, flagFull?: boolean) => {
-    filteredPageLinksSet.forEach(getTd())
+export const typeHierarchy = (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, flagFull?: boolean) => {
+    outgoingList.forEach(getTd())
 
     function getTd(): (value: { uuid: string; name: string}  | undefined, index: number, array: ({ uuid: string; name: string}  | undefined)[]) => void {
         return async (pageLink) => {
@@ -32,7 +32,7 @@ export const typeHierarchy = (filteredPageLinksSet: ({ uuid: string; name: strin
                 //PageEntityをもとに再帰的に処理する。ただし、PageEntity.nameではなく、pageEntity.originalNameを渡す
                 PageEntity.forEach(async (page) => {
                     const pageLink = { uuid: page.uuid, name: page.originalName }
-                    await getTd()(pageLink, 0, filteredPageLinksSet)
+                    await getTd()(pageLink, 0, outgoingList)
                 })
             }
             //PageEntityを空にする
