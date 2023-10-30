@@ -131,13 +131,13 @@ const hopLinks = async (select?: string) => {
     //selectで選択されたタイプ
     const type = select || logseq.settings!.hopLinkType
     switch (type) {
-        case "blocks": // Linked References > Blocks
-            //block.content
-            typeRefBlock(outgoingList, hopLinksElement, current)
+        case "namespace":
+            // クエリーでページ名に関連するページを取得する
+            typeNamespace(hopLinksElement)
             break
-        case "backLinks": //Linked References > BackLinks (ページ)
-            //block.content
-            typeRefPageName(outgoingList, hopLinksElement, current)
+        case "page-hierarchy":
+            //ページ名から階層を取得する
+            typeNamespace(hopLinksElement)
             break
         case "page-tags":
             //ページタグ
@@ -157,10 +157,13 @@ const hopLinks = async (select?: string) => {
             //full hierarchy
             typeHierarchy(outgoingList, hopLinksElement, true)
             break
-        case "namespace":
-            //namespace
-            // クエリーでページ名に関連するページを取得する
-            typeNamespace(hopLinksElement)
+            case "blocks": // Linked References > Blocks
+            //block.content
+            typeRefBlock(outgoingList, hopLinksElement, current)
+            break
+        case "backLinks": //Linked References > BackLinks (ページ)
+            //block.content
+            typeRefPageName(outgoingList, hopLinksElement, current)
             break
     }//end of switch
 
@@ -170,9 +173,10 @@ const hopLinks = async (select?: string) => {
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
     <option value="namespace">${t("Page title")} > ${t("Namespace")}</option>
+    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")}</option>
+    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page only")}</option>
     <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
-    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="hierarchy-and-page-tags" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} + ${t("Page-Tags")}</option>
     <option value="backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
     <option value="blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
@@ -223,7 +227,7 @@ const addCurrentPageHierarchy = async (newSet: Set<unknown>, outgoingList: Promi
         const addPage = async (name: string) => {
             const page = await logseq.Editor.getPage(name) as PageEntity | null
             if (page) {
-                //ジャーナルを除外する
+                //日誌を除外する
                 if (logseq.settings!.excludeJournalFromOutgoingLinks === true && page["journal?"] === true) return
                 if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
                     //2024/01のような形式のページを除外する
