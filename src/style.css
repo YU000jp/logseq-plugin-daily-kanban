@@ -120,6 +120,11 @@ body[data-page=page]>div {
                     backdrop-filter: blur(70px);
                     font-size: .96em;
 
+                    &:hover {
+                        outline: 6px solid var(--ls-quaternary-background-color);
+                        outline-offset: 6px;
+                    }
+
                     & div.hopLinks-popup-img-container {
                         display: flex;
                         gap: 0 20px;
