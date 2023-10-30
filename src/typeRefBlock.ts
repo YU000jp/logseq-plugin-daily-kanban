@@ -28,7 +28,7 @@ export const typeRefBlock = async (filteredPageLinksSet: ({ uuid: string; name: 
         if (filteredBlocks.length === 0) continue
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-blocks", t("Blocks (references)"))
+        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-blocks", t("Blocks"))
         //end of 行タイトル(左ヘッダー)
         //右側
         for (const block of filteredBlocks) {

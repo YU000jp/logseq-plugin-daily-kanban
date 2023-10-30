@@ -25,7 +25,7 @@
     "collapse the Hierarchy list when page open": "ページを開いたときにHierarchyのリストを折りたたむ",
     "collapse the Linked References collection when page open": "ページを開いたときにLinked Referencesを折りたたむ",
     "collapse the Page-tags list when page open": "ページを開いたときにページタグのリストを折りたたむ",
-    "exclude current page from \"backLinks\" and \"blocks (references)\"": "現在のページを「Back Links」と「ブロック参照」から除外する",
+    "exclude current page from \"backLinks\" and \"Blocks\"": "現在のページを「Back Links」と「ブロック参照」から除外する",
     "exclude date from outgoing links (ex. 2024, 2024/01)": "発信リンクから日付を除外する（例: 2024、2024/01）",
     "exclude date from result (ex. 2024, 2024/01)": "結果から日付を除外する（例: 2024、2024/01）",
     "exclude journal from outgoing links (match user date format)": "発信リンクからジャーナルを除外する（ユーザーの日付形式に一致）",

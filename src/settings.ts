@@ -85,7 +85,7 @@ export const settings = (): SettingSchemaDesc[] => [
     {//現在のページに関連するreferencesを取り除く
         key: "excludeCurrentPage",
         type: "boolean",
-        title: t("exclude current page from \"backLinks\" and \"blocks (references)\""),
+        title: t("exclude current page from \"backLinks\" and \"Blocks\""),
         default: false,
         description: "default: false",
     },
