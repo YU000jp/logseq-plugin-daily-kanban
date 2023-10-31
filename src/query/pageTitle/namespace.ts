@@ -1,40 +1,55 @@
-import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
-import { excludePageForPageEntity } from "../../excludePages"
-import { sortForPageEntity } from "../../lib"
-import { createTd, tokenLinkCreateTh } from "../type"
+import { excludePages } from "../../excludePages"
+import { sortPageArray } from "../../lib"
+import { createTd, pageArray, tokenLinkCreateTh } from "../type"
+
 
 export const typeNamespace = async (hopLinksElement: HTMLDivElement) => {
 
-    const currentPage = await logseq.Editor.getCurrentPage() as PageEntity | null
+    const currentPage = await logseq.Editor.getCurrentPage() as pageArray | null
     if (!currentPage) return
-        let PageEntity = await logseq.DB.q(`(namespace "${currentPage.name}")`) as PageEntity[]
-        if (PageEntity && PageEntity.length !== 0)
-            PageEntity = PageEntity.filter((page) =>
-                //日記ページは除外する
-                page["journal?"] === false
-                //2024/01のような形式だったら除外する
-                && page.originalName.match(/^\d{4}\/\d{2}$/) === null
-                // 2024のような数値も除外する
-                && page.originalName.match(/^\d{4}$/) === null)
 
-        //PageEntityが空の場合は処理を終了する
-        if (!PageEntity || PageEntity.length === 0) return
+    // 「/」を含む場合のみ、AAA/BBB/CCCのような形式の場合はCCCを取得する
+    const namespace: string = currentPage.originalName.includes("/") ? (currentPage.originalName.split("/").pop()) as string : currentPage.name
 
-        //ページを除外する
-        if (PageEntity) excludePageForPageEntity(PageEntity)
-        if (PageEntity.length === 0) return
-        //sortする
-        if (PageEntity) sortForPageEntity(PageEntity)
+    let result = (await logseq.DB.datascriptQuery(
+        //同じ名前をもつページ名を取得するクエリー
+        `
+[:find (pull ?p [:block/name :block/original-name :block/uuid] )
+        :in $ ?pattern
+        :where
+        [?p :block/name ?c]
+        [(re-pattern ?pattern) ?q]
+        [(re-find ?q ?c)]
+]
+`,
+        `"${namespace.toLowerCase()}"`// クエリーでは、ページ名を小文字にする必要がある
+    ) as pageArray[] | null)?.flat()
 
-        //th
-        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(currentPage, "th-type-namespace", t("Namespace"))
+    //PageEntityが空の場合は処理を終了する
+    if (!result || result.length === 0) return
 
-        //td
-        if (PageEntity)
-            for (const page of PageEntity)
-                createTd(page, tokenLinkElement, )
+    //設定されたページを除外する
+    if (result) excludePages(result)
 
+    //除外して空になった場合は、処理を終了する
+    if (result.length === 0) return
+
+    //sortする
+    result = sortPageArray(result)
+
+    //thを作成する
+    const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(namespace, "th-type-namespace", t("Namespace"))
+
+    //tdを作成する
+    for (const page of result)
+        createTd({
+            name: page.name,
+            uuid: page.uuid,
+            originalName: page["original-name"],
+        }, tokenLinkElement,)
+
+    //結果を表示する
     hopLinksElement.append(tokenLinkElement)
 
 }
