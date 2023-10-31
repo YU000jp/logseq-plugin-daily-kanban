@@ -157,7 +157,7 @@ const hopLinks = async (select?: string) => {
             //full hierarchy
             typeHierarchy(outgoingList, hopLinksElement, true)
             break
-            case "blocks": // Linked References > Blocks
+        case "blocks": // Linked References > Blocks
             //block.content
             typeRefBlock(outgoingList, hopLinksElement, current)
             break
@@ -189,14 +189,16 @@ const hopLinks = async (select?: string) => {
         logseq.updateSettings({ hopLinkType: selectElement.value })
     })
     hopLinksElement.append(selectElement)
-    setTimeout(() => {//遅延させる
+    setTimeout(async () => {//遅延させる
         //一致するoptionを選択状態にする
         const options = parent.document.getElementById("hopLinkType")?.querySelectorAll("option") as NodeListOf<HTMLOptionElement> | null
         if (!options) return
         for (const option of options)
-            if (option.value === logseq.settings!.hopLinkType)
+            if (option.value === logseq.settings!.hopLinkType) {
                 option.selected = true
-    }, 100)
+                break
+            }
+    }, 200)
 
     processing = false
 
