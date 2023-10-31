@@ -26,9 +26,15 @@ body[data-page=page]>div {
             &.tokenLink {
                 display: flex;
                 flex-wrap: wrap;
+
+                &:hover {
+                    outline-offset: 6px;
+                    outline: 8px solid var(--ls-quaternary-background-color);
+                }
             }
 
             &.hopLinksTh {
+                font-size: .87em;
                 font-weight: bold;
                 background: var(--ls-tertiary-background-color);
 
@@ -47,23 +53,35 @@ body[data-page=page]>div {
                 }
 
                 & div.hopLInksTd {
-                    font-size: .9em;
                     overflow: hidden;
                     text-overflow: ellipsis;
+
                 }
+            }
+
+            &.hopLinksTd {
+                font-size: .78em;
             }
 
             &.hopLinksTh,
             &.hopLinksTd {
+
+                opacity: 0.8;
                 padding: .8em;
                 width: 180px;
                 max-height: 300px;
                 overflow: hidden;
-                font-size: .89em;
                 border: 1px solid var(--ls-guideline-color);
 
-                &:hover:not(:has(div.hopLinks-popup-content)) {
-                    opacity: 0.8;
+                &:hover {
+                    outline-offset: 3px;
+                    outline: 3px solid var(--ls-quaternary-background-color);
+                    box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
+                    text-decoration: underline;
+
+                    &:not(:has(div.hopLinks-popup-content)) {
+                        opacity: 1;
+                    }
                 }
             }
 
