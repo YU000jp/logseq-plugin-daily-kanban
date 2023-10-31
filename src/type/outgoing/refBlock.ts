@@ -1,10 +1,9 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { includeReference, stringLimitAndRemoveProperties } from "./lib"
 import { t } from "logseq-l10n"
-import { tokenLinkCreateTh } from "./type"
-import { checkAlias } from "./excludePages"
-import { excludePageForBlockEntity } from "./excludePages"
-import { openTooltipEventFromBlock } from "./tooltip"
+import { checkAlias, excludePageForBlockEntity } from "../../excludePages"
+import { tokenLinkCreateTh } from "../type"
+import { includeReference, stringLimitAndRemoveProperties } from "../../lib"
+import { openTooltipEventFromBlock } from "../../tooltip"
 
 //typeBlocks
 export const typeRefBlock = async (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {

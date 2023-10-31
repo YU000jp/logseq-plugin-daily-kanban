@@ -1,7 +1,6 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { tokenLinkCreateTh, createTd } from "./type"
-import { checkAlias } from "./excludePages"
-import { excludePagesForPageList } from "./excludePages"
+import { checkAlias, excludePagesForPageList } from "../../excludePages"
+import { createTd, tokenLinkCreateTh } from "../type"
 
 //typeBlocks
 export const typeRefPageName = async (outgoingList: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {

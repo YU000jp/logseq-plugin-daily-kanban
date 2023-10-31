@@ -3,13 +3,13 @@ import { t } from "logseq-l10n"
 import { externalLinks } from "./linksExternal"
 import { outgoingLinks, outgoingLinksFromCurrentPage } from "./linksOutgoing"
 import CSSfile from "./style.css?inline"
-import { typeRefPageName } from "./typeRefPageName"
-import { typeHierarchy } from "./typeHierarchy"
-import { typePageTags } from "./typePageTags"
-import { typeRefBlock } from "./typeRefBlock"
 import { collapsePageAccessory } from "./lib"
 import { excludePages } from "./excludePages"
-import { typeNamespace } from "./typeNamespace"
+import { typeNamespace } from "./type/pageTitle/namespace"
+import { typePageTags } from "./type/outgoing/pageTags"
+import { typeHierarchy } from "./type/outgoing/hierarchy"
+import { typeRefBlock } from "./type/outgoing/refBlock"
+import { typeRefPageName } from "./type/outgoing/refPageName"
 
 
 export const loadTwoHopLink = async () => {
@@ -173,9 +173,9 @@ const hopLinks = async (select?: string) => {
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
     <option value="namespace">${t("Page title")} > ${t("Namespace")}</option>
-    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")}</option>
+    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
-    <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page only")}</option>
+    <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
     <option value="hierarchy-and-page-tags" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} + ${t("Page-Tags")}</option>
     <option value="backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>

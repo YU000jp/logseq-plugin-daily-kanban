@@ -1,5 +1,5 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { openTooltipEventFromPageName } from "./tooltip"
+import { openTooltipEventFromPageName } from "../tooltip"
 
 
 

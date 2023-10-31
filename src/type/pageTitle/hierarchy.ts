@@ -1,8 +1,8 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { sortForPageEntity } from "./lib"
 import { t } from "logseq-l10n"
-import { tokenLinkCreateTh, createTd } from "./type"
-import { excludePageForPageEntity } from "./excludePages"
+import { excludePageForPageEntity } from "../../excludePages"
+import { sortForPageEntity } from "../../lib"
+import { createTd, tokenLinkCreateTh } from "../type"
 
 export const typePageHierarchy = async (hopLinksElement: HTMLDivElement) => {
 
