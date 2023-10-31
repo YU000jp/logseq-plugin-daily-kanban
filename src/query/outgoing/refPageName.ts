@@ -1,9 +1,9 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { checkAlias, excludePagesForPageList } from "../../excludePages"
-import { createTd, tokenLinkCreateTh } from "../type"
+import { checkAlias, excludePagesFromPageList } from "../../excludePages"
+import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 
 //typeBlocks
-export const typeRefPageName = async (outgoingList: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+export const typeRefPageName = async (outgoingList: pageArray[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
 
     //aliasプロパティを取得し、outgoingListから除外する
     if (current) checkAlias(current, outgoingList)
@@ -23,7 +23,7 @@ export const typeRefPageName = async (outgoingList: ({ uuid: string; name: strin
             || pageList.length === 0) continue
 
         //excludePagesの配列に含まれるページを除外する
-        excludePagesForPageList(pageList)
+        excludePagesFromPageList(pageList)
         if (pageList.length === 0) continue
 
         //th

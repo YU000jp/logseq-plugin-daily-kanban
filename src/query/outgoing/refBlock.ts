@@ -1,12 +1,12 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
-import { checkAlias, excludePageForBlockEntity } from "../../excludePages"
-import { tokenLinkCreateTh } from "../type"
+import { checkAlias, excludePageFromBlockEntity } from "../../excludePages"
+import { pageArray, tokenLinkCreateTh } from "../type"
 import { includeReference, stringLimitAndRemoveProperties } from "../../lib"
 import { openTooltipEventFromBlock } from "../../tooltip"
 
 //typeBlocks
-export const typeRefBlock = async (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
+export const typeRefBlock = async (outgoingList: pageArray[], hopLinksElement: HTMLDivElement, current: PageEntity | null) => {
     //aliasプロパティを取得し、outgoingListから除外する
     if (current) checkAlias(current, outgoingList)
     //行作成
@@ -23,7 +23,7 @@ export const typeRefBlock = async (outgoingList: ({ uuid: string; name: string} 
         if (outgoingList.length === 0) continue
 
         //ページを除外する
-        excludePageForBlockEntity(outgoingList)
+        excludePageFromBlockEntity(outgoingList)
         if (outgoingList.length === 0) continue
 
         //th
@@ -32,8 +32,8 @@ export const typeRefBlock = async (outgoingList: ({ uuid: string; name: string} 
         //右側
         for (const block of outgoingList) {
             if (!block || block.content === "") continue
-            if (block.content === `[[${pageLink.name}]]` 
-            || block.content === `#${pageLink.name}`) continue // [[pageLink.name]]もしくは #pageLink.name と一致した場合は除外する
+            if (block.content === `[[${pageLink.name}]]`
+                || block.content === `#${pageLink.name}`) continue // [[pageLink.name]]もしくは #pageLink.name と一致した場合は除外する
 
 
             //行タイトル(左ヘッダー)

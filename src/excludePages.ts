@@ -1,7 +1,11 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
 
 
-export const excludePagesForPageList = (pageList: string[]) => {
+/**
+ * Removes excluded pages from the given page list.
+ * @param pageList - The list of page names to filter.
+ */
+export const excludePagesFromPageList = (pageList: string[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
         for (const pageName of pageList)
@@ -10,7 +14,11 @@ export const excludePagesForPageList = (pageList: string[]) => {
 }
 
 
-export const excludePageForPageEntity = (PageEntityArray: PageEntity[]) => {
+/**
+ * Excludes pages from a given array of PageEntity objects based on the settings in logseq.
+ * @param PageEntityArray An array of PageEntity objects to be filtered.
+ */
+export const excludePageFromPageEntity = (PageEntityArray: PageEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0) {
         for (const page of PageEntityArray) {
@@ -31,7 +39,11 @@ export const excludePageForPageEntity = (PageEntityArray: PageEntity[]) => {
 }
 
 
-export const excludePageForBlockEntity = async (outgoingList: BlockEntity[]) => {
+/**
+ * Filters out pages that are excluded based on the `excludePages` setting in Logseq.
+ * @param outgoingList - The list of BlockEntities to filter.
+ */
+export const excludePageFromBlockEntity = async (outgoingList: BlockEntity[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
         for (const block of outgoingList) {
@@ -42,7 +54,11 @@ export const excludePageForBlockEntity = async (outgoingList: BlockEntity[]) => 
 }
 
 
-export const excludePages = (outgoingList: ({ uuid: string; name: string } | undefined)[]) => {
+/**
+ * Removes pages from the outgoingList that match the names in the excludePages array.
+ * @param outgoingList - An array of objects containing uuid and name properties.
+ */
+export const excludePages = (outgoingList: ({ uuid: string; name: string })[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
         for (const excludePage of excludePages)
@@ -52,7 +68,12 @@ export const excludePages = (outgoingList: ({ uuid: string; name: string } | und
 }
 
 
-export const checkAlias = (current: PageEntity, outgoingList: ({ name: string } | undefined)[]) => {
+/**
+ * Checks if the current page has an alias property and removes any outgoing links that match the alias.
+ * @param current - The current page entity.
+ * @param outgoingList - The list of outgoing links from the current page.
+ */
+export const checkAlias = (current: PageEntity, outgoingList: ({ name: string })[]) => {
     if (current.properties && current.properties.alias) {
         const aliasProperty = current.properties.alias as string[] | undefined //originalNameと同等
         if (aliasProperty && aliasProperty.length !== 0)
@@ -62,3 +83,17 @@ export const checkAlias = (current: PageEntity, outgoingList: ({ name: string } 
                         outgoingList.splice(outgoingList.indexOf(pageLink), 1)
     }
 }
+
+
+/**
+ * Filters out journal pages and pages with names in the format of "YYYY/MM" or "YYYY".
+ * @param pageEntityArray An array of page entities to filter.
+ * @returns A new array of page entities that do not match the exclusion criteria.
+ */
+export const excludeJournalFromEntityArray = (pageEntityArray: PageEntity[]) => pageEntityArray.filter((page) =>
+    //日記ページは除外する
+    page["journal?"] === false
+    //2024/01のような形式だったら除外する
+    && page.originalName.match(/^\d{4}\/\d{2}$/) === null
+    // 2024のような数値も除外する
+    && page.originalName.match(/^\d{4}$/) === null)

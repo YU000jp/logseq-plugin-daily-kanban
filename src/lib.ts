@@ -1,4 +1,5 @@
 import { BlockEntity, BlockUUIDTuple, PageEntity, } from "@logseq/libs/dist/LSPlugin.user"
+import { pageArray } from "./query/type"
 
 export const stringLimitAndRemoveProperties = (content: string, limit: number): string => {
     if (!content) return ""
@@ -79,7 +80,7 @@ export const getPageContent = async (page: PageEntity): Promise<string> => {
 
 
 
-export const sortForPageEntity = (PageEntity: PageEntity[]) => PageEntity.sort((a, b) => {
+export const sortPageArray = (PageEntity: PageEntity[] | pageArray[]) => PageEntity.sort((a, b) => {
     if (a.name > b.name) return 1
     if (a.name < b.name) return -1
     return 0

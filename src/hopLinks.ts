@@ -10,6 +10,7 @@ import { typeRefBlock } from "./query/outgoing/refBlock"
 import { typeRefPageName } from "./query/outgoing/refPageName"
 import { outgoingLinks, outgoingLinksFromCurrentPage } from "./query/outgoingLinks"
 import { externalLinks } from "./query/externalLinks"
+import { pageArray } from "./query/type"
 
 
 export const loadTwoHopLink = async () => {
@@ -59,7 +60,7 @@ const hopLinks = async (select?: string) => {
 
     const newSet = new Set()
     //outgoingリンクを取得する
-    const pageLinksSet: Promise<{ uuid: string; name: string } | undefined>[] = outgoingLinksFromCurrentPage(pageLinks, newSet)
+    const pageLinksSet: Promise<pageArray>[] = outgoingLinksFromCurrentPage(pageLinks, newSet)
     //ページ名を追加する
     const current = await addCurrentPageHierarchy(newSet, pageLinksSet)
     //newSetを空にする
@@ -100,109 +101,45 @@ const hopLinks = async (select?: string) => {
     //設定画面を開くボタン
     buttonSettingsUpdate(hopLinksElement, spanElement)
 
-    const blankMessage = (message: string) => {
-        const pElement: HTMLElement = document.createElement("p")
-        pElement.innerText = message
-        hopLinksElement.append(pElement)
-    }
+
+
     //outgoingListが空の場合は処理を終了する
     if (outgoingList.length === 0) {
-        //ブランクメッセージを表示する
-        blankMessage(t("No links found in this page. (If add links, please click the update button.)"))
+
+        // ブランクメッセージを表示する
+        const pElement: HTMLElement = document.createElement("p")
+        pElement.innerText = t("No links found in this page. (If add links, please click the update button.)")
+        hopLinksElement.append(pElement)
         return
-    }
-    //outgoingListをソートする
-    sortOutgoingList(outgoingList)
 
-    excludePages(outgoingList)
+    } else {
 
+        // outgoingListをソートする
+        sortOutgoingList(outgoingList)
 
-    //発信リンクを表示
-    if (logseq.settings!.outgoingLinks === true)
-        outgoingLinks(outgoingList, hopLinksElement)
+        // 設定されたページを除外する
+        excludePages(outgoingList)
 
-    //外部リンクを表示
-    if (logseq.settings!.externalLinks === true)
-        externalLinks(PageBlocksInnerElement, hopLinksElement)
+        // 発信リンクを表示
+        if (logseq.settings!.outgoingLinks === true)
+            outgoingLinks(outgoingList, hopLinksElement)
 
+        // 外部リンクを表示
+        if (logseq.settings!.externalLinks === true)
+            externalLinks(PageBlocksInnerElement, hopLinksElement)
 
-    /* 2ホップリンクの表示 */
+        // 2ホップリンクの表示 selectで選択されたタイプ
+        switchSelect(select, hopLinksElement, outgoingList, current)//end of switch
 
-    //selectで選択されたタイプ
-    const type = select || logseq.settings!.hopLinkType
-    switch (type) {
-        case "namespace":
-            // クエリーでページ名に関連するページを取得する
-            typeNamespace(hopLinksElement)
-            break
-        case "page-hierarchy":
-            //ページ名から階層を取得する
-            typeNamespace(hopLinksElement)
-            break
-        case "page-tags":
-            //ページタグ
-            typePageTags(outgoingList, hopLinksElement)
-            break
-        case "hierarchy":
-            //hierarchy
-            typeHierarchy(outgoingList, hopLinksElement)
-            break
-        case "hierarchy-and-page-tags":
-            //ページタグ
-            typePageTags(outgoingList, hopLinksElement)
-            //hierarchy
-            typeHierarchy(outgoingList, hopLinksElement)
-            break
-        case "deeperHierarchy":
-            //full hierarchy
-            typeHierarchy(outgoingList, hopLinksElement, true)
-            break
-        case "blocks": // Linked References > Blocks
-            //block.content
-            typeRefBlock(outgoingList, hopLinksElement, current)
-            break
-        case "backLinks": //Linked References > BackLinks (ページ)
-            //block.content
-            typeRefPageName(outgoingList, hopLinksElement, current)
-            break
-    }//end of switch
+    }//end of if (outgoingList)
 
     //selectを設置する
-    const selectElement: HTMLSelectElement = document.createElement("select")
-    selectElement.id = "hopLinkType"
-    selectElement.innerHTML = `
-    <option value="unset">${t("Unset")}</option>
-    <option value="namespace">${t("Page title")} > ${t("Namespace")}</option>
-    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
-    <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
-    <option value="hierarchy-and-page-tags" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} + ${t("Page-Tags")}</option>
-    <option value="backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
-    <option value="blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
-    `
-    //
-    selectElement.addEventListener("change", () => {
-        //hopLinksElementを削除する
-        hopLinksElement.remove()
-        hopLinks(selectElement.value)
-        logseq.updateSettings({ hopLinkType: selectElement.value })
-    })
-    hopLinksElement.append(selectElement)
-    setTimeout(async () => {//遅延させる
-        //一致するoptionを選択状態にする
-        const options = parent.document.getElementById("hopLinkType")?.querySelectorAll("option") as NodeListOf<HTMLOptionElement> | null
-        if (!options) return
-        for (const option of options)
-            if (option.value === logseq.settings!.hopLinkType) {
-                option.selected = true
-                break
-            }
-    }, 200)
+    putSelectButton(hopLinksElement)
 
     processing = false
 
 }//end of hopLinks
+
 
 
 //outgoingListをソートする
@@ -211,7 +148,7 @@ const hopLinks = async (select?: string) => {
  * @param outgoingList An array of objects containing a UUID and a name property.
  * @returns The sorted array of page links.
  */
-const sortOutgoingList = (outgoingList: ({ uuid: string; name: string } | undefined)[]) =>
+const sortOutgoingList = (outgoingList: pageArray[]) =>
     outgoingList.sort((a, b) => {
         if (a?.name === undefined || b?.name === undefined) return 0
         if (a.name > b.name) return 1
@@ -222,7 +159,10 @@ const sortOutgoingList = (outgoingList: ({ uuid: string; name: string } | undefi
 
 
 //現在のページ名とその階層を、リストに追加する
-const addCurrentPageHierarchy = async (newSet: Set<unknown>, outgoingList: Promise<{ uuid: string; name: string } | undefined>[]) => {
+const addCurrentPageHierarchy = async (
+    newSet: Set<unknown>,
+    outgoingList: Promise<pageArray>[]) => {
+
     const current = await logseq.Editor.getCurrentPage() as PageEntity | null
     if (current) {
 
@@ -239,8 +179,14 @@ const addCurrentPageHierarchy = async (newSet: Set<unknown>, outgoingList: Promi
                 }
                 // 重複を除外する
                 if (newSet.has(page.uuid)) return
+
                 newSet.add(page.uuid)
-                outgoingList.push(Promise.resolve({ uuid: page.uuid, name: page.originalName }))
+
+                outgoingList.push(Promise.resolve({
+                    uuid: page.uuid,
+                    name: page.name,
+                    originalName: page.originalName
+                }))
             }
         }
 
@@ -284,5 +230,98 @@ const buttonSettingsUpdate = (hopLinksElement: HTMLDivElement, spanElement: HTML
     }, { once: true })
     hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement)
 
+}
+
+//selectを設置する
+const putSelectButton = (hopLinksElement: HTMLDivElement) => {
+    const selectElement: HTMLSelectElement = document.createElement("select")
+    selectElement.id = "hopLinkType"
+    selectElement.innerHTML = `
+    <option value="unset">${t("Unset")}</option>
+    <option value="namespace">${t("Page title")} > ${t("String Search")}🚀</option>
+    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
+    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
+    <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
+    <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
+    <option value="hierarchy-and-page-tags" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} + ${t("Page-Tags")}</option>
+    <option value="backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
+    <option value="blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
+    `
+    // selectElementの値が変更されたら、hopLinksElementを削除して、再度hopLinksを実行する
+    selectElement.addEventListener("change", () => {
+        //hopLinksElementを削除する
+        hopLinksElement.remove()
+        hopLinks(selectElement.value)
+        logseq.updateSettings({ hopLinkType: selectElement.value })
+    })
+    hopLinksElement.append(selectElement)
+    setTimeout(async () => {
+        //一致するoptionを選択状態にする
+        const options = parent.document.getElementById("hopLinkType")?.querySelectorAll("option") as NodeListOf<HTMLOptionElement> | null
+        if (!options) return
+        for (const option of options)
+            if (option.value === logseq.settings!.hopLinkType) {
+                option.selected = true
+                break
+            }
+    }, 200)
+}
+
+
+//selectで選択されたタイプ
+const switchSelect = (
+    select: string | undefined,
+    hopLinksElement: HTMLDivElement,
+    outgoingList: pageArray[],
+    current: PageEntity | null
+) => {
+    switch (
+    select
+    || logseq.settings!.hopLinkType
+    ) {
+
+        case "namespace":
+            // クエリーでページ名に関連するページを取得する
+            typeNamespace(hopLinksElement)
+            break
+
+        case "page-hierarchy":
+            //ページ名から階層を取得する
+            typeNamespace(hopLinksElement)
+            break
+
+        case "page-tags":
+            //ページタグ
+            typePageTags(outgoingList, hopLinksElement)
+            break
+
+        case "hierarchy":
+            //hierarchy
+            typeHierarchy(outgoingList, hopLinksElement)
+            break
+
+        case "hierarchy-and-page-tags":
+            //ページタグ
+            typePageTags(outgoingList, hopLinksElement)
+            //hierarchy
+            typeHierarchy(outgoingList, hopLinksElement)
+            break
+
+        case "deeperHierarchy":
+            //full hierarchy
+            typeHierarchy(outgoingList, hopLinksElement, true)
+            break
+
+        case "blocks": // Linked References > Blocks
+            //block.content
+            typeRefBlock(outgoingList, hopLinksElement, current)
+            break
+
+        case "backLinks": //Linked References > BackLinks (ページ)
+            //block.content
+            typeRefPageName(outgoingList, hopLinksElement, current)
+            break
+
+    }
 }
 

@@ -1,10 +1,10 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { excludePageForPageEntity } from "../../excludePages"
-import { sortForPageEntity } from "../../lib"
-import { createTd, tokenLinkCreateTh } from "../type"
+import { excludePageFromPageEntity } from "../../excludePages"
+import { sortPageArray } from "../../lib"
+import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 import { t } from "logseq-l10n"
 
-export const typePageTags = async (outgoingList: ({ uuid: string; name: string } | undefined)[], hopLinksElement: HTMLDivElement) => {
+export const typePageTags = async (outgoingList: pageArray[], hopLinksElement: HTMLDivElement) => {
 
     for (const pageLink of outgoingList) {
         if (!pageLink) continue
@@ -34,12 +34,12 @@ export const typePageTags = async (outgoingList: ({ uuid: string; name: string }
             && (!PageEntityFromProperty || PageEntityFromProperty.length === 0)) continue
 
         //ページを除外する
-        if (PageEntity) excludePageForPageEntity(PageEntity)
-        if (PageEntityFromProperty) excludePageForPageEntity(PageEntityFromProperty)
+        if (PageEntity) excludePageFromPageEntity(PageEntity)
+        if (PageEntityFromProperty) excludePageFromPageEntity(PageEntityFromProperty)
         if (PageEntity.length === 0
             && PageEntityFromProperty.length === 0) continue
         //sortする
-        if (PageEntity) sortForPageEntity(PageEntity)
+        if (PageEntity) sortPageArray(PageEntity)
 
         //th
         const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-pageTags", t("Page-Tags"))

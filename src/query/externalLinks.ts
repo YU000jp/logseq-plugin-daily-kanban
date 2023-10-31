@@ -18,7 +18,7 @@ export const externalLinks = (PageBlocksInnerElement: HTMLDivElement, hopLinksEl
         anchorElement.title = t("Open in the browser")
         //開くか尋ねる
         anchorElement.addEventListener("click", (event: MouseEvent) => {
-            if (!confirm(t("Open in the browser?") + `\n\n${externalLink.innerText}\n${externalLink.href}`)) event.preventDefault()
+            if (!confirm(t("Open in the browser?") + `\n\n${externalLink.href === externalLink.innerText ? "" : externalLink.innerText + "\n"}${externalLink.href}`)) event.preventDefault()
         })
         anchorElement.innerText = externalLink.innerText
         divElement.append(anchorElement)

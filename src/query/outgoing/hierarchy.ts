@@ -1,40 +1,50 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { excludePageForPageEntity } from "../../excludePages"
-import { sortForPageEntity } from "../../lib"
-import { createTd, tokenLinkCreateTh } from "../type"
+import { excludePageFromPageEntity } from "../../excludePages"
+import { sortPageArray } from "../../lib"
+import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 
-export const typeHierarchy = (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement, flagFull?: boolean) => {
+export const typeHierarchy = (outgoingList: pageArray[], hopLinksElement: HTMLDivElement, flagFull?: boolean) => {
     outgoingList.forEach(getTd())
 
-    function getTd(): (value: { uuid: string; name: string}  | undefined, index: number, array: ({ uuid: string; name: string}  | undefined)[]) => void {
+    function getTd(): (value: pageArray | undefined, index: number, array: (pageArray | undefined)[]) => void {
         return async (pageLink) => {
             if (!pageLink) return
+
             let PageEntity = await logseq.DB.q(`(namespace "${pageLink.name}")`) as unknown as PageEntity[] | undefined
             if (!PageEntity || PageEntity.length === 0) return
+
             // namespace.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
             PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null)
             if (!PageEntity || PageEntity.length === 0) return
 
             //ページを除外する
-            excludePageForPageEntity(PageEntity)
+            excludePageFromPageEntity(PageEntity)
             if (PageEntity.length === 0) return
 
             //sortする
-            sortForPageEntity(PageEntity)
+            sortPageArray(PageEntity)
+
             //th
             const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-hierarchy", "Hierarchy")
 
             //td
-            PageEntity.forEach((page) => createTd(page, tokenLinkElement, { isHierarchyTitle: pageLink.name }))
+            for (const page of PageEntity)
+                createTd(page, tokenLinkElement,
+                    {
+                        isHierarchyTitle: true,
+                        removeKeyword: pageLink.originalName
+                    })
+
             hopLinksElement.append(tokenLinkElement)
 
-            if (flagFull === true) {
-                //PageEntityをもとに再帰的に処理する。ただし、PageEntity.nameではなく、pageEntity.originalNameを渡す
-                PageEntity.forEach(async (page) => {
-                    const pageLink = { uuid: page.uuid, name: page.originalName }
-                    await getTd()(pageLink, 0, outgoingList)
-                })
-            }
+            if (flagFull === true)
+                for (const page of PageEntity)
+                    getTd()({
+                        uuid: page.uuid,
+                        name: page.name,
+                        originalName: page.originalName
+                    }, 0, outgoingList)
+
             //PageEntityを空にする
             PageEntity.length = 0
         }

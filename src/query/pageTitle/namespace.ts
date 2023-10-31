@@ -10,7 +10,7 @@ export const typeNamespace = async (hopLinksElement: HTMLDivElement) => {
     if (!currentPage) return
 
     // 「/」を含む場合のみ、AAA/BBB/CCCのような形式の場合はCCCを取得する
-    const namespace: string = currentPage.originalName.includes("/") ? (currentPage.originalName.split("/").pop()) as string : currentPage.name
+    const namespace: string = currentPage.originalName.includes("/") ? (currentPage.originalName.split("/").pop()) as string : currentPage.originalName
 
     let result = (await logseq.DB.datascriptQuery(
         //同じ名前をもつページ名を取得するクエリー
@@ -47,7 +47,9 @@ export const typeNamespace = async (hopLinksElement: HTMLDivElement) => {
             name: page.name,
             uuid: page.uuid,
             originalName: page["original-name"],
-        }, tokenLinkElement,)
+        }, tokenLinkElement,
+            { removeKeyword: currentPage.originalName }
+        )
 
     //結果を表示する
     hopLinksElement.append(tokenLinkElement)
