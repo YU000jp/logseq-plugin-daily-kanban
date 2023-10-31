@@ -32,6 +32,9 @@ export const typeNamespace = async (hopLinksElement: HTMLDivElement, flag?: { ca
         `"${namespace.toLowerCase()}"`// クエリーでは、ページ名を小文字にする必要がある
     ) as pageArray[] | null)?.flat()
 
+    //現在のページ名と同じページを除外する
+    if(result) result = result.filter((item) => item.uuid !== currentPage.uuid)
+
     //結果が空の場合は処理を終了する
     if (!result || result.length === 0) return
 
