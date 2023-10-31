@@ -1,5 +1,5 @@
 body[data-page=page]>div {
-    &#root>div>main div#main-content-container div.page-blocks-inner div#hopLinks {
+    &#root>div>main div#main-content-container div.page.relative>div.relative div#hopLinks {
         margin-top: 16em;
         margin-left: 2em;
         user-select: none;

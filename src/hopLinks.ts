@@ -45,13 +45,13 @@ const hopLinks = async (select?: string) => {
     setTimeout(() => processing = false, 5000) //3秒後にprocessingをfalseにする 途中で処理を失敗した場合に備える
 
     //アウトゴーイングリンクを表示する場所
-    const PageBlocksInnerElement = parent.document.body.querySelector("div#root>div>main div#main-content-container div.page-blocks-inner") as HTMLDivElement | null
-    if (!PageBlocksInnerElement) return
+    const pageRelativeInnerElement = parent.document.body.querySelector("div#root>div>main div#main-content-container div.page.relative>div.relative") as HTMLDivElement | null
+    if (!pageRelativeInnerElement) return
     const hopLinksElement: HTMLDivElement = document.createElement("div")
     hopLinksElement.id = "hopLinks"
-    PageBlocksInnerElement.append(hopLinksElement)
+    pageRelativeInnerElement.append(hopLinksElement)
     //PageBlocksInnerElementの中に含まれる<a data-ref>をすべて取得する
-    const pageLinks = PageBlocksInnerElement.querySelectorAll("a[data-ref]:not(.page-property-key)") as NodeListOf<HTMLAnchorElement> | null
+    const pageLinks = pageRelativeInnerElement.querySelectorAll("a[data-ref]:not(.page-property-key)") as NodeListOf<HTMLAnchorElement> | null
     if (!pageLinks) return
     processing = true
 
@@ -126,7 +126,7 @@ const hopLinks = async (select?: string) => {
 
         // 外部リンクを表示
         if (logseq.settings!.externalLinks === true)
-            externalLinks(PageBlocksInnerElement, hopLinksElement)
+            externalLinks(pageRelativeInnerElement, hopLinksElement)
 
         // 2ホップリンクの表示 selectで選択されたタイプ
         switchSelect(
