@@ -129,7 +129,11 @@ const hopLinks = async (select?: string) => {
             externalLinks(PageBlocksInnerElement, hopLinksElement)
 
         // 2ホップリンクの表示 selectで選択されたタイプ
-        switchSelect(select, hopLinksElement, outgoingList, current)//end of switch
+        switchSelect(
+            select || logseq.settings!.hopLinkType,
+            hopLinksElement,
+            outgoingList,
+            current)
 
     }//end of if (outgoingList)
 
@@ -239,6 +243,7 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
     <option value="namespace">${t("Page title")} > ${t("String Search")}🚀</option>
+    <option value="namespace-categorize">${t("Page title")} > ${t("String Search")}🚀 > ${t("categorize")}</option>
     <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
@@ -264,25 +269,27 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
                 option.selected = true
                 break
             }
-    }, 200)
+    }, 500)
 }
 
 
 //selectで選択されたタイプ
 const switchSelect = (
-    select: string | undefined,
+    select: string,
     hopLinksElement: HTMLDivElement,
     outgoingList: pageArray[],
     current: PageEntity | null
 ) => {
-    switch (
-    select
-    || logseq.settings!.hopLinkType
-    ) {
+    switch (select) {
 
         case "namespace":
             // クエリーでページ名に関連するページを取得する
             typeNamespace(hopLinksElement)
+            break
+
+        case "namespace-categorize":
+            // クエリーでページ名に関連するページを取得する カテゴリ分け
+            typeNamespace(hopLinksElement, { category: true })
             break
 
         case "page-hierarchy":

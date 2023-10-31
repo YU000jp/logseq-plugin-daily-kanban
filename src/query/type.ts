@@ -1,4 +1,4 @@
-import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
+import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { openTooltipEventFromPageName } from "../tooltip"
 import { t } from "logseq-l10n"
 
@@ -52,11 +52,11 @@ export const createTd = async (
 
     // キーワードのページは除く
     if (flag && flag.removeKeyword && page.originalName === flag.removeKeyword) return
-    
+
     let displayName = (flag && flag.removeKeyword // isHierarchyTitleがある場合は、キーワードを取り除く
         && flag.isHierarchyTitle === true)
         ? // ページ名とキーワードが完全一致する場合は除く
-        page.originalName.replace(flag.removeKeyword, ".") //hierarchyの場合は、一致するキーワードを取り除く
+        page.originalName.replace(flag.removeKeyword, "..") //hierarchyの場合は、一致するキーワードを取り除く
         : page.originalName
 
     //e525a109-3542-46cf-b316-54cef873db74のような値だったらUUIDなので、ブロックを取得する
@@ -68,15 +68,15 @@ export const createTd = async (
             page.name = block.page.name
         } else
             return
-    }
-    // 「hls/」から始まる場合は、hls/の代わりに、「File > 」にする
-    if (page.name.startsWith("hls/")) displayName = page.originalName.replace("hls/", `PDF ${t("File")} > `)
-    else
-        // 「hls__」から始まる場合は、hls__の代わりに、「File > 」にする
-        if (page.name.startsWith("hls__")) displayName = page.originalName.replace("hls__", `PDF ${t("File")} > `)
+    } else
+        // 「hls/」から始まる場合は、hls/の代わりに、「File > 」にする
+        if (page.name.startsWith("hls/")) displayName = displayName.replace("hls/", `PDF ${t("File")} > `)
         else
-            // 「/」が含まれる場合は、それのすべて「 / 」に置換する
-            if (page.originalName.includes("/")) displayName = page.originalName.replaceAll(/\//g, " / ")
+            // 「hls__」から始まる場合は、hls__の代わりに、「File > 」にする
+            if (page.name.startsWith("hls__")) displayName = displayName.replace("hls__", `PDF ${t("File")} > `)
+            else
+                // 「/」が含まれる場合は、それのすべて「 / 」に置換する
+                if (page.originalName.includes("/")) displayName = displayName.replaceAll(/\//g, " / ")
 
 
     const divElementTag: HTMLDivElement = document.createElement("div")
