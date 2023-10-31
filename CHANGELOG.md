@@ -1,3 +1,20 @@
+# [1.18.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.17.1...v1.18.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* **bug:** CSS > lazy load ([26c44fe](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/26c44fe97c49f4e74f25351eb890e4231a38efa0))
+* **bug:** hop links > if no content ([df821da](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/df821da29babf32272617316095efc22ab77b4ff))
+* **bug:** read error ([8becf2e](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/8becf2e103fa6f056248e8bc5387e7c9c3dd9846))
+
+
+### Features
+
+* **Add:** 2 hop links > page title namespace ([4c4531b](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/4c4531b9b2e8b3048e3aa3fceb5da6d4bc636a6c))
+* **Add:** hop links > namespace ([d2d9a41](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/d2d9a410eebfa5a9c1f27a125a8271573e39683f))
+* **Add:** hop links > remove hierarchies (temp) ([0f3fe17](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/0f3fe1797277232ce7a9f7090df808af63fe6b4c))
+* **Add:** hop links > String Search > multh class ([880e386](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/880e38626f6d0bc14e9be336db35cd21bb9574fc))
+
 ## [1.17.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.17.0...v1.17.1) (2023-09-26)
 
 
