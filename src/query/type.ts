@@ -7,7 +7,9 @@ export const tokenLinkCreateTh = (
     pageLink: pageArray | string,
     className: string,
     boxTitle: string,
+    hierarchies?: string
 ): HTMLDivElement => {
+
     const tokenLinkElement: HTMLDivElement = document.createElement("div")
     tokenLinkElement.classList.add("tokenLink")
     tokenLinkElement.title = boxTitle
@@ -16,8 +18,15 @@ export const tokenLinkCreateTh = (
     divElement.classList.add(className)
 
     if (typeof pageLink !== "string") {
+
         // 「/」が含まれる場合は、それのすべて「 / 」に置換する
-        divElement.innerText = pageLink.originalName.includes("/") ? pageLink.originalName.replaceAll(/\//g, " / ") : pageLink.originalName
+        divElement.innerText = pageLink.originalName.includes("/") ?
+            // 特定の階層を取り除く
+            (hierarchies ?
+                pageLink.originalName.replace(hierarchies + "/", "../")
+                : pageLink.originalName
+            ).replaceAll(/\//g, " / ")
+            : pageLink.originalName
         //ポップアップ表示あり
         const labelElement: HTMLLabelElement = document.createElement("label")
         //input要素を作成
@@ -32,9 +41,16 @@ export const tokenLinkCreateTh = (
         inputElement.addEventListener("change", openTooltipEventFromPageName(popupElement))
         labelElement.append(divElement, inputElement, popupElement)
         tokenLinkElement.append(labelElement)
+
     } else {
-        divElement.innerText = pageLink
+        // ページと同じ階層であれば、それを解除する
+        const keyWord = (hierarchies ? pageLink.replace(hierarchies + "/", "../") : pageLink)
+        // 「/」を「 / 」にする
+        divElement.innerText = keyWord.includes("/") ?
+            keyWord.replaceAll("/", " / ")
+            : keyWord
         tokenLinkElement.append(divElement)
+
     }
     return tokenLinkElement
 }

@@ -240,11 +240,11 @@ const buttonSettingsUpdate = (hopLinksElement: HTMLDivElement, spanElement: HTML
 const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     const selectElement: HTMLSelectElement = document.createElement("select")
     selectElement.id = "hopLinkType"
+    //<option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
     <option value="namespace">${t("Page title")} > ${t("String Search")}🚀</option>
-    <option value="namespace-categorize">${t("Page title")} > ${t("String Search")}🚀 > ${t("categorize")}</option>
-    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
+    <option value="namespace-no-page-hierarchy">${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}</option>
     <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
@@ -283,13 +283,13 @@ const switchSelect = (
     switch (select) {
 
         case "namespace":
-            // クエリーでページ名に関連するページを取得する
-            typeNamespace(hopLinksElement)
+            // クエリーでページ名に関連するページを取得する カテゴリ分け
+            typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
             break
 
-        case "namespace-categorize":
+        case "namespace-no-page-hierarchy":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
-            typeNamespace(hopLinksElement, { category: true })
+            typeNamespace(hopLinksElement, { category: true, removePageHierarchy: true })
             break
 
         case "page-hierarchy":

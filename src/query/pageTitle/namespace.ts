@@ -4,15 +4,19 @@ import { sortPageArray } from "../../lib"
 import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 
 
-export const typeNamespace = async (hopLinksElement: HTMLDivElement, flag?: { category: boolean }) => {
+export const typeNamespace = async (hopLinksElement: HTMLDivElement, flag?: { category: boolean, removePageHierarchy: boolean }) => {
 
     const currentPage = await logseq.Editor.getCurrentPage() as pageArray | null
     if (!currentPage) return
 
     // 「/」を含む場合のみ、AAA/BBB/CCCのような形式の場合はCCCを取得する
-    const namespace: string = currentPage.originalName.includes("/") ? (currentPage.originalName.split("/").pop()) as string : currentPage.originalName
+    const namespace: string = currentPage.originalName.includes("/") ?
+        (currentPage.originalName.split("/").pop()) as string
+        : currentPage.originalName
     // CCC以前の部分を取得する
-    const hierarchies = currentPage.originalName.includes("/") ? (currentPage.originalName.split("/").slice(0, -1).join("/")) as string : currentPage.originalName
+    const hierarchies = currentPage.originalName.includes("/") ?
+        (currentPage.originalName.split("/").slice(0, -1).join("/")) as string
+        : currentPage.originalName
 
     let result = (await logseq.DB.datascriptQuery(
         //同じ名前をもつページ名を取得するクエリー
@@ -32,26 +36,40 @@ export const typeNamespace = async (hopLinksElement: HTMLDivElement, flag?: { ca
     if (!result || result.length === 0) return
 
 
-    if (flag && flag.category) {
+    if (flag && flag.category)
 
         // カテゴリ分けをおこなう
         // 「AAA/BBB/CCC/DDD」のように、original-nameが「/」を含む場合は、最後の「/」までをもつものをグループ化して、そのグループごとにprocessingに入れる。「/」を含まないものは、"分類なし"というグループで処理する
-        categorize(result, hopLinksElement, hierarchies)
+        categorize(
+            result,
+            hopLinksElement,
+            hierarchies,
+            { removePageHierarchy: flag.removePageHierarchy }
+        )
+    // 中でprocessingを呼び出している
 
-    } else
+
+    else
+
         // カテゴリ分けしない
-        processing(result, hopLinksElement, namespace, currentPage.originalName, false)
-
+        processing(
+            result,
+            hopLinksElement,
+            namespace,
+            currentPage.originalName,
+            false
+        )
 }
 
 
 // 表示の単位処理をまとめる
-const processing = (
+const processing = async (
     result: pageArray[],
     hopLinksElement: HTMLDivElement,
     namespace: string,
     removeKeyword: string,
     isHierarchyTitle: boolean,
+    hierarchies?: string
 ) => {
 
     if (!result || result.length === 0) return
@@ -66,14 +84,14 @@ const processing = (
     result = sortPageArray(result)
 
     //thを作成する
-
-    const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(
+    const tokenLinkElement: HTMLDivElement = await tokenLinkCreateTh(
         // keyが"multi class"の場合は、(multi class)にする
         namespace === "multi class" ?
             `(${t("multi class")})`
-            : namespace
-        , "th-type-namespace",
-        t("Namespace")
+            : namespace,
+        "th-type-namespace",
+        t("Namespace"),
+        hierarchies,
     )
 
     //tdを作成する
@@ -98,24 +116,32 @@ const processing = (
 const categorize = (
     result: pageArray[],
     hopLinksElement: HTMLDivElement,
-    hierarchies: string
+    hierarchies: string,
+    flag: { removePageHierarchy: boolean }
 ) => {
 
     // カテゴリ分けをおこなう
     const category: { [key: string]: pageArray[] } = {}
     for (const page of result) {
-        const key = page["original-name"].includes("/") ? page["original-name"].split("/").slice(0, -1).join("/") : "multi class" // originalNameではなく、original-nameを使う
+        const key = page["original-name"].includes("/") ?
+            page["original-name"].split("/").slice(0, -1).join("/")
+            : "multi class" // originalNameではなく、original-nameを使う
         if (!category[key]) category[key] = []
         category[key].push(page)
     }
 
-    // カテゴリの中にあるのが2つ以下の場合は、"multi class"にカテゴリを移動させる
-    for (const key in category) {
-        if (category[key] && category[key].length <= 2) {
-            if (!category["multi class"]) category["multi class"] = []
-            category["multi class"].push(...category[key])
-            delete category[key]
-        }
+    // カテゴリの中にあるのが1つの場合は、"multi class"にカテゴリを移動させる
+    multiClass(category)
+
+    // "multi class" 多クラス分類が10個未満の場合は、グループ化しない
+    if (category["multi class"]
+        && category["multi class"].length > 10) // TODO:プラグイン設定の項目にする
+        multiClassReCategory(category)
+
+    if (flag.removePageHierarchy === true) {
+        // keyの先頭にhierarchiesの値が含まれるグループを削除する
+        for (const key in category)
+            if (key.startsWith(hierarchies + "/") || key === hierarchies) delete category[key]
     }
 
     // カテゴリごとに処理をする
@@ -123,12 +149,40 @@ const categorize = (
         processing(
             category[key],
             hopLinksElement,
-            // 「/」を「 / 」にする
-            key.includes("/") ?
-                key.replaceAll("/", " / ")
-                : key,
             key,
-            true
+            key,
+            true,
+            hierarchies
         )
 
 }
+
+
+// 多クラス分類の再分類
+const multiClassReCategory = (category: { [key: string]: pageArray[] }) => {
+
+    // アイテムのoriginal-nameの文字列の先頭に、いずれかのカテゴリーのキーが含まれている場合は、そのカテゴリーに移動させ、"multi class"から削除する    
+    for (const key in category) {
+        if (key === "multi class") continue
+        for (const page of category["multi class"]) {
+            if (page["original-name"].startsWith(key)) {
+                if (!category[key]) category[key] = []
+                category[key].push(page)
+                category["multi class"] = category["multi class"].filter((item) => item.uuid !== page.uuid)
+            }
+        }
+    }
+}
+
+
+const multiClass = (category: { [key: string]: pageArray[] }) => {
+    for (const key in category) {
+        if (category[key]
+            && category[key].length === 1) {
+            if (!category["multi class"]) category["multi class"] = []
+            category["multi class"].push(...category[key])
+            delete category[key]
+        }
+    }
+}
+
