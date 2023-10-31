@@ -1,6 +1,6 @@
 import { t } from "logseq-l10n"
 import { PageEntity } from "@logseq/libs/dist/LSPlugin.user"
-import { createTd } from "./type/type"
+import { createTd } from "./type"
 
 export const outgoingLinks = (outgoingList: ({ uuid: string; name: string}  | undefined)[], hopLinksElement: HTMLDivElement) => {
 

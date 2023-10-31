@@ -1,7 +1,5 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
-import { externalLinks } from "./linksExternal"
-import { outgoingLinks, outgoingLinksFromCurrentPage } from "./linksOutgoing"
 import CSSfile from "./style.css?inline"
 import { collapsePageAccessory } from "./lib"
 import { excludePages } from "./excludePages"
@@ -10,6 +8,8 @@ import { typePageTags } from "./type/outgoing/pageTags"
 import { typeHierarchy } from "./type/outgoing/hierarchy"
 import { typeRefBlock } from "./type/outgoing/refBlock"
 import { typeRefPageName } from "./type/outgoing/refPageName"
+import { outgoingLinks, outgoingLinksFromCurrentPage } from "./type/outgoingLinks"
+import { externalLinks } from "./type/externalLinks"
 
 
 export const loadTwoHopLink = async () => {
