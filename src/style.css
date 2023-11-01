@@ -65,7 +65,8 @@ body[data-page=page]>div {
 
             &.hopLinksTh,
             &.hopLinksTd {
-
+                display: flex;
+                align-items: center;
                 opacity: 0.8;
                 padding: .8em;
                 width: 180px;
