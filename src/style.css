@@ -34,6 +34,8 @@ body[data-page=page]>div {
             }
 
             &.hopLinksTh {
+                display: flex;
+                align-items: center;
                 font-size: .87em;
                 font-weight: bold;
                 background: var(--ls-tertiary-background-color);
@@ -65,13 +67,11 @@ body[data-page=page]>div {
 
             &.hopLinksTh,
             &.hopLinksTd {
-                display: flex;
-                align-items: center;
                 opacity: 0.8;
                 padding: .8em;
                 width: 180px;
-                max-height: 300px;
-                overflow: hidden;
+                max-height: 240px;
+                overflow: auto;
                 border: 1px solid var(--ls-guideline-color);
 
                 &:hover {
@@ -115,7 +115,7 @@ body[data-page=page]>div {
                     cursor: zoom-in;
 
                     &>a {
-                        line-height: 1.8em;
+                        line-height: 1.4em;
                     }
                 }
 

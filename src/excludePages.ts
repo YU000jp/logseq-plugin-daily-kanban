@@ -43,7 +43,7 @@ export const excludePageFromPageEntity = (PageEntityArray: PageEntity[]) => {
  * Filters out pages that are excluded based on the `excludePages` setting in Logseq.
  * @param outgoingList - The list of BlockEntities to filter.
  */
-export const excludePageFromBlockEntity = async (outgoingList: BlockEntity[]) => {
+export const excludePageFromBlockEntity = async (outgoingList: { uuid: string, content: string, page }[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
         for (const block of outgoingList) {

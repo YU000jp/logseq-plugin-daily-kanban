@@ -33,7 +33,7 @@ export const typeNamespace = async (hopLinksElement: HTMLDivElement, flag?: { ca
     ) as pageArray[] | null)?.flat()
 
     //現在のページ名と同じページを除外する
-    if(result) result = result.filter((item) => item.uuid !== currentPage.uuid)
+    if (result) result = result.filter((item) => item.uuid !== currentPage.uuid)
 
     //結果が空の場合は処理を終了する
     if (!result || result.length === 0) return
@@ -144,7 +144,8 @@ const categorize = (
     if (flag.removePageHierarchy === true) {
         // keyの先頭にhierarchiesの値が含まれるグループを削除する
         for (const key in category)
-            if (key.startsWith(hierarchies + "/") || key === hierarchies) delete category[key]
+            if (key.startsWith(hierarchies + "/")
+                || key === hierarchies) delete category[key]
     }
 
     // カテゴリごとに処理をする

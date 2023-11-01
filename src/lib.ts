@@ -3,9 +3,7 @@ import { pageArray } from "./query/type"
 
 export const stringLimitAndRemoveProperties = (content: string, limit: number): string => {
     if (!content) return ""
-    if (content && content.length > limit) {
-        content = content.slice(0, limit) + "\n\n...\n"
-    }
+
     if (content.includes("\n")) {
         //contentに「background-color:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
         content = content.replaceAll(/background-color:: .+?\n/g, "")
@@ -16,6 +14,11 @@ export const stringLimitAndRemoveProperties = (content: string, limit: number): 
         //contentに。「heading:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
         content = content.replaceAll(/heading:: .+?\n/g, "")
     }
+
+    // 文字数がlimitを超えている場合は、limitまでの文字列にする
+    if (content && content.length > limit) 
+        content = content.slice(0, limit) + "\n\n...\n"
+
     return content
 }
 
