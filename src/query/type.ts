@@ -19,14 +19,16 @@ export const tokenLinkCreateTh = (
 
     if (typeof pageLink !== "string") {
 
+        // 「hls」を「PDF」にする
         // 「/」が含まれる場合は、それのすべて「 / 」に置換する
-        divElement.innerText = pageLink.originalName.includes("/") ?
-            // 特定の階層を取り除く
-            (hierarchies ?
-                pageLink.originalName.replace(hierarchies + "/", "../")
+        divElement.innerText = pageLink.originalName === "hls" ? "PDF" :
+            pageLink.originalName.includes("/") ?
+                // 特定の階層を取り除く
+                (hierarchies ?
+                    pageLink.originalName.replace(hierarchies + "/", "../")
+                    : pageLink.originalName
+                ).replaceAll(/\//g, " / ")
                 : pageLink.originalName
-            ).replaceAll(/\//g, " / ")
-            : pageLink.originalName
         //ポップアップ表示あり
         const labelElement: HTMLLabelElement = document.createElement("label")
         //input要素を作成
@@ -43,12 +45,18 @@ export const tokenLinkCreateTh = (
         tokenLinkElement.append(labelElement)
 
     } else {
+
         // ページと同じ階層であれば、それを解除する
-        const keyWord = (hierarchies ? pageLink.replace(hierarchies + "/", "../") : pageLink)
+        const keyWord = (hierarchies ?
+            pageLink.replace(hierarchies + "/", "../")
+            : pageLink)
+
+        // 「hls」を「PDF」にする
         // 「/」を「 / 」にする
-        divElement.innerText = keyWord.includes("/") ?
-            keyWord.replaceAll("/", " / ")
-            : keyWord
+        divElement.innerText = keyWord === "hls" ? "PDF" :
+            keyWord.includes("/") ?
+                keyWord.replaceAll("/", " / ")
+                : keyWord
         tokenLinkElement.append(divElement)
 
     }
@@ -67,7 +75,8 @@ export const createTd = async (
 ) => {
 
     // キーワードのページは除く
-    if (flag && flag.removeKeyword && page.originalName === flag.removeKeyword) return
+    if (flag && flag.removeKeyword
+        && page.originalName === flag.removeKeyword) return
 
     let displayName = (flag && flag.removeKeyword // isHierarchyTitleがある場合は、キーワードを取り除く
         && flag.isHierarchyTitle === true)
