@@ -1,19 +1,8 @@
 import { BlockEntity, BlockUUIDTuple, PageEntity, } from "@logseq/libs/dist/LSPlugin.user"
 import { pageArray } from "./query/type"
 
-export const stringLimitAndRemoveProperties = (content: string, limit: number): string => {
+export const stringLimit = (content: string, limit: number): string => {
     if (!content) return ""
-
-    if (content.includes("\n")) {
-        //contentに「background-color:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
-        content = content.replaceAll(/background-color:: .+?\n/g, "")
-        //contentに。「id:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
-        content = content.replaceAll(/id:: .+?\n/g, "")
-        //contentの最後の行に「id:: 」が含まれている場合は、その行を削除する
-        content = content.replace(/id:: .+?$/, "")
-        //contentに。「heading:: 何らかの文字列 \n」が含まれる場合は、その行を削除する
-        content = content.replaceAll(/heading:: .+?\n/g, "")
-    }
 
     // 文字数がlimitを超えている場合は、limitまでの文字列にする
     if (content && content.length > limit) 

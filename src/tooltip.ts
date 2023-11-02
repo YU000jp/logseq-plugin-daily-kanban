@@ -1,6 +1,7 @@
 import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
-import { getPageContent, getTreeContent, includeReference, stringLimitAndRemoveProperties } from "./lib"
+import { getPageContent, getTreeContent, includeReference, stringLimit } from "./lib"
+import { blockContent } from "./query/blockContent"
 
 
 /**
@@ -27,7 +28,7 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
             const isReference: string | null = await includeReference(parentBlock.content)
             if (isReference) parentBlock.content = isReference
             //parentBlock.contentの文字数制限と一部のプロパティを削除する
-            parentBlock.content = stringLimitAndRemoveProperties(parentBlock.content, 600)
+            parentBlock.content = stringLimit(parentBlock.content, 600)
 
             const pElement: HTMLParagraphElement = document.createElement("p")
             //pElementをクリックしたら、親ブロックを開く
@@ -40,7 +41,9 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
             const preElement: HTMLPreElement = document.createElement("pre")
             popupElement.append(pElement)
 
-            preElement.innerText = parentBlock.content
+            // ブロックコンテンツ一括置換
+            preElement.innerHTML = await blockContent(parentBlock.content)
+
             popupElement.append(pElement, preElement)
         }
         const pElement: HTMLParagraphElement = document.createElement("p")
@@ -52,14 +55,10 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
         anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(thisBlock.uuid) })
         pElement.append(anchorElement)
         const preElement: HTMLPreElement = document.createElement("pre")
-        const content = await getTreeContent(thisBlock)
-        //リファレンスかどうか
-        const isReference: string | null = await includeReference(content)
-        if (isReference) thisBlock.content = isReference
-        //thisBlock.contentの文字数制限と一部のプロパティを削除する
-        thisBlock.content = stringLimitAndRemoveProperties(thisBlock.content, 600)
 
-        preElement.innerText = thisBlock.content
+        // ブロックコンテンツ一括置換 (ツリー取得)
+        preElement.innerHTML = await blockContent(await getTreeContent(thisBlock))
+
         popupElement.append(pElement, preElement)
     }
 }
@@ -101,7 +100,7 @@ export function openTooltipEventFromPageName(popupElement: HTMLDivElement): (thi
             if (isReference) pageContents = isReference
 
             //pageContentの文字数制限
-            pageContents = stringLimitAndRemoveProperties(pageContents, 700)
+            pageContents = stringLimit(pageContents, 700)
 
             content.innerText += pageContents + "\n"
         }

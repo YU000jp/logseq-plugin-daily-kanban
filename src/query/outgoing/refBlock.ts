@@ -1,9 +1,9 @@
-import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
+import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
 import { checkAlias, excludePageFromBlockEntity } from "../../excludePages"
-import { includeReference, stringLimitAndRemoveProperties } from "../../lib"
 import { openTooltipEventFromBlock } from "../../tooltip"
 import { pageArray, tokenLinkCreateTh } from "../type"
+import { blockContent } from "../blockContent"
 
 //typeBlocks
 export const typeRefBlock = async (
@@ -21,7 +21,7 @@ export const typeRefBlock = async (
         if (logseq.settings!.excludeCurrentPage === true
             && current && pageLink.name === current.originalName) continue
         //pageLinkRefのページを取得する
-        const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: {uuid:string,content:string,page}[]][]
+        const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: { uuid: string, content: string, page }[]][]
         if (!page) continue
         //blocksをフィルターする
         const outgoingList = page.filter((page) => page[1].length !== 0).map((page) => page[1][0])
@@ -39,7 +39,14 @@ export const typeRefBlock = async (
         )
         //end of 行タイトル(左ヘッダー)
 
-        //右側
+        // uuidが重複するものを削除する
+        const uuidSet = new Set()
+        outgoingList.forEach((block) => uuidSet.add(block.uuid))
+        outgoingList.filter((block) => uuidSet.has(block.uuid))
+        uuidSet.clear()
+
+
+        //右側 50件に制限する
         for (const block of outgoingList)
             await forTokenLinkElement(pageLink, block, tokenLinkElement)
 
@@ -47,6 +54,7 @@ export const typeRefBlock = async (
         hopLinksElement.append(tokenLinkElement)
     }
 }
+
 
 const forTokenLinkElement = async (
     pageLink: pageArray,
@@ -59,6 +67,9 @@ const forTokenLinkElement = async (
         || block.content === `[[${pageLink.name}]]` // [[pageLink.name]]と一致した場合は除外する
         || block.content === `#${pageLink.name}`) // #pageLink.nameと一致した場合は除外する
         return
+
+    let content = await blockContent(block.content)
+    if (content === "") return
 
     //行タイトル(左ヘッダー)
     const blockElement: HTMLDivElement = document.createElement("div")
@@ -73,15 +84,6 @@ const forTokenLinkElement = async (
     const popupElement: HTMLDivElement = document.createElement("div")
     popupElement.classList.add("hopLinks-popup-content")
 
-    let content = block.content
-
-    // リファレンス対応
-    const isReference: string | null = await includeReference(content)
-    if (isReference) content = isReference
-
-    // 内容を置換する
-    content = replace(content)
-
     const anchorElement: HTMLAnchorElement = document.createElement("a")
     anchorElement.dataset.uuid = block.uuid
     anchorElement.innerHTML = content //HTMLタグ対策 innerTextを使用する
@@ -90,21 +92,4 @@ const forTokenLinkElement = async (
     labelElement.append(blockElement, inputElement, popupElement)
     tokenLinkElement.append(labelElement)
 
-}
-
-const replace = (content: string) => {
-
-    // content の HTMLタグを無効にする < を &lt; に変換する > を &gt; に変換する
-    content = content.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-
-    // block.contentの文字数制限
-    content = stringLimitAndRemoveProperties(content, 500)
-
-    // 「\n:LOGBOOK:」から「\nEND:」までを削除する
-    content = content.replace(/:LOGBOOK:([\s\S]*?)END:/g, "")
-
-    // \nを<br/>に変換する
-    content = content.replaceAll("\n", "<br/>")
-
-    return content
 }

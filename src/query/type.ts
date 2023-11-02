@@ -1,7 +1,6 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { openTooltipEventFromPageName } from "../tooltip"
 import { t } from "logseq-l10n"
-
+import { openTooltipEventFromPageName } from "../tooltip"
 
 export const tokenLinkCreateTh = (
     pageLink: pageArray | string,
@@ -135,3 +134,4 @@ export type pageArray = {
     originalName: string
     uuid: string
 }
+
