@@ -1,3 +1,15 @@
+# [1.20.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.19.0...v1.20.0) (2023-11-03)
+
+
+### Bug Fixes
+
+* **bug:** hop link > display images ([3442e02](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/3442e02478aa22b280812e5a183a6b2cddecb77b))
+
+
+### Features
+
+* **Add:** hop links > Image only ([fbb4ed0](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/fbb4ed0a882e5dec660fe70bb09fd2d44a94353f))
+
 # [1.19.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.18.0...v1.19.0) (2023-11-03)
 
 
