@@ -81,10 +81,6 @@ Logseq マーケットプレイスからインストールする
 
 > この種のことを質問したり見つけたりするには、[ディスカッション](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions)タブに移動してください。日本語で質問OKです。
 
-課題 / TODO
-  - [ ] Logseq API を使用して編集用のツールチップを表示する方法
-  - [ ] 独自のマークダウンとして変換する方法
-
 ## 先行技術とクレジット
 
 アイコン > [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
