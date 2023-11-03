@@ -36,7 +36,7 @@ export const includeReference = async (content): Promise<string | null> => {
 const isBlockEntity = (b: BlockEntity | BlockUUIDTuple): b is BlockEntity => (b as BlockEntity).uuid !== undefined
 
 //子ブロックを含めたブロックの内容を取得する
-export const getTreeContent = async (b: BlockEntity) => {
+export const getTreeContent = async (b: BlockEntity):Promise<string> => {
     let content = ""
     const trimmedBlockContent = b.content.trim()
     if (trimmedBlockContent.length > 0) content += trimmedBlockContent + "\n"

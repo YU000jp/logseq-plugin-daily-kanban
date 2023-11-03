@@ -51,7 +51,9 @@ const hopLinks = async (select?: string) => {
     hopLinksElement.id = "hopLinks"
     pageRelativeInnerElement.append(hopLinksElement)
     //PageBlocksInnerElementの中に含まれる<a data-ref>をすべて取得する
-    const pageLinks = pageRelativeInnerElement.querySelectorAll("a[data-ref]:not(.page-property-key)") as NodeListOf<HTMLAnchorElement> | null
+    const pageLinks = pageRelativeInnerElement.querySelectorAll(
+        "a[data-ref]:not(.page-property-key)" + (logseq.settings!.keywordsIncludeHierarchy === false ? ":not([data-checked])" : "")
+    ) as NodeListOf<HTMLAnchorElement> | null
     if (!pageLinks) return
     processing = true
 

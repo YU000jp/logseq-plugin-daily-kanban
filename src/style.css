@@ -33,25 +33,13 @@ body[data-page=page]>div {
                 }
             }
 
-            &.hopLinksTh {
-                display: flex;
-                align-items: center;
-                font-size: .87em;
-                font-weight: bold;
-                background: var(--ls-tertiary-background-color);
-
-                &.th-type-pageTags {
-                    background: var(--ls-table-tr-even-background-color);
-                }
-            }
-
             &#outgoingLinks div.hopLinksTh#hopLinksKeyword {
-                background: var(--ls-quaternary-background-color);
+                background-color: var(--ls-quaternary-background-color);
             }
 
             &#externalLinks {
                 & div.hopLinksTh {
-                    background: var(--ls-secondary-background-color);
+                    background-color: var(--ls-secondary-background-color);
                 }
 
                 & div.hopLInksTd {
@@ -61,16 +49,33 @@ body[data-page=page]>div {
                 }
             }
 
+            &.hopLinksTh {
+                display: flex;
+                align-items: center;
+                font-size: .87em;
+                font-weight: bold;
+                background-color: var(--ls-tertiary-background-color);
+
+                &.th-type-pageTags {
+                    background-color: var(--ls-table-tr-even-background-color);
+                }
+            }
+
             &.hopLinksTd {
                 font-size: .78em;
+                background-color: var(--ls-page-properties-background-color);
             }
 
             &.hopLinksTh,
             &.hopLinksTd {
                 opacity: 0.8;
-                padding: .8em;
-                width: 180px;
-                max-height: 240px;
+                padding-top: 1.4em;
+                padding-bottom: 1.4em;
+                padding-left: 1em;
+                padding-right: 1em;
+                width: 188px;
+                min-height: 120px;
+                max-height: 200px;
                 overflow: auto;
                 border: 1px solid var(--ls-guideline-color);
 
@@ -136,8 +141,8 @@ body[data-page=page]>div {
                     outline: 2px solid var(--ls-guideline-color);
                     outline-offset: 3px;
                     cursor: zoom-out;
-                    backdrop-filter: blur(70px);
                     font-size: .96em;
+                    background-color: var(--ls-primary-background-color);
 
                     &:hover {
                         outline: 6px solid var(--ls-quaternary-background-color);

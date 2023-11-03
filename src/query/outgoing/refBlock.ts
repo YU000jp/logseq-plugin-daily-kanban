@@ -42,11 +42,11 @@ export const typeRefBlock = async (
         // uuidが重複するものを削除する
         const uuidSet = new Set()
         outgoingList.forEach((block) => uuidSet.add(block.uuid))
-        outgoingList.filter((block) => uuidSet.has(block.uuid))
+        outgoingList.filter((block) => uuidSet.has(block.uuid)
+            && block.content !== "") // ついでに空のものも除外する
         uuidSet.clear()
 
 
-        //右側 50件に制限する
         for (const block of outgoingList)
             await forTokenLinkElement(pageLink, block, tokenLinkElement)
 
@@ -68,8 +68,7 @@ const forTokenLinkElement = async (
         || block.content === `#${pageLink.name}`) // #pageLink.nameと一致した場合は除外する
         return
 
-    let content = await blockContent(block.content)
-    if (content === "") return
+
 
     //行タイトル(左ヘッダー)
     const blockElement: HTMLDivElement = document.createElement("div")
@@ -86,7 +85,11 @@ const forTokenLinkElement = async (
 
     const anchorElement: HTMLAnchorElement = document.createElement("a")
     anchorElement.dataset.uuid = block.uuid
-    anchorElement.innerHTML = content //HTMLタグ対策 innerTextを使用する
+
+    const content = await blockContent(block.content) as string
+    if (content === "") return
+        anchorElement.innerHTML = content
+
     blockElement.append(anchorElement)
     blockElement.addEventListener("click", openTooltipEventFromBlock(popupElement))
     labelElement.append(blockElement, inputElement, popupElement)
