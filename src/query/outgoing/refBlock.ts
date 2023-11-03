@@ -51,7 +51,7 @@ export const typeRefBlock = async (
 
 
         for (const block of outgoingList) {
-            const content = await replaceForLogseq(block.content, { isImageOnly: true }) as string
+            const content = await replaceForLogseq(block.content, { isImageOnly:flag.isImageOnly }) as string
             if (!content) continue
             await CreateTdBlock(pageLink, block, tokenLinkElement)
         }
