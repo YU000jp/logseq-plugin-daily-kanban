@@ -1,6 +1,7 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
 import { openTooltipEventFromPageName } from "../tooltip"
+import { excludeJournal } from "../excludePages"
 
 export const tokenLinkCreateTh = (
     pageLink: pageArray | string,
@@ -73,9 +74,14 @@ export const createTd = async (
     }
 ) => {
 
-    // キーワードのページは除く
-    if (flag && flag.removeKeyword
-        && page.originalName === flag.removeKeyword) return
+    //日誌を除外する
+    if (excludeJournal(
+        (page as PageEntity)["journal?"],
+        (page as PageEntity).originalName
+    ) as boolean === true
+        || (flag && flag.removeKeyword // キーワードのページは除く
+            && page.originalName === flag.removeKeyword)
+    ) return
 
     let displayName = (flag && flag.removeKeyword // isHierarchyTitleがある場合は、キーワードを取り除く
         && flag.isHierarchyTitle === true)

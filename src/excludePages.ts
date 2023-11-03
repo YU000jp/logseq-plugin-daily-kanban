@@ -90,10 +90,22 @@ export const checkAlias = (current: PageEntity, outgoingList: ({ name: string })
  * @param pageEntityArray An array of page entities to filter.
  * @returns A new array of page entities that do not match the exclusion criteria.
  */
-export const excludeJournalFromEntityArray = (pageEntityArray: PageEntity[]) => pageEntityArray.filter((page) =>
-    //日記ページは除外する
-    page["journal?"] === false
-    //2024/01のような形式だったら除外する
-    && page.originalName.match(/^\d{4}\/\d{2}$/) === null
-    // 2024のような数値も除外する
-    && page.originalName.match(/^\d{4}$/) === null)
+export const excludeJournalFilter = (pageEntityArray: PageEntity[]) =>
+    pageEntityArray.filter(
+        (page) =>
+            excludeJournal(page["journal?"],
+                page.originalName
+            ) === false)
+
+
+export const excludeJournal = (journal: boolean, originalName: string): boolean => // 除外する場合はtrueを返す
+    // 設定項目 結果から日誌を除外する
+    logseq.settings!.excludeJournalFromResult === true
+    // 日誌かどうか
+    && journal === true
+    // 設定項目 結果から日付を除外する
+    || (logseq.settings!.excludeDateFromResult === true
+        //2024/01のような形式だったら除外する
+        && originalName.match(/^\d{4}\/\d{2}$/) !== null
+        // 2024のような数値も除外する
+        || originalName.match(/^\d{4}$/) !== null)

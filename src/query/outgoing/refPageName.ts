@@ -38,13 +38,6 @@ export const typeRefPageName = async (outgoingList: pageArray[], hopLinksElement
             const page = await logseq.Editor.getPage(pageName) as PageEntity | null
             if (!page) continue
 
-            //日誌を除外する
-            if (logseq.settings!.excludeJournalFromResult === true
-                && page["journal?"] === true
-                || logseq.settings!.excludeDateFromResult === true
-                && page.originalName.match(/^\d{4}\/\d{2}$/) !== null
-                || page.originalName.match(/^\d{4}$/) !== null) continue
-
             //td
             createTd(page, tokenLinkElement)
         }

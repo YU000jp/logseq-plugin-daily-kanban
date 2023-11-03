@@ -147,7 +147,6 @@ const hopLinks = async (select?: string) => {
 }//end of hopLinks
 
 
-
 //outgoingListをソートする
 /**
  * Sorts an array of page links by name in ascending order.
@@ -161,7 +160,6 @@ const sortOutgoingList = (outgoingList: pageArray[]) =>
         if (a.name < b.name) return -1
         return 0
     })
-
 
 
 //現在のページ名とその階層を、リストに追加する
@@ -204,10 +202,9 @@ const addCurrentPageHierarchy = async (
             names = names.map((_name, i) => names.slice(0, i + 1).join("/"))
             for (const name of names) await addPage(name)
 
-        } else {
+        } else 
             // current.originalName 現在のページ名
             await addPage(current.originalName)
-        }
 
     }
     return current
@@ -242,11 +239,11 @@ const buttonSettingsUpdate = (hopLinksElement: HTMLDivElement, spanElement: HTML
 const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     const selectElement: HTMLSelectElement = document.createElement("select")
     selectElement.id = "hopLinkType"
-    //<option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
     <option value="namespace">${t("Page title")} > ${t("String Search")}🚀</option>
     <option value="namespace-no-page-hierarchy">${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}</option>
+    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
     <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>

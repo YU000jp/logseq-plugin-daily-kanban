@@ -3,7 +3,7 @@ import { t } from "logseq-l10n"
 import { excludePageFromPageEntity } from "../../excludePages"
 import { sortPageArray } from "../../lib"
 import { createTd, tokenLinkCreateTh } from "../type"
-import { excludeJournalFromEntityArray } from "../../excludePages"
+import { excludeJournalFilter } from "../../excludePages"
 
 export const typePageHierarchy = async (hopLinksElement: HTMLDivElement) => {
 
@@ -17,7 +17,7 @@ export const typePageHierarchy = async (hopLinksElement: HTMLDivElement) => {
     if (!PageEntity || PageEntity.length === 0) return
 
     //journalを除外する
-    PageEntity = excludeJournalFromEntityArray(PageEntity)
+    PageEntity = excludeJournalFilter(PageEntity)
 
     //設定されたページを除外する
     if (PageEntity) excludePageFromPageEntity(PageEntity)
