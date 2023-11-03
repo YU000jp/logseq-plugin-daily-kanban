@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.18.0...v1.19.0) (2023-11-03)
+
+
+### Features
+
+* **Add:** hop links > block > display images ([fc231bd](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/fc231bd4607aad46d1aee130fe8154c825ae5970))
+
 # [1.18.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.17.1...v1.18.0) (2023-10-31)
 
 
