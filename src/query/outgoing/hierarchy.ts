@@ -1,5 +1,5 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { excludePageFromPageEntity } from "../../excludePages"
+import { excludeJournalFilter, excludePageFromPageEntity } from "../../excludePages"
 import { sortPageArray } from "../../lib"
 import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 
@@ -14,7 +14,7 @@ export const typeHierarchy = (outgoingList: pageArray[], hopLinksElement: HTMLDi
             if (!PageEntity || PageEntity.length === 0) return
 
             // namespace.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
-            PageEntity = PageEntity.filter((page) => page["journal?"] === false && page.originalName.match(/^\d{4}\/\d{2}$/) === null && page.originalName.match(/^\d{4}$/) === null)
+            PageEntity = excludeJournalFilter(PageEntity)
             if (!PageEntity || PageEntity.length === 0) return
 
             //ページを除外する

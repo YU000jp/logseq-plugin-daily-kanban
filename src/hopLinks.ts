@@ -11,6 +11,7 @@ import { typeRefPageName } from "./query/outgoing/refPageName"
 import { outgoingLinks, outgoingLinksFromCurrentPage } from "./query/outgoingLinks"
 import { externalLinks } from "./query/externalLinks"
 import { pageArray } from "./query/type"
+import { typePageHierarchy } from "./query/pageTitle/hierarchy"
 
 
 export const loadTwoHopLink = async () => {
@@ -293,7 +294,7 @@ const switchSelect = (
 
         case "page-hierarchy":
             //ページ名から階層を取得する
-            typeNamespace(hopLinksElement)
+            typePageHierarchy(hopLinksElement)
             break
 
         case "page-tags":

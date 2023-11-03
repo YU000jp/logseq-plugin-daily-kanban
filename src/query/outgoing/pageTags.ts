@@ -1,5 +1,5 @@
 import { PageEntity } from "@logseq/libs/dist/LSPlugin"
-import { excludePageFromPageEntity } from "../../excludePages"
+import { excludeJournalFilter, excludePageFromPageEntity } from "../../excludePages"
 import { sortPageArray } from "../../lib"
 import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 import { t } from "logseq-l10n"
@@ -25,9 +25,7 @@ export const typePageTags = async (outgoingList: pageArray[], hopLinksElement: H
         let PageEntity = await logseq.DB.q(`(page-tags "${pageLink.name}")`) as PageEntity[]
         if (PageEntity && PageEntity.length !== 0) 
             // pageTags.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
-            PageEntity = PageEntity.filter((page) => page["journal?"] === false
-                && page.originalName.match(/^\d{4}\/\d{2}$/) === null
-                && page.originalName.match(/^\d{4}$/) === null)
+            PageEntity = excludeJournalFilter(PageEntity)
         
         //PageEntityとPageEntityFromPropertyが両方とも空の場合は処理を終了する
         if ((!PageEntity || PageEntity.length === 0)

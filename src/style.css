@@ -74,8 +74,8 @@ body[data-page=page]>div {
                 padding-left: 1em;
                 padding-right: 1em;
                 width: 187px;
-                min-height: 120px;
-                max-height: 200px;
+                min-height: 80px;
+                max-height: 180px;
                 overflow: auto;
                 border: 1px solid var(--ls-guideline-color);
 
