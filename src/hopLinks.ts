@@ -11,7 +11,6 @@ import { typeRefPageName } from "./query/outgoing/refPageName"
 import { outgoingLinks, outgoingLinksFromCurrentPage } from "./query/outgoingLinks"
 import { externalLinks } from "./query/externalLinks"
 import { pageArray } from "./query/type"
-import { typePageHierarchy } from "./query/pageTitle/hierarchy"
 import { typeBlock } from "./query/pageTitle/block"
 
 
@@ -100,7 +99,6 @@ const hopLinks = async (select?: string) => {
 
     //設定画面を開くボタン
     buttonSettingsUpdate(hopLinksElement, spanElement)
-
 
 
     //outgoingListが空の場合は処理を終了する
