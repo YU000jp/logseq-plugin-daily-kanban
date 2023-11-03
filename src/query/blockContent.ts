@@ -8,6 +8,7 @@ import { includeReference } from "../lib"
  * @returns The processed content of the block.
  */
 export const blockContent = async (content: string): Promise<string> => {
+
     //プロパティやレンダリングだけのものは除外する
     if (checkBlockContent(content) === false) return ""
 
@@ -68,36 +69,40 @@ const replaceForLogseq = async (content: string): Promise<string> => {
 // 画像を表示する
 const replaceImage = async (content: string): Promise<string> => {
 
-    if (!content.includes("../assets/")
+    if (!content.includes("../assets/") //../assets/が含まれている
         || !content.includes("![")
         || !content.includes("](")
     ) return content
 
     // 「)_」を「）_」に置換する
     if (content.includes(")_"))
-        content = content.replaceAll(/\)_/g, "）_")
+        content = content.replaceAll("\)_", "）_") // 一時的に変換する
 
-    // 「![」で始まり、「](を途中に含み、その次の「)」まで、<img src="">タグにする
-    content = content.replaceAll(/\!\[([^\[\]]*?)\]\((?!.*\.pdf).*?\)/g, "<img src=\"$2\"/>")
-
-    // 「<img src="何らかのURL"」にマッチする
-    const imageMatch = content.match(/<img src="([\s\S]*?)"/) as RegExpMatchArray | null
-    // p1![1]を置換する
-    if (imageMatch) {
-        for (const match of imageMatch) {
-            if (match && match.startsWith("../assets/")) {
-                const imgExists = await logseq.Assets.makeUrl(match.replace(/）_/g, ")_")) // ユーザー向け短縮URLからローカルのURLを取得する
-                if (imgExists)
-                    content = content.replace(match, imgExists)
-            }
+    // 「![何らかの文字列](何らかの文字列)」のような文字列で、それぞれを取得する
+    let match = content.match(/!\[(.+?)\]\((.+?)\)/g) as RegExpMatchArray | null
+    if (match) {
+        for (const m of match) {
+            // 2つ目の文字列を取得する
+            let url = m.match(/!\[(.+?)\]\((.+?)\)/)?.[2] as string | null
+            if (!url
+                || url.includes(".pdf")) // 「.pdf」を含まないようにする
+                continue
+            const imgExists = await logseq.Assets.makeUrl(
+                url.replace(/）_/g, ")_") // 一時的に変換した「）_」を「)_」に置換する
+            ) as string | null
+            if (imgExists)
+                // < img src = "" > タグにする
+                content = content.replaceAll(m, `<img src="${imgExists}" />`)
         }
+
         // 「{:height 数値, :width 数値}」のような文字列を削除する
         if (content.includes(":height"))
             content = content.replaceAll(/{:height \d+, :width \d+}/g, "")
     }
+
     // 「）_」を「)_」に置換する
     if (content.includes("）_"))
-        content = content.replaceAll(/）_/g, ")_")
+        content = content.replaceAll("）_", ")_")
 
     return content
 }
@@ -107,6 +112,7 @@ const replaceImage = async (content: string): Promise<string> => {
 //contentに「プロパティ名:: 何らかの文字列」が含まれる場合は、その行を削除する
 //プロパティ名は次のいずれか。background-color|id|heading|collapsed|string|title
 const removeProperty = (content: string): string => content.replaceAll(/^(background-color|id|heading|collapsed|string|title|created-at)::.*$/gm, "")
+
 
 //プロパティだけの場合は除外する
 //先頭からプロパティが含まれているものは、コンテンツがなく、プロパティしかないものとなるので、returnする
@@ -140,14 +146,8 @@ const replaceTask = (content: string) =>
 
 const replaceHeading = (content: string) =>
     content.replaceAll(/^# (.+?)$/gm, "<h1>$1</h1>")
-        // 「## 」の場合は<h2>タグで囲む
         .replaceAll(/^## (.+?)$/gm, "<h2>$1</h2>")
-        // 「### 」の場合は<h3>タグで囲む
         .replaceAll(/^### (.+?)$/gm, "<h3>$1</h3>")
-        // 「#### 」の場合は<h4>タグで囲む
         .replaceAll(/^#### (.+?)$/gm, "<h4>$1</h4>")
-        // 「##### 」の場合は<h5>タグで囲む
         .replaceAll(/^##### (.+?)$/gm, "<h5>$1</h5>")
-        // 「###### 」の場合は<h6>タグで囲む
         .replaceAll(/^###### (.+?)$/gm, "<h6>$1</h6>")
-
