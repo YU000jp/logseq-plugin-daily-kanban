@@ -8,7 +8,10 @@ export const tokenLinkCreateTh = (
     pageLink: pageArray | string,
     className: string,
     boxTitle: string,
-    hierarchies?: string
+    flag: {
+        hierarchies?: string,
+        mark: string
+    }
 ): HTMLDivElement => {
 
     const tokenLinkElement: HTMLDivElement = document.createElement("div")
@@ -22,14 +25,14 @@ export const tokenLinkCreateTh = (
 
         // 「hls」を「PDF」にする
         // 「/」が含まれる場合は、それのすべて「 / 」に置換する
-        divElement.innerText = pageLink.originalName === "hls" ? "PDF" :
+        divElement.innerText = (pageLink.originalName === "hls" ? "PDF" :
             pageLink.originalName.includes("/") ?
                 // 特定の階層を取り除く
-                (hierarchies ?
-                    pageLink.originalName.replace(hierarchies + "/", "../")
+                (flag && flag.hierarchies ?
+                    pageLink.originalName.replace(flag.hierarchies + "/", "../")
                     : pageLink.originalName
                 ).replaceAll(/\//g, " / ")
-                : pageLink.originalName
+                : pageLink.originalName) + " " + flag.mark
         //ポップアップ表示あり
         const labelElement: HTMLLabelElement = document.createElement("label")
         //input要素を作成
@@ -48,9 +51,9 @@ export const tokenLinkCreateTh = (
     } else {
 
         // ページと同じ階層であれば、それを解除する
-        const keyWord = (hierarchies ?
-            pageLink.replace(hierarchies + "/", "../")
-            : pageLink)
+        const keyWord = (flag && flag.hierarchies ?
+            pageLink.replace(flag.hierarchies + "/", "../")
+            : pageLink) + " " + flag.mark
 
         // 「hls」を「PDF」にする
         // 「/」を「 / 」にする

@@ -246,36 +246,34 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     selectElement.id = "hopLinkType"
     // <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
     // <option value="page-blocks-image">${t("Page title")} > ${t("Block")} > ${t("Image only")}</option>
+    //<option value="pageHierarchy">${t("Page")} ${t("Hierarchy")} : ${t("Sub page")}</option>
     selectElement.innerHTML = `
     <option value="unset">
     ${t("Unset")}
     </option>
-    <option value="pageNamespace">
-    ${t("Page title")} > ${t("String Search")}🚀
-    </option>
     <option value="pageNamespaceNoPageHierarchy">
-    ${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}
+    ${t("Page title")} << ${t("String Search")}🚀
+    </option>
+    <option value="pageNamespace">
+    ${t("Page title")} << ${t("String Search")}🚀 (${t("Include hierarchies of this page")})
     </option>
     <option value="pageBlocks">
-    ${t("Page title")} > ${t("Block")}
-    </option>
-    <option value="pageHierarchy">
-    ${t("Page title")} >> ${t("Hierarchy")} > ${t("Sub page")}
+    ${t("Page title")} << ${t("Block")}
     </option>
     <option value="outgoingHierarchy">
-    ${t("Outgoing links")} >> ${t("Hierarchy")} > ${t("Sub page")}
+    >> ${t("Outgoing links")} > ${t("Sub page")} (${t("Hierarchy")})
     </option>
     <option value="outgoingPageTags">
-    ${t("Outgoing links")} > ${t("Page-Tags")}
+    >> ${t("Outgoing links")} <> ${t("Page-Tags")}
     </option>
     <option value="refBackLinks">
-    ${t("Outgoing links")} >> Linked References > ${t("BackLinks")}
+    >> ${t("Outgoing links")} << ${t("BackLinks")}
     </option>
     <option value="refBlocks">
-    ${t("Outgoing links")} >> Linked References > ${t("Blocks")}
+    >> ${t("Outgoing links")} << ${t("Blocks")}
     </option>
     <option value="refBlocksImage">
-    ${t("Outgoing links")} >> Linked References > ${t("Blocks")} > ${t("Image only")}
+    >> ${t("Outgoing links")} << ${t("Blocks")} : ${t("Image only")}
     </option>
     `
     // selectElementの値が変更されたら、hopLinksElementを削除して、再度hopLinksを実行する
@@ -308,14 +306,14 @@ const switchSelect = (
 ) => {
     switch (select) {
 
-        case "pageNamespace":
-            // クエリーでページ名に関連するページを取得する カテゴリ分け
-            typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
-            break
-
         case "pageNamespaceNoPageHierarchy":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
             typeNamespace(hopLinksElement, { category: true, removePageHierarchy: true })
+            break
+        
+        case "pageNamespace":
+            // クエリーでページ名に関連するページを取得する カテゴリ分け
+            typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
             break
 
         case "pageBlocks":
@@ -328,10 +326,10 @@ const switchSelect = (
         //     typeBlock(hopLinksElement, { isImageOnly: true })
         //     break
 
-        case "pageHierarchy":
-            //ページ名から階層を取得する
-            typePageHierarchy(hopLinksElement)
-            break
+        // case "pageHierarchy":
+        //     //ページ名から階層を取得する
+        //     typePageHierarchy(hopLinksElement)
+        //     break
 
         case "outgoingPageTags":
             //ページタグ

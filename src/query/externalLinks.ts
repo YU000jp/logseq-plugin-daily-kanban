@@ -6,7 +6,7 @@ export const externalLinks = (PageBlocksInnerElement: HTMLDivElement, hopLinksEl
     //outgoingLinksElementを作成
     const externalLinksElement: HTMLDivElement = document.createElement("div")
     externalLinksElement.id = "externalLinks"
-    externalLinksElement.innerHTML += `<div class="hopLinksTh">${t("External Links")} >></div>`
+    externalLinksElement.innerHTML += `<div class="hopLinksTh">>> ${t("External Links")}</div>`
     for (const externalLink of externalLinks) {
         //td
         const labelElement: HTMLLabelElement = document.createElement("label")

@@ -25,7 +25,7 @@ export const typeHierarchy = (outgoingList: pageArray[], hopLinksElement: HTMLDi
             sortPageArray(PageEntity)
 
             //th
-            const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-hierarchy", "Hierarchy")
+            const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-hierarchy", "Hierarchy", { mark: "<<" })
 
             //td
             for (const page of PageEntity)

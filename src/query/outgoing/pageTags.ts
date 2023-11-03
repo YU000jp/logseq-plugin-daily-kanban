@@ -23,10 +23,10 @@ export const typePageTags = async (outgoingList: pageArray[], hopLinksElement: H
 
         //そのページにタグ漬けされている
         let PageEntity = await logseq.DB.q(`(page-tags "${pageLink.name}")`) as PageEntity[]
-        if (PageEntity && PageEntity.length !== 0) 
+        if (PageEntity && PageEntity.length !== 0)
             // pageTags.nameが2024/01のような形式だったら除外する。また2024のような数値も除外する
             PageEntity = excludeJournalFilter(PageEntity)
-        
+
         //PageEntityとPageEntityFromPropertyが両方とも空の場合は処理を終了する
         if ((!PageEntity || PageEntity.length === 0)
             && (!PageEntityFromProperty || PageEntityFromProperty.length === 0)) continue
@@ -40,7 +40,7 @@ export const typePageTags = async (outgoingList: pageArray[], hopLinksElement: H
         if (PageEntity) sortPageArray(PageEntity)
 
         //th
-        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-pageTags", t("Page-Tags"))
+        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-pageTags", t("Page-Tags"), { mark: "<<" })
 
         //td
         if (PageEntity)

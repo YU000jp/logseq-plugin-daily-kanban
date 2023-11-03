@@ -27,7 +27,12 @@ export const typePageHierarchy = async (hopLinksElement: HTMLDivElement) => {
     sortPageArray(PageEntity)
 
     //thを作成する
-    const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(currentPage, "th-type-namespace", t("Namespace"))
+    const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(
+        currentPage,
+        "th-type-namespace",
+        t("Namespace"),
+        { mark: "" }
+    )
 
     //tdを作成する
     for (const page of PageEntity)

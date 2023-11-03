@@ -41,7 +41,8 @@ export const typeRefBlock = async (
         const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(
             pageLink,
             "th-type-blocks",
-            t("Blocks")
+            t("Blocks"),
+            { mark: "<<" }
         )
         //end of 行タイトル(左ヘッダー)
 
@@ -51,7 +52,7 @@ export const typeRefBlock = async (
 
 
         for (const block of outgoingList) {
-            const content = await replaceForLogseq(block.content, { isImageOnly:flag.isImageOnly }) as string
+            const content = await replaceForLogseq(block.content, { isImageOnly: flag.isImageOnly }) as string
             if (!content) continue
             await CreateTdBlock(pageLink, block, tokenLinkElement)
         }

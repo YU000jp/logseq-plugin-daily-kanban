@@ -30,7 +30,7 @@ export const typeRefPageName = async (outgoingList: pageArray[], hopLinksElement
         pageList.sort()
 
         // th 作成
-        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-backLinks", "BackLinks")
+        const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-backLinks", "BackLinks", { mark: "<<" })
 
         // td 作成
         for (const pageName of pageList) {

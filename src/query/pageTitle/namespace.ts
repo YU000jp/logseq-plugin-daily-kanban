@@ -100,7 +100,10 @@ const processing = async (
         pageLink,
         "th-type-namespace",
         t("Namespace"),
-        hierarchies,
+        {
+            mark: "",
+            hierarchies,
+        }
     )
 
     //tdを作成する

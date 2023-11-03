@@ -51,7 +51,8 @@ export const typeBlock = async (
     const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(
         currentPage,
         "th-type-blocks",
-        t("Blocks")
+        t("Blocks"),
+        { mark: "<<"}
     )
     //end of 行タイトル(左ヘッダー)
 
