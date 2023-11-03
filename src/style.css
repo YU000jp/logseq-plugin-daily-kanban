@@ -187,6 +187,7 @@ body[data-page=page]>div {
                     &>pre {
                         line-height: 2.5em;
                         margin:unset;
+                        padding: .5em;
                         font-size: .9em;
                     }
                 }
