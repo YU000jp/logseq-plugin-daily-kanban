@@ -26,10 +26,13 @@ export const typeRefPageName = async (outgoingList: pageArray[], hopLinksElement
         excludePagesFromPageList(pageList)
         if (pageList.length === 0) continue
 
-        //th
+        // ソートする
+        pageList.sort()
+
+        // th 作成
         const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(pageLink, "th-type-backLinks", "BackLinks")
 
-        //td
+        // td 作成
         for (const pageName of pageList) {
             if (pageName === "") continue
             const page = await logseq.Editor.getPage(pageName) as PageEntity | null

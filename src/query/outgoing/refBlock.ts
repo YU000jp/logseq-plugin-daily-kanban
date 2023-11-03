@@ -1,4 +1,4 @@
-import { PageEntity } from "@logseq/libs/dist/LSPlugin"
+import { IEntityID, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
 import { checkAlias, excludePageFromBlockEntity } from "../../excludePages"
 import { openTooltipEventFromBlock } from "../../tooltip"
@@ -21,7 +21,7 @@ export const typeRefBlock = async (
         if (logseq.settings!.excludeCurrentPage === true
             && current && pageLink.name === current.originalName) continue
         //pageLinkRefのページを取得する
-        const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: { uuid: string, content: string, page }[]][]
+        const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: { uuid: string, content: string, page:IEntityID, }[]][]
         if (!page) continue
         //blocksをフィルターする
         const outgoingList = page.filter((page) => page[1].length !== 0).map((page) => page[1][0])
@@ -31,7 +31,9 @@ export const typeRefBlock = async (
         excludePageFromBlockEntity(outgoingList)
         if (outgoingList.length === 0) continue
 
-        //th
+        // 各ブロックはその日付情報をもっていないので、ソートできない
+
+        //thの作成
         const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(
             pageLink,
             "th-type-blocks",
@@ -67,8 +69,6 @@ const forTokenLinkElement = async (
         || block.content === `[[${pageLink.name}]]` // [[pageLink.name]]と一致した場合は除外する
         || block.content === `#${pageLink.name}`) // #pageLink.nameと一致した場合は除外する
         return
-
-
 
     //行タイトル(左ヘッダー)
     const blockElement: HTMLDivElement = document.createElement("div")

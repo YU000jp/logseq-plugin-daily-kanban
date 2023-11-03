@@ -39,12 +39,14 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
             anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(parentBlock.uuid) })
             pElement.append(anchorElement)
             const preElement: HTMLPreElement = document.createElement("pre")
-            popupElement.append(pElement)
 
             // ブロックコンテンツ一括置換
-            preElement.innerHTML = await blockContent(parentBlock.content)
-
-            popupElement.append(pElement, preElement)
+            const content = await blockContent(parentBlock.content)
+            if (content) {
+                preElement.innerHTML = content
+                preElement.classList.add("ls-block")
+                popupElement.append(pElement, preElement)
+            }
         }
         const pElement: HTMLParagraphElement = document.createElement("p")
         //pElementをクリックしたら、親ブロックを開く
@@ -58,7 +60,7 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
 
         // ブロックコンテンツ一括置換 (ツリー取得)
         preElement.innerHTML = await blockContent(await getTreeContent(thisBlock))
-
+        preElement.classList.add("ls-block")
         popupElement.append(pElement, preElement)
     }
 }
@@ -91,22 +93,13 @@ export function openTooltipEventFromPageName(popupElement: HTMLDivElement): (thi
             && thisPage.properties?.alias) showPageTags(thisPage.properties.alias, popupElement, true)
 
         //ページの内容を取得する
-        const content: HTMLPreElement = document.createElement("pre")
-        content.title = t("Page Content")
-        let pageContents = await getPageContent(thisPage)
-        if (pageContents) {
-            //リファレンスかどうか
-            const isReference: string | null = await includeReference(pageContents)
-            if (isReference) pageContents = isReference
-
-            //pageContentの文字数制限
-            pageContents = stringLimit(pageContents, 700)
-
-            content.innerText += pageContents + "\n"
-        }
-
-        if (content.innerText !== "") {
-            popupElement.append(content)
+        const preElement: HTMLPreElement = document.createElement("pre")
+        preElement.title = t("Page Content")
+        preElement.classList.add("ls-block")
+        let content = await blockContent(await getPageContent(thisPage)) as string
+        if (content) {
+            preElement.innerHTML += content
+            popupElement.append(preElement)
 
             //更新日時を表示する
             if (logseq.settings!.tooltipShowUpdatedAt === true

@@ -42,9 +42,8 @@ const replaceForLogseq = async (content: string): Promise<string> => {
     if (content.includes(":LOGBOOK:"))
         content = content.replace(/:LOGBOOK:([\s\S]*?)END:/g, "")
 
-    // 「[」と「]」に囲まれていて、その後ろに、「(」と「)」に、その2つを含まない文字列で囲まれている場合は、<b>タグで囲む
-    // この場合は、[ ]( )の中に、[ ]( )が含まれないようにする
-    content = content.replaceAll(/\[([^\[\]]*?)\]\(([^\(\)]*?)\)/g, "<b>$1</b>")
+    // [前の文字列](後ろの文字列)のように囲まれている場合は、前の文字列を使い<b>タグで囲む。この場合は、[]()の中に、[]()が含まれないようにする。
+    content = content.replaceAll(/\[([^\[\]]*?)\]\(([^\[\]]*?)\)/g, "<b>$1</b>")
 
     // 「[[」と「]]」で囲まれている(それらを含まない)場合は、<i>タグで囲む
     content = content.replaceAll(/\[\[([^\[\]]*?)\]\]/g, "<i>$1</i>")
@@ -58,6 +57,9 @@ const replaceForLogseq = async (content: string): Promise<string> => {
     // 「completed:: 」で始まる行は、その前に「\n」をつける
     content = content.replaceAll(/completed::/g, "<br/>completed::")
 
+    // 「SCHEDULED: 」で始める行は、その前に「\n」をつける
+    content = content.replaceAll(/SCHEDULED: /g, "<br/>SCHEDULED: ")
+
     // 返却する
     return content
 }
@@ -66,14 +68,17 @@ const replaceForLogseq = async (content: string): Promise<string> => {
 // 画像を表示する
 const replaceImage = async (content: string): Promise<string> => {
 
-    if (!content.includes("../assets/")) return content
-    
+    if (!content.includes("../assets/")
+        || !content.includes("![")
+        || !content.includes("](")
+    ) return content
+
     // 「)_」を「）_」に置換する
     if (content.includes(")_"))
         content = content.replaceAll(/\)_/g, "）_")
 
     // 「![」で始まり、「](を途中に含み、その次の「)」まで、<img src="">タグにする
-    content = content.replaceAll(/!\[([\s\S]*?)\]\(([\s\S]*?)\)/g, "<img src=\"$2\"/>")
+    content = content.replaceAll(/\!\[([^\[\]]*?)\]\((?!.*\.pdf).*?\)/g, "<img src=\"$2\"/>")
 
     // 「<img src="何らかのURL"」にマッチする
     const imageMatch = content.match(/<img src="([\s\S]*?)"/) as RegExpMatchArray | null
@@ -93,6 +98,7 @@ const replaceImage = async (content: string): Promise<string> => {
     // 「）_」を「)_」に置換する
     if (content.includes("）_"))
         content = content.replaceAll(/）_/g, ")_")
+
     return content
 }
 
@@ -123,42 +129,25 @@ const checkBlockContent = (content: string): boolean =>
 
 // タスクを絵文字に変換する
 const replaceTask = (content: string) =>
-    content.includes("DONE") ?
-        content.replace(/^(#*)\s?DONE/gm, "$1✔️")
-        :
-        content.includes("TODO") ?
-            content.replace(/^(#*)\s?TODO/gm, "$1◽")
-            :
-            (content.includes("CANCELED")
-                || content.includes("CANCELLED")) ?
-                content.replace(/^(#*)\s?CANCEL(?:ED|LED)/gm, "$1❌")
-                :
-                content.includes("DOING") ?
-                    content.replace(/^(#*)\s?DOING/gm, "$1🟡")
-                    :
-                    content.includes("WAITING") ?
-                        content.replace(/^(#*)\s?WAITING/gm, "$1🟠")
-                        :
-                        content.includes("LATER") ?
-                            content.replace(/^(#*)\s?LATER/gm, "$1🔵")
-                            :
-                            content.includes("NOW") ?
-                                content.replace(/^(#*)\s?NOW/gm, "$1🟢")
-                                : content
+    content.replaceAll(/^(#*)\s?DONE/gm, "$1✔️")
+        .replaceAll(/^(#*)\s?TODO/gm, "$1◽")
+        .replaceAll(/^(#*)\s?CANCEL(?:ED|LED)/gm, "$1❌")
+        .replaceAll(/^(#*)\s?DOING/gm, "$1🟡")
+        .replaceAll(/^(#*)\s?WAITING/gm, "$1🟠")
+        .replaceAll(/^(#*)\s?LATER/gm, "$1🔵")
+        .replaceAll(/^(#*)\s?NOW/gm, "$1🟢")
 
 
+const replaceHeading = (content: string) =>
+    content.replaceAll(/^# (.+?)$/gm, "<h1>$1</h1>")
+        // 「## 」の場合は<h2>タグで囲む
+        .replaceAll(/^## (.+?)$/gm, "<h2>$1</h2>")
+        // 「### 」の場合は<h3>タグで囲む
+        .replaceAll(/^### (.+?)$/gm, "<h3>$1</h3>")
+        // 「#### 」の場合は<h4>タグで囲む
+        .replaceAll(/^#### (.+?)$/gm, "<h4>$1</h4>")
+        // 「##### 」の場合は<h5>タグで囲む
+        .replaceAll(/^##### (.+?)$/gm, "<h5>$1</h5>")
+        // 「###### 」の場合は<h6>タグで囲む
+        .replaceAll(/^###### (.+?)$/gm, "<h6>$1</h6>")
 
-const replaceHeading = (content: string) => {
-    content = content.replaceAll(/^# (.+?)$/gm, "<h1>$1</h1>")
-    // 「## 」の場合は<h2>タグで囲む
-    content = content.replaceAll(/^## (.+?)$/gm, "<h2>$1</h2>")
-    // 「### 」の場合は<h3>タグで囲む
-    content = content.replaceAll(/^### (.+?)$/gm, "<h3>$1</h3>")
-    // 「#### 」の場合は<h4>タグで囲む
-    content = content.replaceAll(/^#### (.+?)$/gm, "<h4>$1</h4>")
-    // 「##### 」の場合は<h5>タグで囲む
-    content = content.replaceAll(/^##### (.+?)$/gm, "<h5>$1</h5>")
-    // 「###### 」の場合は<h6>タグで囲む
-    content = content.replaceAll(/^###### (.+?)$/gm, "<h6>$1</h6>")
-    return content
-}
