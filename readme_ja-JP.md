@@ -83,8 +83,12 @@ Logseq マーケットプレイスからインストールする
 
 ## 先行技術とクレジット
 
+Obsidian プラグイン > [@L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
+
+Obsidian プラグイン > [@tokuhirom / 2Hop LInks](https://github.com/tokuhirom/obsidian-2hop-links-plugin)
+
 アイコン > [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
 
-製作者 > [YU000jp (GitHub)](https://github.com/YU000jp)
+製作者 > [@YU000jp](https://github.com/YU000jp)
 
 <a href="https://www.buymeacoffee.com/yu000japan" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="🍌Buy Me A Coffee" style="height: 42px;width: 152px" ></a>
