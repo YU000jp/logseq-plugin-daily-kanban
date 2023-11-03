@@ -7,7 +7,7 @@ export const outgoingLinks = (outgoingList: pageArray[], hopLinksElement: HTMLDi
     //outgoingLinksElementを作成
     const outgoingLinksElement: HTMLDivElement = document.createElement("div")
     outgoingLinksElement.id = "outgoingLinks"
-    outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">${t("Outgoing Links (Keyword)")}</div>`
+    outgoingLinksElement.innerHTML += `<div class="hopLinksTh" id="hopLinksKeyword">${t("Outgoing Links (Keyword)")} >></div>`
 
     // tdを作成
     for (const pageLink of outgoingList)
