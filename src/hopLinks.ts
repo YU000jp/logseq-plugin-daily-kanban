@@ -245,18 +245,38 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     const selectElement: HTMLSelectElement = document.createElement("select")
     selectElement.id = "hopLinkType"
     // <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
+    // <option value="page-blocks-image">${t("Page title")} > ${t("Block")} > ${t("Image only")}</option>
     selectElement.innerHTML = `
-    <option value="unset">${t("Unset")}</option>
-    <option value="page-namespace">${t("Page title")} > ${t("String Search")}🚀</option>
-    <option value="page-namespace-no-page-hierarchy">${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}</option>
-    <option value="page-blocks">${t("Page title")} > ${t("Block")}</option>
-    <option value="page-blocks-image">${t("Page title")} > ${t("Block")} > ${t("Image only")}</option>
-    <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="outgoing-hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="outgoing-page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
-    <option value="ref-backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
-    <option value="ref-blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
-    <option value="ref-blocks-image">${t("Outgoing links")} > Linked References > ${t("Blocks")} > ${t("Image only")}</option>
+    <option value="unset">
+    ${t("Unset")}
+    </option>
+    <option value="pageNamespace">
+    ${t("Page title")} > ${t("String Search")}🚀
+    </option>
+    <option value="pageNamespaceNoPageHierarchy">
+    ${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}
+    </option>
+    <option value="pageBlocks">
+    ${t("Page title")} > ${t("Block")}
+    </option>
+    <option value="pageHierarchy">
+    ${t("Page title")} >> ${t("Hierarchy")} > ${t("Sub page")}
+    </option>
+    <option value="outgoingHierarchy">
+    ${t("Outgoing links")} >> ${t("Hierarchy")} > ${t("Sub page")}
+    </option>
+    <option value="outgoingPageTags">
+    ${t("Outgoing links")} > ${t("Page-Tags")}
+    </option>
+    <option value="refBackLinks">
+    ${t("Outgoing links")} >> Linked References > ${t("BackLinks")}
+    </option>
+    <option value="refBlocks">
+    ${t("Outgoing links")} >> Linked References > ${t("Blocks")}
+    </option>
+    <option value="refBlocksImage">
+    ${t("Outgoing links")} >> Linked References > ${t("Blocks")} > ${t("Image only")}
+    </option>
     `
     // selectElementの値が変更されたら、hopLinksElementを削除して、再度hopLinksを実行する
     selectElement.addEventListener("change", () => {
@@ -275,7 +295,7 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
                 option.selected = true
                 break
             }
-    }, 500)
+    }, 50)
 }
 
 
@@ -288,52 +308,52 @@ const switchSelect = (
 ) => {
     switch (select) {
 
-        case "page-namespace":
+        case "pageNamespace":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
             typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
             break
 
-        case "page-namespace-no-page-hierarchy":
+        case "pageNamespaceNoPageHierarchy":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
             typeNamespace(hopLinksElement, { category: true, removePageHierarchy: true })
             break
 
-        case "page-blocks":
+        case "pageBlocks":
             // ブロックを表示する
             typeBlock(hopLinksElement, { isImageOnly: false })
             break
 
-        case "page-blocks-image":
-            // ブロックを表示する
-            typeBlock(hopLinksElement, { isImageOnly: true })
-            break
+        // case "pageBlocksImage":
+        //     // ブロックを表示する
+        //     typeBlock(hopLinksElement, { isImageOnly: true })
+        //     break
 
-        case "page-hierarchy":
+        case "pageHierarchy":
             //ページ名から階層を取得する
             typePageHierarchy(hopLinksElement)
             break
 
-        case "outgoing-page-tags":
+        case "outgoingPageTags":
             //ページタグ
             typePageTags(outgoingList, hopLinksElement)
             break
 
-        case "outgoing-hierarchy":
+        case "outgoingHierarchy":
             //hierarchy
             typeHierarchy(outgoingList, hopLinksElement, false)
             break
 
-        case "ref-backLinks": //Linked References > BackLinks (ページ)
+        case "refBackLinks": //Linked References > BackLinks (ページ)
             //block.content
             typeRefPageName(outgoingList, hopLinksElement, current)
             break
 
-        case "ref-blocks": // Linked References > Blocks
+        case "refBlocks": // Linked References > Blocks
             //block.content
             typeRefBlock(outgoingList, hopLinksElement, current, { isImageOnly: false })
             break
 
-        case "ref-blocks-image": // Linked References > Blocks > Image only
+        case "refBlocksImage": // Linked References > Blocks > Image only
             //block.content
             typeRefBlock(outgoingList, hopLinksElement, current, { isImageOnly: true })
             break
