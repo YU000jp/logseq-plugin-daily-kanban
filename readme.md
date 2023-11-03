@@ -41,14 +41,6 @@ Install from Logseq Marketplace
 
 > Go to the [discussion](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions) tab to ask and find this kind of things.
 
-### Contribution
-
-#### Issues / TODO
-
-- [ ] How to display tooltips for editing, with Logseq API
-- [ ] How to convert as its own markdown
-   > [remark-definition-list](https://github.com/wataru-chocola/remark-definition-list)
-
 ## Prior art & Credit
 
 Obsidian Plugin > [L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
