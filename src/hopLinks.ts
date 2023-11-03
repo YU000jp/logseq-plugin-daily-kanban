@@ -22,7 +22,6 @@ export const loadTwoHopLink = async () => {
         if (template === '/page/:name'
             && !parent.document.getElementById("hopLinks") as boolean)
             hopLinks()
-
     })
 
     //Logseqのバグあり。動作保証が必要
@@ -32,9 +31,6 @@ export const loadTwoHopLink = async () => {
     })
 
     logseq.provideStyle(CSSfile)
-
-    //TODO: プラグイン設定の反映
-
 
 }//end of loadTwoHopLink
 
@@ -175,13 +171,16 @@ const addCurrentPageHierarchy = async (
             const page = await logseq.Editor.getPage(name) as PageEntity | null
             if (page) {
                 //日誌を除外する
-                if (logseq.settings!.excludeJournalFromOutgoingLinks === true && page["journal?"] === true) return
+                if (logseq.settings!.excludeJournalFromOutgoingLinks === true
+                    && page["journal?"] === true) return
+                
                 if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
                     //2024/01のような形式のページを除外する
                     if (page.originalName.match(/^\d{4}\/\d{2}$/) !== null) return
                     //2024のような数値を除外する
                     if (page.originalName.match(/^\d{4}$/) !== null) return
                 }
+
                 // 重複を除外する
                 if (newSet.has(page.uuid)) return
 
@@ -203,7 +202,7 @@ const addCurrentPageHierarchy = async (
             names = names.map((_name, i) => names.slice(0, i + 1).join("/"))
             for (const name of names) await addPage(name)
 
-        } else 
+        } else
             // current.originalName 現在のページ名
             await addPage(current.originalName)
 
@@ -232,7 +231,11 @@ const buttonSettingsUpdate = (hopLinksElement: HTMLDivElement, spanElement: HTML
         hopLinksElement.remove()
         hopLinks()
     }, { once: true })
-    hopLinksElement.prepend(spanElement, settingButtonElement, updateButtonElement)
+    hopLinksElement.prepend(
+        spanElement,
+        settingButtonElement,
+        updateButtonElement
+    )
 
 }
 
@@ -240,15 +243,14 @@ const buttonSettingsUpdate = (hopLinksElement: HTMLDivElement, spanElement: HTML
 const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     const selectElement: HTMLSelectElement = document.createElement("select")
     selectElement.id = "hopLinkType"
+    // <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
     <option value="namespace">${t("Page title")} > ${t("String Search")}🚀</option>
     <option value="namespace-no-page-hierarchy">${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}</option>
     <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
-    <option value="hierarchy-and-page-tags" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} + ${t("Page-Tags")}</option>
+    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
     <option value="backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
     <option value="blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
     `
@@ -304,19 +306,7 @@ const switchSelect = (
 
         case "hierarchy":
             //hierarchy
-            typeHierarchy(outgoingList, hopLinksElement)
-            break
-
-        case "hierarchy-and-page-tags":
-            //ページタグ
-            typePageTags(outgoingList, hopLinksElement)
-            //hierarchy
-            typeHierarchy(outgoingList, hopLinksElement)
-            break
-
-        case "deeperHierarchy":
-            //full hierarchy
-            typeHierarchy(outgoingList, hopLinksElement, true)
+            typeHierarchy(outgoingList, hopLinksElement, false)
             break
 
         case "blocks": // Linked References > Blocks

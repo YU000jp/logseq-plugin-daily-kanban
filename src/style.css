@@ -64,6 +64,8 @@ body[data-page=page]>div {
             &.hopLinksTd {
                 font-size: .78em;
                 background-color: var(--ls-page-properties-background-color);
+                border-radius: 0.8em;
+                box-shadow: 0 0 0.5em 0.2em var(--ls-primary-background-color);
             }
 
             &.hopLinksTh,

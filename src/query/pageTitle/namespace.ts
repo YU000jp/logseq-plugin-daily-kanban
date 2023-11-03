@@ -86,12 +86,18 @@ const processing = async (
     //sortする
     result = sortPageArray(result)
 
+    let pageLink: pageArray | string
+    if (namespace === "multi class") {
+        pageLink = t("multi class")
+    } else {
+        const page = await logseq.Editor.getPage(namespace) as pageArray | null
+        pageLink = page ? page : namespace
+    }
+
     //thを作成する
-    const tokenLinkElement: HTMLDivElement = await tokenLinkCreateTh(
+    const tokenLinkElement: HTMLDivElement = tokenLinkCreateTh(
         // keyが"multi class"の場合は、(multi class)にする
-        namespace === "multi class" ?
-            `(${t("multi class")})`
-            : namespace,
+        pageLink,
         "th-type-namespace",
         t("Namespace"),
         hierarchies,
@@ -138,7 +144,7 @@ const categorize = (
 
     // "multi class" 多クラス分類が10個未満の場合は、グループ化しない
     if (category["multi class"]
-        && category["multi class"].length > 10) // TODO:プラグイン設定の項目にする
+        && category["multi class"].length > 10)
         multiClassReCategory(category)
 
     if (flag.removePageHierarchy === true) {
