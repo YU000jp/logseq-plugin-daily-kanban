@@ -1,5 +1,5 @@
 import { t } from "logseq-l10n"
-import { excludeJournal, excludeJournalFilter, excludePages } from "../../excludePages"
+import { excludePages } from "../../excludePages"
 import { sortPageArray } from "../../lib"
 import { createTd, pageArray, tokenLinkCreateTh } from "../type"
 

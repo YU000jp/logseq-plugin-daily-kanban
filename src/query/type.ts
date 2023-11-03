@@ -1,7 +1,8 @@
-import { PageEntity } from "@logseq/libs/dist/LSPlugin"
+import { IEntityID, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
-import { openTooltipEventFromPageName } from "../tooltip"
+import { openTooltipEventFromBlock, openTooltipEventFromPageName } from "../tooltip"
 import { excludeJournal } from "../excludePages"
+import { blockContent } from "./blockContent"
 
 export const tokenLinkCreateTh = (
     pageLink: pageArray | string,
@@ -75,10 +76,11 @@ export const createTd = async (
 ) => {
 
     //日誌を除外する
-    if (excludeJournal(
-        (page as PageEntity)["journal?"],
-        (page as PageEntity).originalName
-    ) as boolean === true
+    if (page["journal?"]
+        && excludeJournal(
+            page["journal?"],
+            page.originalName
+        ) as boolean === true
         || (flag && flag.removeKeyword // キーワードのページは除く
             && page.originalName === flag.removeKeyword)
     ) return
@@ -139,5 +141,50 @@ export type pageArray = {
     name: string
     originalName: string
     uuid: string
+}
+export const CreateTdBlock = async (
+    pageLink: pageArray,
+    block: { uuid: string; content: string },
+    tokenLinkElement: HTMLDivElement
+) => {
+
+    if (!block
+        || block.content === "" // 空の場合は除外する
+        || block.content === `[[${pageLink.originalName}]]` // [[ページ名]]に一致する場合は除外する
+        || block.content === `#${pageLink.originalName}`) //  #ページ名に一致する場合は除外する
+        return
+
+    //行タイトル(左ヘッダー)
+    const blockElement: HTMLDivElement = document.createElement("div")
+    blockElement.classList.add("hopLinksTd")
+    //ポップアップ表示あり
+    const labelElement: HTMLLabelElement = document.createElement("label")
+    //input要素を作成
+    const inputElement: HTMLInputElement = document.createElement("input")
+    inputElement.type = "checkbox"
+    inputElement.name = "blocks-popup-" + pageLink.uuid
+    //div ポップアップの内容
+    const popupElement: HTMLDivElement = document.createElement("div")
+    popupElement.classList.add("hopLinks-popup-content")
+
+    const anchorElement: HTMLAnchorElement = document.createElement("a")
+    anchorElement.dataset.uuid = block.uuid
+
+    const content = await blockContent(block.content) as string
+    if (content === "") return
+    anchorElement.innerHTML = content
+
+    blockElement.append(anchorElement)
+    blockElement.addEventListener("click", openTooltipEventFromBlock(popupElement))
+    labelElement.append(blockElement, inputElement, popupElement)
+    tokenLinkElement.append(labelElement)
+
+}
+export const removeBlockUuid = (outgoingList: { uuid: string; content: string; page: IEntityID }[]) => {
+    const uuidSet = new Set()
+    outgoingList.forEach((block) => uuidSet.add(block.uuid))
+    outgoingList.filter((block) => uuidSet.has(block.uuid)
+        && block.content !== "") // ついでに空のものも除外する
+    uuidSet.clear()
 }
 

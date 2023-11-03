@@ -1,4 +1,4 @@
-import { BlockEntity, PageEntity } from "@logseq/libs/dist/LSPlugin"
+import { BlockEntity, IEntityID, PageEntity } from "@logseq/libs/dist/LSPlugin"
 
 
 /**
@@ -43,7 +43,7 @@ export const excludePageFromPageEntity = (PageEntityArray: PageEntity[]) => {
  * Filters out pages that are excluded based on the `excludePages` setting in Logseq.
  * @param outgoingList - The list of BlockEntities to filter.
  */
-export const excludePageFromBlockEntity = async (outgoingList: { uuid: string, content: string, page }[]) => {
+export const excludePageFromBlockEntity = async (outgoingList: { uuid: string, content: string, page: IEntityID }[]) => {
     const excludePages = logseq.settings!.excludePages.split("\n") as string[] | undefined //除外するページ
     if (excludePages && excludePages.length !== 0)
         for (const block of outgoingList) {
@@ -98,14 +98,15 @@ export const excludeJournalFilter = (pageEntityArray: PageEntity[]) =>
             ) === false)
 
 
-export const excludeJournal = (journal: boolean, originalName: string): boolean => // 除外する場合はtrueを返す
+export const excludeJournal = (journal: boolean, originalName: string): boolean =>// 除外する場合はtrueを返す
     // 設定項目 結果から日誌を除外する
     logseq.settings!.excludeJournalFromResult === true
     // 日誌かどうか
     && journal === true
     // 設定項目 結果から日付を除外する
     || (logseq.settings!.excludeDateFromResult === true
+        && originalName !== ""
         //2024/01のような形式だったら除外する
-        && originalName.match(/^\d{4}\/\d{2}$/) !== null
-        // 2024のような数値も除外する
-        || originalName.match(/^\d{4}$/) !== null)
+        && (originalName.match(/^\d{4}\/\d{2}$/) !== null
+            // 2024のような数値も除外する
+            || originalName.match(/^\d{4}$/) !== null))

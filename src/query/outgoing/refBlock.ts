@@ -1,15 +1,19 @@
 import { IEntityID, PageEntity } from "@logseq/libs/dist/LSPlugin"
 import { t } from "logseq-l10n"
 import { checkAlias, excludePageFromBlockEntity } from "../../excludePages"
-import { openTooltipEventFromBlock } from "../../tooltip"
 import { pageArray, tokenLinkCreateTh } from "../type"
-import { blockContent } from "../blockContent"
+import { CreateTdBlock } from "../type"
+import { removeBlockUuid } from "../type"
+import { replaceForLogseq } from "../blockContent"
 
 //typeBlocks
 export const typeRefBlock = async (
     outgoingList: pageArray[],
     hopLinksElement: HTMLDivElement,
-    current: PageEntity | null
+    current: PageEntity | null,
+    flag: {
+        isImageOnly: boolean,
+    }
 ) => {
 
     //aliasプロパティを取得し、outgoingListから除外する
@@ -21,7 +25,7 @@ export const typeRefBlock = async (
         if (logseq.settings!.excludeCurrentPage === true
             && current && pageLink.name === current.originalName) continue
         //pageLinkRefのページを取得する
-        const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: { uuid: string, content: string, page:IEntityID, }[]][]
+        const page = await logseq.Editor.getPageLinkedReferences(pageLink.uuid) as [page: PageEntity, blocks: { uuid: string, content: string, page: IEntityID, }[]][]
         if (!page) continue
         //blocksをフィルターする
         const outgoingList = page.filter((page) => page[1].length !== 0).map((page) => page[1][0])
@@ -42,57 +46,16 @@ export const typeRefBlock = async (
         //end of 行タイトル(左ヘッダー)
 
         // uuidが重複するものを削除する
-        const uuidSet = new Set()
-        outgoingList.forEach((block) => uuidSet.add(block.uuid))
-        outgoingList.filter((block) => uuidSet.has(block.uuid)
-            && block.content !== "") // ついでに空のものも除外する
-        uuidSet.clear()
+        removeBlockUuid(outgoingList)
 
 
-        for (const block of outgoingList)
-            await forTokenLinkElement(pageLink, block, tokenLinkElement)
 
+        for (const block of outgoingList) {
+            const content = await replaceForLogseq(block.content, { isImageOnly: true }) as string
+            if (!content) continue
+            await CreateTdBlock(pageLink, block, tokenLinkElement)
+        }
         //end of 右側
         hopLinksElement.append(tokenLinkElement)
     }
-}
-
-
-const forTokenLinkElement = async (
-    pageLink: pageArray,
-    block: { uuid: string; content: string },
-    tokenLinkElement: HTMLDivElement
-) => {
-
-    if (!block
-        || block.content === "" // 空の場合は除外する
-        || block.content === `[[${pageLink.name}]]` // [[pageLink.name]]と一致した場合は除外する
-        || block.content === `#${pageLink.name}`) // #pageLink.nameと一致した場合は除外する
-        return
-
-    //行タイトル(左ヘッダー)
-    const blockElement: HTMLDivElement = document.createElement("div")
-    blockElement.classList.add("hopLinksTd")
-    //ポップアップ表示あり
-    const labelElement: HTMLLabelElement = document.createElement("label")
-    //input要素を作成
-    const inputElement: HTMLInputElement = document.createElement("input")
-    inputElement.type = "checkbox"
-    inputElement.name = "blocks-popup-" + pageLink.uuid
-    //div ポップアップの内容
-    const popupElement: HTMLDivElement = document.createElement("div")
-    popupElement.classList.add("hopLinks-popup-content")
-
-    const anchorElement: HTMLAnchorElement = document.createElement("a")
-    anchorElement.dataset.uuid = block.uuid
-
-    const content = await blockContent(block.content) as string
-    if (content === "") return
-        anchorElement.innerHTML = content
-
-    blockElement.append(anchorElement)
-    blockElement.addEventListener("click", openTooltipEventFromBlock(popupElement))
-    labelElement.append(blockElement, inputElement, popupElement)
-    tokenLinkElement.append(labelElement)
-
 }

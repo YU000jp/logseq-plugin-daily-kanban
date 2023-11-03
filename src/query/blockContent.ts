@@ -25,15 +25,31 @@ export const blockContent = async (content: string): Promise<string> => {
 
 
 // Logseq用に置換する
-const replaceForLogseq = async (content: string): Promise<string> => {
+export const replaceForLogseq = async (
+    content: string,
+    flag?: { isImageOnly: boolean }
+): Promise<string> => {
 
     // assetsにある画像を表示する
-    content = await replaceImage(content) // 処理のタイミングに注意
+    const rep = await replaceImage(content) as { content: string, match: number } // 処理のタイミングに注意
+    if (flag && flag.isImageOnly
+        && rep.match === 0) return ""
+
+    content = rep.content
+
+    // 専用マークダウンを置換する
+    content = replaceMarkdownLight(content)
+
+    // 返却する
+    return content
+}
+
+
+const replaceMarkdownLight = (content: string) => {
 
     // 「#」で始まる行がある場合
     // 「# 」の場合は<h1>タグで囲む   
     content = replaceHeading(content)
-
 
     //タスクを絵文字に変換する
     // 「# DONE」や「## DONE」...のようにいくつかの#を含む文字列がある場合とない場合があり、その後ろにDONEが続く文字列の場合、DONEの部分を ✔️ に変換する
@@ -60,30 +76,32 @@ const replaceForLogseq = async (content: string): Promise<string> => {
 
     // 「SCHEDULED: 」で始める行は、その前に「\n」をつける
     content = content.replaceAll(/SCHEDULED: /g, "<br/>SCHEDULED: ")
-
-    // 返却する
     return content
 }
 
 
 // 画像を表示する
-const replaceImage = async (content: string): Promise<string> => {
+export const replaceImage = async (content: string): Promise<{ content: string, match: number }> => {
 
-    if (!content.includes("../assets/") //../assets/が含まれている
+    if (!content
+        || !content.includes("../assets/") //../assets/が含まれている
         || !content.includes("![")
         || !content.includes("](")
-    ) return content
+    ) return {
+        content: content,
+        match: 0
+    }
 
     // 「)_」を「）_」に置換する
     if (content.includes(")_"))
         content = content.replaceAll("\)_", "）_") // 一時的に変換する
 
-    // 「![何らかの文字列](何らかの文字列)」のような文字列で、それぞれを取得する
-    let match = content.match(/!\[(.+?)\]\((.+?)\)/g) as RegExpMatchArray | null
+    // 「![何らかの文字列もしくは空](何らかの文字列)」のような文字列で、それぞれを取得する
+    let match = content.match(/!\[(.+?)?\]\((.+?)\)/g) as RegExpMatchArray | null
     if (match) {
         for (const m of match) {
             // 2つ目の文字列を取得する
-            let url = m.match(/!\[(.+?)\]\((.+?)\)/)?.[2] as string | null
+            let url = m.match(/!\[(.+?)?\]\((.+?)\)/)?.[2] as string | null
             if (!url
                 || url.includes(".pdf")) // 「.pdf」を含まないようにする
                 continue
@@ -104,7 +122,10 @@ const replaceImage = async (content: string): Promise<string> => {
     if (content.includes("）_"))
         content = content.replaceAll("）_", ")_")
 
-    return content
+    return {
+        content: content,
+        match: match?.length || 0
+    }
 }
 
 

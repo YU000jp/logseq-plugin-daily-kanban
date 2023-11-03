@@ -12,6 +12,7 @@ import { outgoingLinks, outgoingLinksFromCurrentPage } from "./query/outgoingLin
 import { externalLinks } from "./query/externalLinks"
 import { pageArray } from "./query/type"
 import { typePageHierarchy } from "./query/pageTitle/hierarchy"
+import { typeBlock } from "./query/pageTitle/block"
 
 
 export const loadTwoHopLink = async () => {
@@ -173,7 +174,7 @@ const addCurrentPageHierarchy = async (
                 //日誌を除外する
                 if (logseq.settings!.excludeJournalFromOutgoingLinks === true
                     && page["journal?"] === true) return
-                
+
                 if (logseq.settings!.excludeDateFromOutgoingLinks === true) {
                     //2024/01のような形式のページを除外する
                     if (page.originalName.match(/^\d{4}\/\d{2}$/) !== null) return
@@ -246,13 +247,16 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     // <option value="deeperHierarchy" title="${t("recursive processing for deeper hierarchy")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("deeper")}</option>
     selectElement.innerHTML = `
     <option value="unset">${t("Unset")}</option>
-    <option value="namespace">${t("Page title")} > ${t("String Search")}🚀</option>
-    <option value="namespace-no-page-hierarchy">${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}</option>
+    <option value="page-namespace">${t("Page title")} > ${t("String Search")}🚀</option>
+    <option value="page-namespace-no-page-hierarchy">${t("Page title")} > ${t("String Search")}🚀 > ${t("Remove hierarchies of this page")}</option>
+    <option value="page-blocks">${t("Page title")} > ${t("Block")}</option>
+    <option value="page-blocks-image">${t("Page title")} > ${t("Block")} > ${t("Image only")}</option>
     <option value="page-hierarchy">${t("Page title")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
-    <option value="page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
-    <option value="backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
-    <option value="blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
+    <option value="outgoing-hierarchy" title="${t("base on outgoing links")}">${t("Outgoing links")} > ${t("Hierarchy")} > ${t("Sub page")}</option>
+    <option value="outgoing-page-tags">${t("Outgoing links")} > ${t("Page-Tags")}</option>
+    <option value="ref-backLinks">${t("Outgoing links")} > Linked References > ${t("BackLinks")}</option>
+    <option value="ref-blocks">${t("Outgoing links")} > Linked References > ${t("Blocks")}</option>
+    <option value="ref-blocks-image">${t("Outgoing links")} > Linked References > ${t("Blocks")} > ${t("Image only")}</option>
     `
     // selectElementの値が変更されたら、hopLinksElementを削除して、再度hopLinksを実行する
     selectElement.addEventListener("change", () => {
@@ -284,14 +288,24 @@ const switchSelect = (
 ) => {
     switch (select) {
 
-        case "namespace":
+        case "page-namespace":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
             typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
             break
 
-        case "namespace-no-page-hierarchy":
+        case "page-namespace-no-page-hierarchy":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
             typeNamespace(hopLinksElement, { category: true, removePageHierarchy: true })
+            break
+
+        case "page-blocks":
+            // ブロックを表示する
+            typeBlock(hopLinksElement, { isImageOnly: false })
+            break
+
+        case "page-blocks-image":
+            // ブロックを表示する
+            typeBlock(hopLinksElement, { isImageOnly: true })
             break
 
         case "page-hierarchy":
@@ -299,24 +313,29 @@ const switchSelect = (
             typePageHierarchy(hopLinksElement)
             break
 
-        case "page-tags":
+        case "outgoing-page-tags":
             //ページタグ
             typePageTags(outgoingList, hopLinksElement)
             break
 
-        case "hierarchy":
+        case "outgoing-hierarchy":
             //hierarchy
             typeHierarchy(outgoingList, hopLinksElement, false)
             break
 
-        case "blocks": // Linked References > Blocks
-            //block.content
-            typeRefBlock(outgoingList, hopLinksElement, current)
-            break
-
-        case "backLinks": //Linked References > BackLinks (ページ)
+        case "ref-backLinks": //Linked References > BackLinks (ページ)
             //block.content
             typeRefPageName(outgoingList, hopLinksElement, current)
+            break
+
+        case "ref-blocks": // Linked References > Blocks
+            //block.content
+            typeRefBlock(outgoingList, hopLinksElement, current, { isImageOnly: false })
+            break
+
+        case "ref-blocks-image": // Linked References > Blocks > Image only
+            //block.content
+            typeRefBlock(outgoingList, hopLinksElement, current, { isImageOnly: true })
             break
 
     }
