@@ -52,7 +52,7 @@ export function openTooltipEventFromBlock(popupElement: HTMLDivElement): (this: 
         //pElementをクリックしたら、親ブロックを開く
         const anchorElement: HTMLAnchorElement = document.createElement("a")
         anchorElement.dataset.uuid = parentPage.uuid
-        anchorElement.innerText = t("Block")
+        anchorElement.innerText = t("Target block")
         anchorElement.title = t("Click to open page in right sidebar")
         anchorElement.addEventListener("click", function () { logseq.Editor.openInRightSidebar(thisBlock.uuid) })
         pElement.append(anchorElement)
@@ -145,7 +145,10 @@ const showUpdatedAt = (updatedAt: number, popupElement: HTMLDivElement) => {
     updatedAtElement.classList.add("hopLinks-popup-updatedAt")
     //ローカライズされた日付
     if (updatedAt === undefined) return
-    updatedAtElement.innerText = t("This page updated at: ") + new Date(updatedAt).toLocaleString()
+    //2023年1月1日 12時43分のように表示する
+    updatedAtElement.innerText = t("This page updated at: ") + new Date(updatedAt).toLocaleString("default", {
+        month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric"
+    })
     popupElement.append(updatedAtElement)
 }
 
