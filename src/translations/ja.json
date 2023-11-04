@@ -1,7 +1,7 @@
 {
     "2 Hop Links": "2ホップリンク",
     "BackLinks": "戻りリンク",
-    "Block": "ブロック",
+    "Block search": "ブロック検索",
     "Blocks": "ブロック",
     "Click to collapse": "クリックして折りたたむ",
     "Click to open page in right sidebar": "クリックすると、右サイドバーでページが開きます",
@@ -23,6 +23,7 @@
     "External Links": "外部リンク",
     "external links enable": "外部リンクを有効にする",
     "File": "ファイル",
+    "Target block" : "対象のブロック",
     "Hierarchy": "階層",
     "Image only": "画像のみ",
     "multi class": "多クラス分類",
