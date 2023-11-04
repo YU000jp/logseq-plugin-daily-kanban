@@ -249,14 +249,14 @@ const putSelectButton = (hopLinksElement: HTMLDivElement) => {
     <option value="unset">
     ${t("Unset")}
     </option>
-    <option value="pageBlocks">
-    ${t("Page title")} << ${t("Block search")}🚀
-    </option>
     <option value="pageNamespaceNoPageHierarchy">
-    ${t("Page title")} << ${t("String Search")}🚀
+    ${t("Page title")} << ${t("String Search")}
     </option>
     <option value="pageNamespace">
-    ${t("Page title")} << ${t("String Search")}🚀 (${t("Include hierarchies of this page")})
+    ${t("Page title")} << ${t("String Search")} (${t("Include hierarchies of this page")})
+    </option>
+    <option value="pageBlocks">
+    ${t("Page title")} << ${t("Block search")}
     </option>
     <option value="outgoingHierarchy">
     >> ${t("Outgoing links")} > ${t("Sub page")} (${t("Hierarchy")})
@@ -304,11 +304,6 @@ const switchSelect = (
 ) => {
     switch (select) {
 
-        case "pageNamespace":
-            // クエリーでページ名に関連するページを取得する カテゴリ分け
-            typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
-            break
-
         case "pageBlocks":
             // ブロックを表示する
             typeBlock(hopLinksElement, { isImageOnly: false })
@@ -317,6 +312,11 @@ const switchSelect = (
         case "pageNamespaceNoPageHierarchy":
             // クエリーでページ名に関連するページを取得する カテゴリ分け
             typeNamespace(hopLinksElement, { category: true, removePageHierarchy: true })
+            break
+
+        case "pageNamespace":
+            // クエリーでページ名に関連するページを取得する カテゴリ分け
+            typeNamespace(hopLinksElement, { category: true, removePageHierarchy: false })
             break
 
         // case "pageBlocksImage":
