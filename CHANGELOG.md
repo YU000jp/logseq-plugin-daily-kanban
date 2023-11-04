@@ -1,3 +1,10 @@
+## [1.20.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.20.0...v1.20.1) (2023-11-04)
+
+
+### Bug Fixes
+
+* **bug:** hop links > Linked References > Cannot work (same with image only) ([887c942](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/887c94280dae7825688fa9c184aa54532397ec06))
+
 # [1.20.0](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.19.0...v1.20.0) (2023-11-03)
 
 
