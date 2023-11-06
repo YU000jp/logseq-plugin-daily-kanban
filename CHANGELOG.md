@@ -1,3 +1,10 @@
+## [1.20.2](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.20.1...v1.20.2) (2023-11-06)
+
+
+### Bug Fixes
+
+* **bug:** CSS not applied ([7f9f688](https://github.com/YU000jp/logseq-plugin-two-hop-link/commit/7f9f688df9ced376f17ea352e5f0d69cdaed6fea))
+
 ## [1.20.1](https://github.com/YU000jp/logseq-plugin-two-hop-link/compare/v1.20.0...v1.20.1) (2023-11-04)
 
 
