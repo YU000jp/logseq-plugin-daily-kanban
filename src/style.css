@@ -206,7 +206,7 @@ body[data-page=page]>div {
 
     }
 
-    &[data-id="two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
+    &[data-id="logseq-plugin-two-hop-link"] div[data-key="excludePages"].as-input textarea.form-input {
         height: 15em;
     }
 }
