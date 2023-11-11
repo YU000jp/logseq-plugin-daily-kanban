@@ -41,11 +41,13 @@ Install from Logseq Marketplace
 
 > Go to the [discussion](https://github.com/YU000jp/logseq-plugin-two-hop-link/discussions) tab to ask and find this kind of things.
 
+1. This plugin relies on Logseq's DOM structure. If the DOM structure changes due to a Logseq version update, styles may not be applied. We will adjust the CSS to deal with it. If you notice something, please raise an issue.
+
 ## Prior art & Credit
 
-Obsidian Plugin > [L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
+Obsidian Plugin > [@L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
 
-Obsidian Plugin > [tokuhirom / 2Hop LInks](https://github.com/tokuhirom/obsidian-2hop-links-plugin)
+Obsidian Plugin > [@tokuhirom / 2Hop LInks](https://github.com/tokuhirom/obsidian-2hop-links-plugin)
 
 Icon > [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
 
