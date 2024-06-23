@@ -1,6 +1,5 @@
  # Logseq Plugin: 2 hop link
 
-
 Displays collections of links at bottom of a page content. Collect outgoing links and generate further links.
 
 <div align="right">
