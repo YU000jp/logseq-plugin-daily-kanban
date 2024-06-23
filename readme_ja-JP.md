@@ -2,7 +2,14 @@
 
 - ページ コンテンツの下部にリンクのコレクションを表示します。ページ内にあるリンクを収集し、そこから先のリンクを生成します。
 
-[](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-two-hop-link) [](https://github.com/YU000jp/logseq-plugin-two-hop-link/LICENSE)![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-two-hop-link?color=blue) [](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)![Downloads](https://img.shields.io/github/downloads/YU000jp/logseq-plugin-two-hop-link/total.svg) 公開日 2023/09/25
+<div align="right">
+
+[English](https://github.com/YU000jp/logseq-plugin-two-hop-link)/[日本語](https://github.com/YU000jp/logseq-plugin-two-hop-link/blob/main/readme_ja-JP.md) 
+[![latest release version](https://img.shields.io/github/v/release/YU000jp/logseq-plugin-two-hop-link)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
+[![License](https://img.shields.io/github/license/YU000jp/logseq-plugin-two-hop-link?color=blue)](https://github.com/YU000jp/logseq-plugin-two-hop-link/LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/YU000jp/logseq-plugin-two-hop-link/total.svg)](https://github.com/YU000jp/logseq-plugin-two-hop-link/releases)
+ 公開日 20230925 <a href="https://www.buymeacoffee.com/yu000japan"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a pizza&emoji=🍕&slug=yu000japan&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
+</div>
 
 ## 概要
 
@@ -83,12 +90,7 @@ Logseq マーケットプレイスからインストールする
 
 ## 先行技術とクレジット
 
-Obsidian プラグイン > [@L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
-
-Obsidian プラグイン > [@tokuhirom / 2Hop LInks](https://github.com/tokuhirom/obsidian-2hop-links-plugin)
-
-アイコン > [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
-
-製作者 > [@YU000jp](https://github.com/YU000jp)
-
-<a href="https://www.buymeacoffee.com/yu000japan"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a pizza&emoji=🍕&slug=yu000japan&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
+- Obsidian プラグイン > [@L7Cy / 2Hop Links Plus](https://github.com/L7Cy/obsidian-2hop-links-plus)
+- Obsidian プラグイン > [@tokuhirom / 2Hop LInks](https://github.com/tokuhirom/obsidian-2hop-links-plugin)
+- アイコン > [icooon-mono.com](https://icooon-mono.com/14733-lego%e3%82%a2%e3%82%a4%e3%82%b3%e3%83%b32/)
+- 製作者 > [@YU000jp](https://github.com/YU000jp)
