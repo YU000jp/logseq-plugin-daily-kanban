@@ -2,6 +2,9 @@
 
 - ページ コンテンツの下部にリンクのコレクションを表示します。ページ内にあるリンクを収集し、そこから先のリンクを生成します。
 
+> [!WARNING]
+>このプラグインはLogseq dbバージョンでは動作しません。
+
 <div align="right">
 
 [English](https://github.com/YU000jp/logseq-plugin-two-hop-link)/[日本語](https://github.com/YU000jp/logseq-plugin-two-hop-link/blob/main/readme_ja-JP.md) 

@@ -2,6 +2,9 @@
 
 Displays collections of links at bottom of a page content. Collect outgoing links and generate further links.
 
+> [!WARNING]
+This plugin does not work with Logseq db version.
+
 <div align="right">
 
 [English](https://github.com/YU000jp/logseq-plugin-two-hop-link)/[日本語](https://github.com/YU000jp/logseq-plugin-two-hop-link/blob/main/readme_ja-JP.md) 
